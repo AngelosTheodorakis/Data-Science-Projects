@@ -2,9 +2,9 @@ getwd()
 
 install.packages("RCurl") # We install the package 'RCurl' in order to read our data directly from the Github page
 library(RCurl)
-data<-read.csv(text = getURI("https://raw.githubusercontent.com/AngelosTheodorakis/Data-Science-Projects/master/My-encoding.csv"),sep=';',header=TRUE )
+data<-read.csv(text = getURI("https://raw.githubusercontent.com/AngelosTheodorakis/Data-Science-Projects/master/Data/My-encoding.csv"),sep=';',header=TRUE )
 
-#Let's check out our data
+#Let's check out our data summary
 str(data) 
 summary(data)
 
