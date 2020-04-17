@@ -1,0 +1,89 @@
+knit(input="Markdown_presentation.rmd", output = "Markdown_presentation.md")
+---
+title: "My first Markdown"
+author: "Angelos Theodorakis"
+date: "16/4/2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+This is my first Markdown Document!
+
+
+
+Let's load some data 
+
+
+```{r}
+library(foreign)
+library(knitr)
+library(ggplot2)
+library(scales)
+source("http://peterhaschke.com/Code/multiplot.R")
+data <- read.spss("C:/Users/User/Desktop/Άγγελος/ΕΛΚΕ/Έρευνα/sodanet/My-encoding.sav",use.value.labels = FALSE, to.data.frame=TRUE)
+
+#file.choose()
+dataset.labels <- as.data.frame(attr(data, "variable.labels"))
+knitr::kable(dataset.labels, caption = "Labels table", floating.environment="sidewaystable")
+```
+
+
+
+Let's try some plots
+
+
+```{r}
+p1<-ggplot(data, aes(x = factor(Q1))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..), fill = factor(Q1))) + 
+  geom_text(aes( label = scales::percent((..count..)/sum(..count..)),
+                 y=(..count..)/sum(..count..) ), stat= "count", vjust = -.3) +
+  scale_y_continuous(labels = percent) +
+  labs(title='Ποσοστό Φύλων', x='Φύλο',y='Ποσοστό')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_x_discrete(labels=c('Γυναίκες','Άνδρες'))+
+  scale_fill_discrete(name = "Φύλο", 
+                       labels=c("Γυναίκες", "Άνδρες"))
+
+
+p2<-ggplot(data, aes(x = factor(Age))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..), fill = factor(Age))) + 
+  geom_text(aes( label = scales::percent((..count..)/sum(..count..)),
+                 y=(..count..)/sum(..count..) ), stat= "count", vjust = -.3) +
+  scale_y_continuous(labels = percent) +
+  labs(title='Ποσοστό Ηλικίας', x='Ηλικία',y='Ποσοστό')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_x_discrete(labels=c('25-29','30-34','35-39','40+'))+
+  scale_fill_discrete(name = "Ηλικία", 
+                      labels=c('25-29','30-34','35-39','40+'))
+
+
+
+multiplot(p1, p2, cols=2)
+```
+
+
+
+```{r}
+library(ggplot2)
+library(scales)
+ggplot(data, aes(x = factor(Q13),fill = factor(Q8))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_y_continuous(labels = percent)+
+  labs(title='Συνάφεια ΠΜΣ με εργασία και σύσταση ΠΜΣ', x='Θα προτείνατε το ΠΜΣ;',y='Ποσοστό',
+       fill='Συνάφεια με εργασία')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_x_discrete(labels=c('Σίγουρα ναι','Μάλλον ναι','Ούτε ναι ούτε όχι','Μάλλον όχι','Σίγουρα όχι'))+
+scale_fill_manual(values=c("darkred","red","blue","green4","darkgreen","yellow"),
+  labels = c("Πολύ ", "Αρκετά ", "Όχι και τόσο ", "Καθόλου ", "Δεν έχω εργαστεί",'NA'))
+
+```
+
+
+##How about a picture?##
+
+![alt text](C:/Users/User/Desktop/Άγγελος/education-teaching/Teaching/10-beginner-guitar-chords.jpg)
+
+
+
+
