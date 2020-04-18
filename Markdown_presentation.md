@@ -438,4 +438,4 @@ scale_fill_manual(values=c("darkred","red","blue","green4","darkgreen","yellow")
 \#\#How about a picture?\#\#
 
 ![alt
-text](C:/Users/User/Desktop/Άγγελος/education-teaching/Teaching/10-beginner-guitar-chords.jpg)
+text](C:/Users/User/Desktop/Data-Science-Projects/Markdown_presentation_files.jpg)
