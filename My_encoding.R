@@ -1,17 +1,13 @@
 getwd()
-
-install.packages("RCurl") # We install the package 'RCurl' in order to read our data directly from the Github page
-library(RCurl)
-data<-read.csv(text = getURI("https://raw.githubusercontent.com/AngelosTheodorakis/Data-Science-Projects/master/Data/My-encoding.csv"),sep=';',header=TRUE )
-
-#Let's check out our data summary
-str(data) 
+setwd("C:/Users/User/Desktop/Άγγελος/ΕΛΚΕ/Έρευνα/sodanet")
+data<-read.csv('My-encoding.csv',sep=';',header=TRUE)
+str(data)
 summary(data)
 
-# We search for missing values
 Missing_values<-data.frame(sort(sapply(data,function(x) sum(is.na(x))),decreasing = TRUE))
 
 #Q7
+#In variable Q7 
 test<-data.frame(cbind(data$Q6,data$Q7))
  #prepei na simpiptoun ta Na's tis erotisis 6 me ta na's ths 7     
 which((test[,1]<=15) & is.na(test[,2]==TRUE))
@@ -127,9 +123,11 @@ data[which(is.na(data$Q4)),]
 ########################################################################
 #MY STATS
 library(dplyr)
+data$Q3<-as.factor(data$Q3)
+data$Q13<-as.numeric(data$Q13)
 data %>% 
-  group_by(Q3) %>% 
-  summarise(Q13 = mean(Q13,na.rm=TRUE))
+  count(Q3,Q13)
+
 
 #OR
 tapply(data$Q13, data$Q3, FUN=mean, na.rm=TRUE)
@@ -140,28 +138,44 @@ library(ggplot2)
 library(scales)
 source("http://peterhaschke.com/Code/multiplot.R")
 
-ggplot(data, aes(x = factor(Gradyear))) +  
-  geom_bar(aes(y = (..count..)/sum(..count..)), fill = "#FF6666") + 
-  scale_y_continuous(labels = percent)+
-  labs(title='ΒΈΓ΄Γ―Γ² ΓΓ°Γ―Γ¶Γ―ΓΓ΄Γ§Γ³Γ§Γ²', x='Graduation Year',y='Percent')+
-  theme(plot.title = element_text(hjust = 0.5))+
-  scale_x_discrete(labels=c('1997-2002','2003-2007','2008-2012','2013-2017'))
 
+
+ggplot(data, aes(x = factor(Gradyear))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..), fill = factor(Gradyear))) + 
+  geom_text(aes( label = scales::percent((..count..)/sum(..count..)),
+                 y=(..count..)/sum(..count..) ), stat= "count", vjust = -.3) +
+  scale_y_continuous(labels = percent) +
+  labs(title='Έτος Αποφοίτησης', x='Graduation Year',y='Percent')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_x_discrete(labels=c('1997-2002','2003-2007','2008-2012','2013-2017'))+
+  scale_fill_discrete(name = "Φύλο", 
+                      labels=c('1997-2002','2003-2007','2008-2012','2013-2017'))
 
 
 p1<-ggplot(data, aes(x = factor(Q1))) +  
-  geom_bar(aes(y = (..count..)/sum(..count..)), fill = "red") + 
+  geom_bar(aes(y = (..count..)/sum(..count..), fill = factor(Q1))) + 
+  geom_text(aes( label = scales::percent((..count..)/sum(..count..)),
+                 y=(..count..)/sum(..count..) ), stat= "count", vjust = -.3) +
   scale_y_continuous(labels = percent) +
-  labs(title='Γ–Γ½Γ«Γ―', x='Γ–Γ½Γ«Γ―',y='ΓΓ―Γ³Γ―Γ³Γ΄ΓΌ')+
+  labs(title='Ποσοστό Φύλων', x='Φύλο',y='Ποσοστό')+
   theme(plot.title = element_text(hjust = 0.5))+
-  scale_x_discrete(labels=c('ΓƒΓµΓ­Γ΅ΓΓªΓ¥Γ²','ΒΆΓ­Γ¤Γ±Γ¥Γ²'))
+  scale_x_discrete(labels=c('Γυναίκες','Άνδρες'))+
+  scale_fill_discrete(name = "Φύλο", 
+                       labels=c("Γυναίκες", "Άνδρες"))
+
 
 p2<-ggplot(data, aes(x = factor(Age))) +  
-  geom_bar(aes(y = (..count..)/sum(..count..)), fill = "blue") + 
-  scale_y_continuous(labels = percent)+
-  labs(title='Γ‡Γ«Γ©ΓªΓΓ΅', x='Γ‡Γ«Γ©ΓªΓ©Γ΅ΓªΓ Γ―Γ¬ΓΓ¤Γ΅',y='ΓΓ―Γ³Γ―Γ³Γ΄ΓΌ')+
+  geom_bar(aes(y = (..count..)/sum(..count..), fill = factor(Age))) + 
+  geom_text(aes( label = scales::percent((..count..)/sum(..count..)),
+                 y=(..count..)/sum(..count..) ), stat= "count", vjust = -.3) +
+  scale_y_continuous(labels = percent) +
+  labs(title='Ποσοστό Ηλικίας', x='Ηλικία',y='Ποσοστό')+
   theme(plot.title = element_text(hjust = 0.5))+
-  scale_x_discrete(labels=c('25-29','30-34','35-39','40+'))
+  scale_x_discrete(labels=c('25-29','30-34','35-39','40+'))+
+  scale_fill_discrete(name = "Ηλικία", 
+                      labels=c('25-29','30-34','35-39','40+'))
+
+
 
 multiplot(p1, p2, cols=2)
 
@@ -172,6 +186,7 @@ round(sapply(table(as.factor(data$Emplmnt)),function(x) x/nrow(data)*100),1)
 #To idio afairwntas ta na's
 round(sapply(table(as.factor(data$Emplmnt)),function(x) x/length(which(!is.na(data$Q6)))*100),1)
 
+data.frame(attr(data$Emplmnt,"value.labels"))
 
 
 
@@ -183,19 +198,70 @@ round(sapply(table(as.factor(data$Emplmnt)),function(x) x/length(which(!is.na(da
 
 data$Q13
 
+ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +  
+  geom_bar(width=0.5) + 
+  labs(fill='Θα συστήνατε?')
 
 plot(as.factor(data$Q13))
 table(as.factor(data$Q13))
 sapply(table(as.factor(data$Q13)),function(x) x/nrow(data)*100)
+
 #######
 plot(factor(data$Q1))
 
 sapply(table(as.factor(data$Q1)),function(x) x/nrow(data)*100)
+
 ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
   geom_bar(width=0.5) + 
+  facet_wrap(~factor(Q5_SQ001))+
   labs(fill='Gender')
 
+  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+    geom_bar(width=0.5) + 
+    facet_wrap(~factor(Age))+
+  labs(fill='Gender')
+  
+  #LABELS AGE#
+  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+    geom_bar(width=0.5) + 
+    labs(title='Γνώμη για σύσταση ΠΜΣ ανά Ηλικίακή ομάδα', x='Γνώμη',y='Πλήθος')+
+    facet_wrap(~factor(Age))+
+    theme(plot.title = element_text(hjust = 0.5))+
+    scale_x_discrete(labels = c("Σίγουρα ναι", "Μάλλον ναι", "Ούτε ναι ούτε οχι", "Μάλλον όχι", "Σίγουρα όχι"))+
+    scale_fill_discrete(name = "Φύλο", 
+                        labels=c("Γυναίκες", "Άνδρες"))
+  
+  
+  
+  
+  
+  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+    geom_bar(width=0.5) + 
+    facet_wrap(~factor(Age2cats))+
+  labs(fill='Gender')
 
+  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+    geom_bar(width=0.5) + 
+    facet_wrap(~factor(Q7))+
+    labs(fill='Gender')
+  
+  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+    geom_bar(width=0.5) + 
+    facet_wrap(~factor(language))+
+    labs(fill='Gender')
+  
+  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+    geom_bar(width=0.5) + 
+    facet_wrap(~ factor(Q3))+
+    labs(fill='Gender')
+ 
+  
+  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+    geom_bar(width=0.5) + 
+    facet_wrap(~ factor(Q8))+
+    labs(fill='Gender')
+  
+  
 ggplot(data, aes(x = factor(Q13),fill=factor(Age))) +  
   geom_bar(width=0.5) + 
   labs(fill='Age group')
@@ -221,10 +287,11 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Q8))) +
 ggplot(data, aes(x = factor(Q13),fill = factor(Q8))) +  
   geom_bar(aes(y = (..count..)/sum(..count..))) + 
   scale_y_continuous(labels = percent)+
-  labs(title='Γ“ΓµΓ­ΓΓ¶Γ¥Γ©Γ΅ ΓΓΓ“ Γ¬Γ¥ Γ¥Γ±Γ£Γ΅Γ³ΓΓ΅ ΓªΓ΅Γ© Γ³Γ½Γ³Γ΄Γ΅Γ³Γ§ ΓΓΓ“', x='ΓΓ΅ Γ°Γ±Γ―Γ΄Γ¥ΓΓ­Γ΅Γ΄Γ¥ Γ΄Γ― ΓΓΓ“;',y='ΓΓ―Γ³Γ―Γ³Γ΄ΓΌ',
-       fill='Γ“ΓµΓ­ΓΓ¶Γ¥Γ©Γ΅ Γ¬Γ¥ Γ¥Γ±Γ£Γ΅Γ³ΓΓ΅')+
+  labs(title='Συνάφεια ΠΜΣ με εργασία και σύσταση ΠΜΣ', x='Θα προτείνατε το ΠΜΣ;',y='Ποσοστό',
+       fill='Συνάφεια με εργασία')+
   theme(plot.title = element_text(hjust = 0.5))+
-  scale_x_discrete(labels=c('Γ“ΓΓ£Γ―ΓµΓ±Γ΅ Γ­Γ΅Γ©','ΓΓΓ«Γ«Γ―Γ­ Γ­Γ΅Γ©','ΓΓ½Γ΄Γ¥ Γ­Γ΅Γ© Γ―Γ½Γ΄Γ¥ ΓΌΓ·Γ©','ΓΓΓ«Γ«Γ―Γ­ ΓΌΓ·Γ©','Γ“ΓΓ£Γ―ΓµΓ±Γ΅ ΓΌΓ·Γ©'))+
+  scale_x_discrete(labels=c('Σίγουρα ναι','Μάλλον ναι','Ούτε ναι ούτε όχι','Μάλλον όχι','Σίγουρα όχι'))+
 scale_fill_manual(values=c("darkred","red","blue","green4","darkgreen","yellow"),
-  labels = c("ΓΓ―Γ«Γ½ ", "ΓΓ±ΓªΓ¥Γ΄Γ ", "ΒΌΓ·Γ© ΓªΓ΅Γ© Γ΄ΓΌΓ³Γ― ", "ΓΓ΅Γ¨ΓΌΓ«Γ―Γµ ", "Γ„Γ¥Γ­ ΓΓ·ΓΉ Γ¥Γ±Γ£Γ΅Γ³Γ΄Γ¥Γ",'NA'))
+  labels = c("Πολύ ", "Αρκετά ", "Όχι και τόσο ", "Καθόλου ", "Δεν έχω εργαστεί",'NA'))
 
+tinytex::install_tinytex()
