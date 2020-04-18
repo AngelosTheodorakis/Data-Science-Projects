@@ -437,5 +437,4 @@ scale_fill_manual(values=c("darkred","red","blue","green4","darkgreen","yellow")
 ![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-4-19.png)
 \#\#How about a picture?\#\#
 
-![alt
-text](C:/Users/User/Desktop/Data-Science-Projects/Markdown_presentation_files/figure-markdown_github/10-beginner-guitar-chords.jpg)
+![my\_image](C:/Users/User/Desktop/Data-Science-Projects/10-beginner-guitar-chords.jpg)
