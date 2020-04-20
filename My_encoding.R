@@ -9,7 +9,7 @@ Missing_values<-data.frame(sort(sapply(data,function(x) sum(is.na(x))),decreasin
 #Q7
 #In variable Q7 
 test<-data.frame(cbind(data$Q6,data$Q7))
- #prepei na simpiptoun ta Na's tis erotisis 6 me ta na's ths 7     
+#prepei na simpiptoun ta Na's tis erotisis 6 me ta na's ths 7     
 which((test[,1]<=15) & is.na(test[,2]==TRUE))
 #Ara vriskoume missing values stis paratiriseis 121 kai 463 ta opoia
 #aforoun atoma pou ergazontai alla den apantisan.
@@ -24,7 +24,7 @@ identical(which(is.na(data$Q6)),which(is.na(data$Q6) & is.na(data$Q7)))
 #Ara sinolika ta missing values ths Q7 einai
 # 68 72 121 169 184 243 338 351 360 391 430 445 453 kai 463
 length(which(is.na(data$Q6) & is.na(data$Q7))) + 
- length( which((test[,1]<=15) & is.na(test[,2]==TRUE)))
+  length( which((test[,1]<=15) & is.na(test[,2]==TRUE)))
 #14 missing values gia tin Q7
 
 
@@ -161,7 +161,7 @@ p1<-ggplot(data, aes(x = factor(Q1))) +
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_discrete(labels=c('Γυναίκες','’νδρες'))+
   scale_fill_discrete(name = "Φύλο", 
-                       labels=c("Γυναίκες", "’νδρες"))
+                      labels=c("Γυναίκες", "’νδρες"))
 
 
 p2<-ggplot(data, aes(x = factor(Age))) +  
@@ -216,52 +216,52 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +
   facet_wrap(~factor(Q5_SQ001))+
   labs(fill='Gender')
 
-  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
-    geom_bar(width=0.5) + 
-    facet_wrap(~factor(Age))+
-  labs(fill='Gender')
-  
-  #LABELS AGE#
-  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
-    geom_bar(width=0.5) + 
-    labs(title='Γνώμη για σύσταση ΠΜΣ ανά Ηλικίακή ομάδα', x='Γνώμη',y='Πλήθος')+
-    facet_wrap(~factor(Age))+
-    theme(plot.title = element_text(hjust = 0.5))+
-    scale_x_discrete(labels = c("Σίγουρα ναι", "Μάλλον ναι", "Ούτε ναι ούτε οχι", "Μάλλον όχι", "Σίγουρα όχι"))+
-    scale_fill_discrete(name = "Φύλο", 
-                        labels=c("Γυναίκες", "’νδρες"))
-  
-  
-  
-  
-  
-  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
-    geom_bar(width=0.5) + 
-    facet_wrap(~factor(Age2cats))+
+ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+  geom_bar(width=0.5) + 
+  facet_wrap(~factor(Age))+
   labs(fill='Gender')
 
-  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
-    geom_bar(width=0.5) + 
-    facet_wrap(~factor(Q7))+
-    labs(fill='Gender')
-  
-  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
-    geom_bar(width=0.5) + 
-    facet_wrap(~factor(language))+
-    labs(fill='Gender')
-  
-  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
-    geom_bar(width=0.5) + 
-    facet_wrap(~ factor(Q3))+
-    labs(fill='Gender')
- 
-  
-  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
-    geom_bar(width=0.5) + 
-    facet_wrap(~ factor(Q8))+
-    labs(fill='Gender')
-  
-  
+#LABELS AGE#
+ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+  geom_bar(width=0.5) + 
+  labs(title='Γνώμη για σύσταση ΠΜΣ ανά Ηλικίακή ομάδα', x='Γνώμη',y='Πλήθος')+
+  facet_wrap(~factor(Age))+
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_x_discrete(labels = c("Σίγουρα ναι", "Μάλλον ναι", "Ούτε ναι ούτε οχι", "Μάλλον όχι", "Σίγουρα όχι"))+
+  scale_fill_discrete(name = "Φύλο", 
+                      labels=c("Γυναίκες", "’νδρες"))
+
+
+
+
+
+ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+  geom_bar(width=0.5) + 
+  facet_wrap(~factor(Age2cats))+
+  labs(fill='Gender')
+
+ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+  geom_bar(width=0.5) + 
+  facet_wrap(~factor(Q7))+
+  labs(fill='Gender')
+
+ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+  geom_bar(width=0.5) + 
+  facet_wrap(~factor(language))+
+  labs(fill='Gender')
+
+ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+  geom_bar(width=0.5) + 
+  facet_wrap(~ factor(Q3))+
+  labs(fill='Gender')
+
+
+ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+  geom_bar(width=0.5) + 
+  facet_wrap(~ factor(Q8))+
+  labs(fill='Gender')
+
+
 ggplot(data, aes(x = factor(Q13),fill=factor(Age))) +  
   geom_bar(width=0.5) + 
   labs(fill='Age group')
@@ -291,7 +291,155 @@ ggplot(data, aes(x = factor(Q13),fill = factor(Q8))) +
        fill='Συνάφεια με εργασία')+
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_discrete(labels=c('Σίγουρα ναι','Μάλλον ναι','Ούτε ναι ούτε όχι','Μάλλον όχι','Σίγουρα όχι'))+
-scale_fill_manual(values=c("darkred","red","blue","green4","darkgreen","yellow"),
-  labels = c("Πολύ ", "Αρκετά ", "Όχι και τόσο ", "Καθόλου ", "Δεν έχω εργαστεί",'NA'))
+  scale_fill_manual(values=c("darkred","red","blue","green4","darkgreen","yellow"),
+                    labels = c("Πολύ ", "Αρκετά ", "Όχι και τόσο ", "Καθόλου ", "Δεν έχω εργαστεί",'NA'))
 
-tinytex::install_tinytex()
+
+ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+  geom_bar(width=0.5) + 
+  facet_wrap(~factor(Age2cats))+
+  labs(fill='Gender')
+
+
+plot(as.factor(data$age2017))
+
+
+data$work <- rep('’νεργοι',nrow(data))
+data[(data$Q6<=15) & (!is.na(data$Q6)),'work'] <- 'Εργαζόμενοι'
+data[is.na(data$Q6),'work'] <- NA
+
+data$work
+
+
+ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+  geom_bar(width=0.5) + 
+  facet_wrap(~factor(work))+
+  labs(fill='Gender')
+
+ggplot(data, aes(x = factor(Q13),fill = factor(Q1))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_y_continuous(labels = percent)+
+  labs(title='Συνάφεια ΠΜΣ με εργασιακή κατάσταση και σύσταση ΠΜΣ', x='Θα προτείνατε το ΠΜΣ;',y='Ποσοστό',
+       fill='Φύλο')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  facet_wrap(~factor(work))+
+  scale_x_discrete(labels=c('Σίγουρα ναι','Μάλλον ναι','Ούτε ναι ούτε όχι','Μάλλον όχι','Σίγουρα όχι'))+
+  scale_fill_manual(values=c("darkred","blue"),
+                    labels = c("Γυναίκες","’νδρες "))
+
+
+ggplot(data, aes(x = factor(Q3),fill=factor(Q1))) +  
+  geom_bar(width=0.5) + 
+  labs(title='Τμήμα ΠΜΣ ανά Ηλικίακή ομάδα', x='Τμήμα',y='Πλήθος')+
+  facet_wrap(~factor(Age))+
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_x_discrete(labels = c("Πολιτική Επιστήμη", "Διεθνείς σπουδές", "ΚΔΠ", "ΣΝΕ"))+
+  scale_fill_discrete(name = "Φύλο", 
+                      labels=c("Γυναίκες", "’νδρες"))
+
+
+ggplot(data, aes(x = factor(Q9_SQ002),fill=factor(Q1))) +  
+  geom_bar(width=0.5) + 
+  labs(title='Τμήμα ΠΜΣ ανά συμβολή στην εύρεση εργασίας', x='Τμήμα',y='Πλήθος')+
+  facet_wrap(~factor(Q3))+
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_x_discrete(labels = c("NA","Πολύ", "Αρκετά", "Ούτε πολύ ούτε λίγο", "Λίγο","Καθόλου"))+
+  scale_fill_discrete(name = "Φύλο", 
+                      labels=c("Γυναίκες", "’νδρες"))
+
+
+ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q1))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_y_continuous(labels = percent)+
+  labs(title='Μετά την ολοκλήρωση του ανωτέρω ΠΜΣ, συνεχίσατε τις σπουδές σας;', x='',y='Ποσοστό',
+       fill='Φύλο')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_x_discrete(labels=c('Ναι','Όχι'))+
+  scale_fill_manual(values=c("darkred","blue"),
+                    labels = c("Γυναίκες","’νδρες "))
+
+
+ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q1))) +  
+  geom_bar(width=0.5) + 
+  labs(title='Συνέχιση σπουδών μετά το ΠΜΣ ανα ΠΜΣ;', x='',y='Πλήθος',
+       fill='Φύλο')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  facet_wrap(~factor(Q3))+
+  scale_x_discrete(labels=c('Ναι','Όχι'))+
+  scale_fill_manual(values=c("darkred","blue"),
+                    labels = c("Γυναίκες","’νδρες "))
+
+
+ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q1))) +  
+  geom_bar(width=0.5) + 
+  labs(title='Συνέχιση σπουδών μετά το ΠΜΣ ανα Hλικία;', x='',y='Πλήθος',
+       fill='Φύλο')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  facet_wrap(~factor(Age))+
+  scale_x_discrete(labels=c('Ναι','Όχι'))+
+  scale_fill_manual(values=c("darkred","darkblue"),
+                    labels = c("Γυναίκες","’νδρες "))
+
+
+data$Q1Factor <- factor(data$Q1, labels = c("Γυναίκες",  "’νδρες"))
+
+ggplot(data, aes(x = factor(Q11_SQ001))) +  
+  geom_bar(width=0.5) + 
+  labs(title='Συνέχιση σπουδών μετά το ΠΜΣ ανα Φύλο;', x='',y='Πλήθος',
+       fill='Φύλο')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  facet_wrap(~factor(Q1Factor),labeller=label_parsed)+
+  scale_x_discrete(labels=c('Ναι','Όχι'))
+
+
+ggplot(data, aes(x = factor(Q5_SQ001))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..), fill = factor(work))) + 
+  geom_text(aes( label = scales::percent((..count..)/sum(..count..)),
+                 y=(..count..)/sum(..count..) ), stat= "count", vjust = -.3) +
+  scale_y_continuous(labels = percent) + 
+  labs(title='Βαθμός Ικανοποίησης', x='',y='Πλήθος',
+       fill='')+
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(data, aes(x = factor(Q5_SQ001))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..), fill = factor(Age))) + 
+  geom_text(aes( label = scales::percent((..count..)/sum(..count..)),
+                 y=(..count..)/sum(..count..) ), stat= "count", vjust = -.3) +
+  scale_y_continuous(labels = percent) + 
+  labs(title='Βαθμός Ικανοποίησης', x='',y='Πλήθος',
+       fill='Ηλ.Ομάδα')+
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+
+
+ggplot(data, aes(x = factor(Q5_SQ001))) +  
+  geom_bar(aes(y = (..count..), fill = factor(Q1Factor))) +
+  geom_text(stat='count', aes(label=..count..), vjust=-.3) +
+  labs(title='Βαθμός Ικανοποίησης', x='',y='Πλήθος',
+       fill='Φύλο')+
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+
+ggplot(data, aes(x = factor(Q5_SQ001))) +  
+  geom_bar(aes(y = (..count..), fill = factor(Q1Factor))) +
+  geom_text(stat='count', aes(label=..count..), vjust=-.3) +
+  labs(title='Βαθμός Ικανοποίησης', x='',y='Πλήθος',
+       fill='Φύλο')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  facet_wrap(~factor(Q3))
+
+
+ggplot(data, aes(x = factor(Q5_SQ001))) +  
+  geom_bar(aes(y = (..count..), fill = factor(Gradyear))) +
+  geom_text(stat='count', aes(label=..count..), vjust=-.3) +
+  labs(title='Βαθμός Ικανοποίησης', x='Βαθμός',y='Πλήθος',
+       fill='Έτος')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  facet_wrap(~factor(Q3))
+
+
+round(sapply(table(as.factor(data$Q5_SQ001)),function(x) x/length(which(!is.na(data$Q5_SQ001)))*100),1)
+
+
