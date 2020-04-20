@@ -294,7 +294,7 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +
   geom_bar(width=0.5) + 
   facet_wrap(~factor(Q5_SQ001))+
   labs(fill='Gender')
-
+  
 
 
 ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +  
@@ -326,10 +326,11 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +
   labs(fill='Gender')
   
   #LABELS AGE#
+  data$AgeFactor <- factor(data$Age, labels = c('25-29','30-34','35-39','40+'))
   ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
     geom_bar(width=0.5) + 
     labs(title='Γνώμη για σύσταση ΠΜΣ ανά Ηλικίακή ομάδα', x='Γνώμη',y='Πλήθος')+
-    facet_wrap(~factor(Age))+
+    facet_wrap(~factor(AgeFactor))+
     theme(plot.title = element_text(hjust = 0.5))+
     scale_x_discrete(labels = c("Σίγουρα ναι", "Μάλλον ναι", "Ούτε ναι ούτε οχι", "Μάλλον όχι", "Σίγουρα όχι"))+
     scale_fill_discrete(name = "Φύλο", 
@@ -339,20 +340,29 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +
   
   
   
-  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
-    geom_bar(width=0.5) + 
-    facet_wrap(~factor(Age2cats))+
-  labs(fill='Gender')
+  # ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+  #   geom_bar(width=0.5) + 
+  #   facet_wrap(~factor(Age2cats))+
+  # labs(fill='Gender')
 
-  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+  # Στο παρακάτω γράφημα παρατηρούμε η τελευταία κατηγορία 
+  # αποτελείται κυρίως από τα τα άτομα που δεν εργάζονται
+  data$Q7Factor <- factor(data$Q7, labels = c("Πολύ ευχαριστημένος", "Αρκετά ευχαριστημένος", "Ούτε ευχαριστημένος ούτε δυσαρεστημένος", "Αρκετά δυσαρεστημένος ", "Πολύ δυσαρεστημένος"))
+  ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +  
     geom_bar(width=0.5) + 
-    facet_wrap(~factor(Q7))+
-    labs(fill='Gender')
+    facet_wrap(~factor(Q7Factor))+
+  scale_fill_discrete(name = "Θα συστήνατε
+το μεταπτυχιακό;",labels = c("Σίγουρα ναι", "Μάλλον ναι", "Ούτε ναι ούτε οχι", "Μάλλον όχι", "Σίγουρα όχι"))+
+    labs(title='Σύσταση ΠΜΣ ανα ικανοποίηση από τρέχουσα απασχόληση', x='Θα συστήνατε το ΠΜΣ;',y='Πλήθος',
+         fill='Συνάφεια με εργασία')+
+    theme(plot.title = element_text(hjust = 0.5))
+    
   
-  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
-    geom_bar(width=0.5) + 
-    facet_wrap(~factor(language))+
-    labs(fill='Gender')
+  
+  # ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+  #   geom_bar(width=0.5) + 
+  #   facet_wrap(~factor(language))+
+  #   labs(fill='Gender')
   
   ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
     geom_bar(width=0.5) + 
@@ -371,22 +381,22 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Age))) +
   labs(fill='Age group')
 
 
-ggplot(data, aes(x = factor(Q13),fill=factor(language))) +  
-  geom_bar(width=0.5) + 
-  labs(fill='Language group')
+# ggplot(data, aes(x = factor(Q13),fill=factor(language))) +  
+#   geom_bar(width=0.5) + 
+#   labs(fill='Language group')
 
 
 ggplot(data, aes(x = factor(Q13),fill=factor(Q3))) +  
   geom_bar(width=0.5) + 
   labs(fill='Tmima group')
 
-ggplot(data, aes(x = factor(Q13),fill=factor(Q5_SQ001))) +  
-  geom_bar(width=0.5) + 
-  labs(fill='Satisfaction group')
+# ggplot(data, aes(x = factor(Q13),fill=factor(Q5_SQ001))) +
+#   geom_bar(width=0.5) +
+#   labs(fill='Satisfaction group')
 
-ggplot(data, aes(x = factor(Q13),fill=factor(Q8))) +  
-  geom_bar(width=0.5) + 
-  labs(fill='Sinafeia me ergasia group')
+# ggplot(data, aes(x = factor(Q13),fill=factor(Q8))) +  
+#   geom_bar(width=0.5) + 
+#   labs(fill='Sinafeia me ergasia group')
 
 ggplot(data, aes(x = factor(Q13),fill = factor(Q8))) +  
   geom_bar(aes(y = (..count..)/sum(..count..))) + 
@@ -395,14 +405,14 @@ ggplot(data, aes(x = factor(Q13),fill = factor(Q8))) +
        fill='Συνάφεια με εργασία')+
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_discrete(labels=c('Σίγουρα ναι','Μάλλον ναι','Ούτε ναι ούτε όχι','Μάλλον όχι','Σίγουρα όχι'))+
-scale_fill_manual(values=c("darkred","red","blue","green4","darkgreen","yellow"),
+scale_fill_manual(values=c("darkred","red","blue","green4","darkgreen","darkblue"),
   labels = c("Πολύ ", "Αρκετά ", "Όχι και τόσο ", "Καθόλου ", "Δεν έχω εργαστεί",'NA'))
 
 
-ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
-  geom_bar(width=0.5) + 
-  facet_wrap(~factor(Age2cats))+
-  labs(fill='Gender')
+# ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+#   geom_bar(width=0.5) + 
+#   facet_wrap(~factor(Age2cats))+
+#   labs(fill='Gender')
 
 
 plot(as.factor(data$age2017)) #further investigate for normal distribution
@@ -417,11 +427,11 @@ data[is.na(data$Q6),'work'] <- NA
 
 data$work
 
-
-ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
-  geom_bar(width=0.5) + 
-  facet_wrap(~factor(work))+
-  labs(fill='Gender')
+# 
+# ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+#   geom_bar(width=0.5) + 
+#   facet_wrap(~factor(work))+
+#   labs(fill='Gender')
 
 ggplot(data, aes(x = factor(Q13),fill = factor(Q1))) +  
   geom_bar(aes(y = (..count..)/sum(..count..))) + 
@@ -435,24 +445,39 @@ ggplot(data, aes(x = factor(Q13),fill = factor(Q1))) +
                     labels = c("Γυναίκες","’νδρες "))
 
 
-ggplot(data, aes(x = factor(Q3),fill=factor(Q1))) +  
+
+
+
+
+ggplot(data, aes(x = factor(Q3Factor),fill=factor(Q1))) +  
   geom_bar(width=0.5) + 
-  labs(title='Τμήμα ΠΜΣ ανά Ηλικίακή ομάδα', x='Τμήμα',y='Πλήθος')+
-  facet_wrap(~factor(Age))+
+  labs(title='Τμήμα ΠΜΣ ανά Ηλικίακή ομάδα και φύλο', x='Τμήμα',y='Πλήθος')+
+  facet_wrap(~factor(AgeFactor))+
   theme(plot.title = element_text(hjust = 0.5))+
-  scale_x_discrete(labels = c("Πολιτική Επιστήμη", "Διεθνείς σπουδές", "ΚΔΠ", "ΣΝΕ"))+
+  scale_x_discrete(labels = c("ΠΕ", "ΔΣ", "ΚΔΠ", "ΣΝΕ"))+
   scale_fill_discrete(name = "Φύλο", 
                       labels=c("Γυναίκες", "’νδρες"))
 
-
-ggplot(data, aes(x = factor(Q9_SQ002),fill=factor(Q1))) +  
+ggplot(data, aes(x = factor(Q3Factor),fill=factor(work))) +  
   geom_bar(width=0.5) + 
-  labs(title='Τμήμα ΠΜΣ ανά συμβολή στην εύρεση εργασίας', x='Τμήμα',y='Πλήθος')+
-  facet_wrap(~factor(Q3))+
+  labs(title='Τμήμα ΠΜΣ ανά Ηλικίακή ομάδα και εργασιακή κατάσταση', x='Τμήμα',y='Πλήθος')+
+  facet_wrap(~factor(AgeFactor))+
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_x_discrete(labels = c("Πολ.Επ.", "Διεθ.Σπ", "Κρ.Δημ.Πολ.", "Σπ.Νοτ.Ευρ."))+
+  scale_fill_discrete(name = "Κατάσταση")
+
+# Στο παρακάτω γράφημα παρατηρούμε οτι το τμήμα πολιτικής επιστήμης έχει 
+# συγκριτικά με τα υπόλοιπα τμήματα μεγαλύτερη συμβολή στην εύρεση εργασίας
+ggplot(data, aes(x = factor(Q9_SQ002),fill=factor(work))) +  
+  geom_bar(width=0.5) + 
+  labs(title='Συμβολή στην εύρεση εργασίας ανα Τμήμα ΠΜΣ και εργασιακή κατάσταση', x='Τμήμα',y='Πλήθος')+
+  facet_wrap(~factor(Q3Factor))+
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_discrete(labels = c("NA","Πολύ", "Αρκετά", "Ούτε πολύ ούτε λίγο", "Λίγο","Καθόλου"))+
-  scale_fill_discrete(name = "Φύλο", 
-                      labels=c("Γυναίκες", "’νδρες"))
+  scale_fill_discrete(name = "Κατάσταση")
+
+
+
 
 
 ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q1))) +  
