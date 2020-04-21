@@ -134,7 +134,7 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +
                       labels=c('Σίγουρα ναι','Μάλλον ναι','Ούτε ναι ούτε όχι','Μάλλον όχι','Σίγουρα όχι'))
 ```
 
-### Στο επόμενο γράφημα παρατηρούμε την απάντηση για σύσταση του ΠΜΣ σε τρίτους ανά φύλο
+### Στο επόμενο γράφημα παρατηρούμε την απάντηση για σύσταση του ΠΜΣ σε τρίτους ανά ηλικιακή ομάδα και φύλο
 ```{r,fig.width=12,fig.height=7,echo=FALSE}
 
   data$AgeFactor <- factor(data$Age, labels = c('25-29','30-34','35-39','40+'))
@@ -216,7 +216,7 @@ ggplot(data, aes(x = factor(Q9_SQ002),fill=factor(work))) +
   labs(title='Συμβολή στην εύρεση εργασίας ανα Τμήμα ΠΜΣ και εργασιακή κατάσταση', x='Τμήμα',y='Πλήθος')+
   facet_wrap(~factor(Q3Factor))+
   theme(plot.title = element_text(hjust = 0.5))+
-  scale_x_discrete(labels = c("NA","Πολύ", "Αρκετά", "Ούτε πολύ ούτε λίγο", "Λίγο","Καθόλου"))+
+  scale_x_discrete(labels = c("Πολύ", "Αρκετά", "Ούτε πολύ ούτε λίγο", "Λίγο","Καθόλου","NA"))+
   scale_fill_discrete(name = "Κατάσταση")
 
 ```

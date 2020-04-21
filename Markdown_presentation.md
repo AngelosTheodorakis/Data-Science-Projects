@@ -45,7 +45,7 @@ scale_fill_discrete(labels=c('Σίγουρα ναι','Μάλλον ναι','Ού
 
 ![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
-### Στο επόμενο γράφημα παρατηρούμε την απάντηση για σύσταση του ΠΜΣ σε τρίτους ανά φύλο
+### Στο επόμενο γράφημα παρατηρούμε την απάντηση για σύσταση του ΠΜΣ σε τρίτους ανά ηλικιακή ομάδα και φύλο
 
 ![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-7-1.png)
 
