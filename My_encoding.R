@@ -125,7 +125,7 @@ data[which(is.na(data$Q4)),]
 #MY STATS
 library(dplyr)
 data$Q3<-as.factor(data$Q3)
-data$Q13<-as.numeric(data$Q13)
+#data$Q13<-as.numeric(data$Q13)
 data %>% group_by(Q3)%>%group_by(Gradyear)%>%
   summarise(mean(na.omit(Q5_SQ001)))
 
@@ -151,7 +151,7 @@ text(test[13:16,"Gradyear"],test[13:16,"mean.na.omit.Q5_SQ001.."],label=round(te
 #OR
 tapply(data$Q13, data$Q3, FUN=mean, na.rm=TRUE)
 
-tmima2<-subset(data, data$Q3 == "2")
+#tmima2<-subset(data, data$Q3 == "2")
 
 library(ggplot2)
 library(scales)
@@ -327,7 +327,8 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +
   
   #LABELS AGE#
   data$AgeFactor <- factor(data$Age, labels = c('25-29','30-34','35-39','40+'))
-  ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
+ 
+   ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
     geom_bar(width=0.5) + 
     labs(title='Γνώμη για σύσταση ΠΜΣ ανά Ηλικίακή ομάδα', x='Γνώμη',y='Πλήθος')+
     facet_wrap(~factor(AgeFactor))+
@@ -347,7 +348,8 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +
 
   # Στο παρακάτω γράφημα παρατηρούμε η τελευταία κατηγορία 
   # αποτελείται κυρίως από τα τα άτομα που δεν εργάζονται
-  data$Q7Factor <- factor(data$Q7, labels = c("Πολύ ευχαριστημένος", "Αρκετά ευχαριστημένος", "Ούτε ευχαριστημένος ούτε δυσαρεστημένος", "Αρκετά δυσαρεστημένος ", "Πολύ δυσαρεστημένος"))
+  
+   data$Q7Factor <- factor(data$Q7, labels = c("Πολύ ευχαριστημένος", "Αρκετά ευχαριστημένος", "Ούτε ευχαριστημένος ούτε δυσαρεστημένος", "Αρκετά δυσαρεστημένος ", "Πολύ δυσαρεστημένος"))
   ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +  
     geom_bar(width=0.5) + 
     facet_wrap(~factor(Q7Factor))+
@@ -401,12 +403,13 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Q3))) +
 ggplot(data, aes(x = factor(Q13),fill = factor(Q8))) +  
   geom_bar(aes(y = (..count..)/sum(..count..))) + 
   scale_y_continuous(labels = percent)+
-  labs(title='Συνάφεια ΠΜΣ με εργασία και σύσταση ΠΜΣ', x='Θα προτείνατε το ΠΜΣ;',y='Ποσοστό',
-       fill='Συνάφεια με εργασία')+
+  labs(title='Σχέση ΠΜΣ με τωρινή/πρόσφατη εργασία και σύσταση ΠΜΣ', x='Θα προτείνατε το ΠΜΣ;',y='Ποσοστό',
+       fill='Σχέση ΠΜΣ
+με εργασία')+
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_discrete(labels=c('Σίγουρα ναι','Μάλλον ναι','Ούτε ναι ούτε όχι','Μάλλον όχι','Σίγουρα όχι'))+
-scale_fill_manual(values=c("darkred","red","blue","green4","darkgreen","darkblue"),
-  labels = c("Πολύ ", "Αρκετά ", "Όχι και τόσο ", "Καθόλου ", "Δεν έχω εργαστεί",'NA'))
+scale_fill_discrete(
+  labels = c("Πολύ σχετικό ", "Αρκετά σχετικό", "Όχι και τόσο ", "Καθόλου σχετικό ", "Δεν έχω εργαστεί",'NA'))
 
 
 # ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
@@ -414,8 +417,19 @@ scale_fill_manual(values=c("darkred","red","blue","green4","darkgreen","darkblue
 #   facet_wrap(~factor(Age2cats))+
 #   labs(fill='Gender')
 
+ggplot(data, aes(x = factor(Q13),fill = factor(Q13))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_y_continuous(labels = percent)+
+  labs(title='Συνάφεια ΠΜΣ με εργασιακή κατάσταση και σύσταση ΠΜΣ', x='Θα προτείνατε το ΠΜΣ;',y='Συνολικό Ποσοστό',
+       fill='Απάντηση')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  facet_wrap(~factor(work))+
+  scale_fill_discrete( labels = c('Σίγουρα ναι','Μάλλον ναι','Ούτε ναι ούτε όχι','Μάλλον όχι','Σίγουρα όχι',"NA"))
 
-plot(as.factor(data$age2017)) #further investigate for normal distribution
+
+
+qplot(as.factor(data$age2017),bins=30) #further investigate for normal distribution
+
 median(data$age2017)
 mean(data$age2017)
 
@@ -425,7 +439,10 @@ data$work <- rep('’νεργοι',nrow(data))
 data[(data$Q6<=15) & (!is.na(data$Q6)),'work'] <- 'Εργαζόμενοι'
 data[is.na(data$Q6),'work'] <- NA
 
-data$work
+length(data[(data$Q6<=15) & (!is.na(data$Q6)),'work'])
+length(data[(data$Q6>15) & (!is.na(data$Q6)),'work'])
+length(data[is.na(data$Q6),'work'])
+summary(factor(data$work))
 
 # 
 # ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  

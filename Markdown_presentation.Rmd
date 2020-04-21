@@ -1,6 +1,6 @@
 
 ---
-title: "My first Markdown"
+title: "Γραφήματα για Έρευνα ΠΜΣ"
 author: "Angelos Theodorakis"
 date: "16/4/2020"
 output: 
@@ -9,12 +9,9 @@ output:
 
 ---
 
-This is my first Markdown Document!
- #md_document:
-    #variant: markdown_github
 
 
-## Let's load some libraries
+
 
 
 ```{r,echo=FALSE}
@@ -26,7 +23,6 @@ library(dplyr)
 source("http://peterhaschke.com/Code/multiplot.R")
 ```
 
-### Now let's load the data
 
 ```{r,echo=FALSE}
 data <- read.spss("C:/Users/User/Desktop/Άγγελος/ΕΛΚΕ/Έρευνα/sodanet/My-encoding.sav",use.value.labels = FALSE, to.data.frame=TRUE)
@@ -37,7 +33,7 @@ data <- read.spss("C:/Users/User/Desktop/Άγγελος/ΕΛΚΕ/Έρευνα/so
 
 
 
-# PLOTS
+# ΔΙΑΓΡΑΜΜΑΤΑ
 
 
 
@@ -124,6 +120,7 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +
   scale_fill_discrete(name='Φύλο',labels=c('Γυναίκες','Άνδρες'))
 ```
 
+### Το επόμενο διάγραμμα μας δείχνει την απάντηση για τη σύσταση ΠΜΣ σε τρίτους, ανα βαθμό ικανοποίησης από τις σπουδές των αποφοίτων.Υπάρχει όπως φαίνεται μια σύνδεση ανάμεσα στις 2 μεταβλητές.
 ```{r,fig.width=12,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +  
   geom_bar(width=0.5) + 
@@ -137,8 +134,9 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +
                       labels=c('Σίγουρα ναι','Μάλλον ναι','Ούτε ναι ούτε όχι','Μάλλον όχι','Σίγουρα όχι'))
 ```
 
+### Στο επόμενο γράφημα παρατηρούμε την απάντηση για σύσταση του ΠΜΣ σε τρίτους ανά φύλο
 ```{r,fig.width=12,fig.height=7,echo=FALSE}
- #LABELS AGE#
+
   data$AgeFactor <- factor(data$Age, labels = c('25-29','30-34','35-39','40+'))
   ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +  
     geom_bar(width=0.5) + 
@@ -151,8 +149,7 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +
   
 ```
 
-### Στο παρακάτω γράφημα η τελευταία κατηγορία (ΝΑ) 
-### αποτελείται κυρίως από τα άτομα που δεν εργάζονται
+### Στο παρακάτω γράφημα παρατηρούμε το πως η ικανοποίηση από την τρέχουσα απασχόληση επηρεάζει την απάντηση για σύσταση του ΠΜΣ σε τρίτους
 ```{r,fig.width=12,fig.height=7,echo=FALSE}
   data$Q7Factor <- factor(data$Q7, labels = c("Πολύ ευχαριστημένος", "Αρκετά ευχαριστημένος", "Ούτε ευχαριστημένος ούτε δυσαρεστημένος", "Αρκετά δυσαρεστημένος ", "Πολύ δυσαρεστημένος"))
   ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +  
@@ -166,46 +163,52 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +
 
 ```
 
+
+
 ```{r,echo=FALSE}
 data$work <- rep('Άνεργοι',nrow(data))
 data[(data$Q6<=15) & (!is.na(data$Q6)),'work'] <- 'Εργαζόμενοι'
 data[is.na(data$Q6),'work'] <- NA
 ```
 
+### Στο παρακάτω γράφημα ελέγχουμε αν η εργασιακή κατάσταση επηρεάζει την απόφαση για την σύσταση του ΠΜΣ σε τρίτους 
 ```{r,fig.width=14,fig.height=7,echo=FALSE}
-ggplot(data, aes(x = factor(Q13),fill = factor(Q1))) +  
+ggplot(data, aes(x = factor(Q13),fill = factor(Q13))) +  
   geom_bar(aes(y = (..count..)/sum(..count..))) + 
   scale_y_continuous(labels = percent)+
-  labs(title='Συνάφεια ΠΜΣ με εργασιακή κατάσταση και σύσταση ΠΜΣ', x='Θα προτείνατε το ΠΜΣ;',y='Ποσοστό',
-       fill='Φύλο')+
+  labs(title='Συνάφεια ΠΜΣ με εργασιακή κατάσταση και σύσταση ΠΜΣ', x='Θα προτείνατε το ΠΜΣ;',y='Συνολικό Ποσοστό',
+       fill='Απάντηση')+
   theme(plot.title = element_text(hjust = 0.5))+
   facet_wrap(~factor(work))+
-  scale_x_discrete(labels=c('Σίγουρα ναι','Μάλλον ναι','Ούτε ναι ούτε όχι','Μάλλον όχι','Σίγουρα όχι'))+
-  scale_fill_manual(values=c("darkred","blue"),
-                    labels = c("Γυναίκες","Άνδρες "))
+  scale_fill_discrete( labels = c('Σίγουρα ναι','Μάλλον ναι','Ούτε ναι ούτε όχι','Μάλλον όχι','Σίγουρα όχι',"NA"))
 
 ```
 
+
+### Στο παρακάτω γράφημα παρατηρούμε τον αριθμό των αποφοίτων σε κάθε τμήμα , ανα ηλικιακή ομάδα και φύλο. Οι γυναίκες υπερισχύουν στο τμήμα Κράτος και Δημόσια Πολιτική ,σε κάθε ηλικιακή ομάδα
 ```{r,fig.width=12,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(Q3Factor),fill=factor(Q1))) +  
   geom_bar(width=0.5) + 
   labs(title='Τμήμα ΠΜΣ ανά Ηλικίακή ομάδα και φύλο', x='Τμήμα',y='Πλήθος')+
   facet_wrap(~factor(AgeFactor))+
   theme(plot.title = element_text(hjust = 0.5))+
-  scale_x_discrete(labels = c("ΠΕ", "ΔΣ", "ΚΔΠ", "ΣΝΕ"))+
+  scale_x_discrete(labels = c("Πολ.Επ.", "Διεθ.Σπ.", "Κρ.Δημ.Πολ.", "Σπ.Νοτ.Ευρ."))+
   scale_fill_discrete(name = "Φύλο", 
                       labels=c("Γυναίκες", "Άνδρες"))
+```
 
+### Το ίδιο γράφημα, αυτή τη φορά ανα ηλικιακή ομάδα και εργασιακή κατάσταση.
+```{r,fig.width=12,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(Q3Factor),fill=factor(work))) +  
   geom_bar(width=0.5) + 
   labs(title='Τμήμα ΠΜΣ ανά Ηλικίακή ομάδα και εργασιακή κατάσταση', x='Τμήμα',y='Πλήθος')+
   facet_wrap(~factor(AgeFactor))+
   theme(plot.title = element_text(hjust = 0.5))+
-  scale_x_discrete(labels = c("Πολ.Επ.", "Διεθ.Σπ", "Κρ.Δημ.Πολ.", "Σπ.Νοτ.Ευρ."))+
+  scale_x_discrete(labels = c("Πολ.Επ.", "Διεθ.Σπ.", "Κρ.Δημ.Πολ.", "Σπ.Νοτ.Ευρ."))+
   scale_fill_discrete(name = "Κατάσταση")
 ```
 
-### Στο παρακάτω γράφημα παρατηρούμε οτι το τμήμα πολιτικής επιστήμης έχει συγκριτικά με τα υπόλοιπα τμήματα μεγαλύτερη συμβολή στην εύρεση εργασίας
+### Στο παρακάτω γράφημα παρατηρούμε οτι το Τμήμα Πολιτικής Επιστήμης έχει συγκριτικά με τα υπόλοιπα τμήματα μεγαλύτερη συμβολή στην εύρεση εργασίας
 ```{r,fig.width=12,fig.height=7,echo=FALSE}
 
 ggplot(data, aes(x = factor(Q9_SQ002),fill=factor(work))) +  
@@ -219,6 +222,19 @@ ggplot(data, aes(x = factor(Q9_SQ002),fill=factor(work))) +
 ```
 
 
+### Στο παρακάτω γράφημα μπορούμε να παρατηρήσουμε αν η σχέση του ΠΜΣ με την απασχόληση των αποφοίτων, επηρεάζει την απόφασή τους για τη σύσταση του ΠΜΣ
+```{r,echo=FALSE}
+ggplot(data, aes(x = factor(Q13),fill = factor(Q8))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_y_continuous(labels = percent)+
+  labs(title='Σχέση ΠΜΣ με τωρινή/πρόσφατη εργασία και σύσταση ΠΜΣ', x='Θα προτείνατε το ΠΜΣ;',y='Ποσοστό',
+       fill='Σχέση ΠΜΣ
+με εργασία')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_x_discrete(labels=c('Σίγουρα ναι','Μάλλον ναι','Ούτε ναι ούτε όχι','Μάλλον όχι','Σίγουρα όχι'))+
+scale_fill_discrete(
+  labels = c("Πολύ σχετικό ", "Αρκετά σχετικό", "Όχι και τόσο ", "Καθόλου σχετικό ", "Δεν έχω εργαστεί",'NA'))
+```
 
 
 
