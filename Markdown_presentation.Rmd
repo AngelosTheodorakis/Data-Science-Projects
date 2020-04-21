@@ -77,7 +77,7 @@ multiplot(p1, p2, cols=2)
 ```
 
 
-## Γραφήματα που αφορούν την επιλογή των απόφοιτων για τη σύσταση του μεταπτυχιακού σε τρίτους
+
 ```{r}
 
 ggplot(data, aes(x = factor(Q13))) +  
@@ -223,7 +223,7 @@ ggplot(data, aes(x = factor(Q9_SQ002),fill=factor(work))) +
 
 
 ### Στο παρακάτω γράφημα μπορούμε να παρατηρήσουμε αν η σχέση του ΠΜΣ με την απασχόληση των αποφοίτων, επηρεάζει την απόφασή τους για τη σύσταση του ΠΜΣ
-```{r,echo=FALSE}
+```{r,fig.width=12,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(Q13),fill = factor(Q8))) +  
   geom_bar(aes(y = (..count..)/sum(..count..))) + 
   scale_y_continuous(labels = percent)+
@@ -236,11 +236,84 @@ scale_fill_discrete(
   labels = c("Πολύ σχετικό ", "Αρκετά σχετικό", "Όχι και τόσο ", "Καθόλου σχετικό ", "Δεν έχω εργαστεί",'NA'))
 ```
 
+### Στη συνέχεια το γράφημα απεικονίζει τη πλήθος αποφοίτων που συνέχισαν (ή όχι) τις σπουδές τους, ανα τμήμα και φύλο
+```{r,fig.width=10,fig.height=7,echo=FALSE}
+ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q1))) +  
+  geom_bar(width=0.5) + 
+  labs(title='Συνέχιση σπουδών μετά το ΠΜΣ ανα τμήμα και φύλο;', x='',y='Πλήθος',
+       fill='Φύλο')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  facet_wrap(~factor(Q3Factor))+
+  scale_x_discrete(labels=c('Ναι','Όχι'))+
+  scale_fill_manual(values=c("darkred","blue"),
+                    labels = c("Γυναίκες","Άνδρες "))
+```
+
+### Παρακάτω απεικονίζεται η συνέχιση (ή μη) των σπουδών μετά το ΠΜΣ ανα Hλικία και συγγραφική δραστηριότητα.Όπως είναι αναμενόμενο, παρατηρούμε οτι όλες οι μεταβλητές συνδέονται.
+```{r,fig.width=10,fig.height=7,echo=FALSE}
+ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q12_SQ001))) +  
+  geom_bar(width=0.5) + 
+  labs(title='Συνέχιση σπουδών μετά το ΠΜΣ ανα Hλικία', x='',y='Πλήθος',
+       fill='Συγγραφική
+δραστηριότητα')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  facet_wrap(~factor(AgeFactor))+
+  scale_x_discrete(labels=c('Μη συνέχιση σπουδών','Συνέχιση σπουδών'))+
+  scale_fill_manual(values=c("darkred","darkblue"),
+                    labels = c("Όχι","Ναι"))
+```
+
+```{r,echo=FALSE}
+data$Q1Factor <- factor(data$Q1, labels = c("Γυναίκες",  "Άνδρες"))
+```
+
+### Γράφημα για συνέχιση(ή μη) των σπουδών ανά φύλο
+
+```{r,fig.width=10,fig.height=7,echo=FALSE}
+ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q11_SQ001))) +  
+  geom_bar(width=0.5) + 
+  labs(title='Συνέχιση σπουδών μετά το ΠΜΣ ανα Φύλο;', x='Συνέχιση',y='Πλήθος',
+       fill='Συνέχιση')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  facet_wrap(~factor(Q1Factor),labeller=label_parsed)+
+  scale_x_discrete(labels=c('Ναι','Όχι'))+
+  scale_fill_discrete(labels = c("Ναι","Όχι"))
+```
 
 
+### Bαθμός ικανοποίησης ανά ηλικιακή ομάδα, όλων συνολικά των αποφοίτων
+```{r,fig.width=10,fig.height=7,echo=FALSE}
+ggplot(data, aes(x = factor(Q5_SQ001))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..), fill = factor(AgeFactor))) + 
+  geom_text(aes( label = scales::percent((..count..)/sum(..count..)),
+                 y=(..count..)/sum(..count..) ), stat= "count", vjust = -.3) +
+  scale_y_continuous(labels = percent) + 
+  labs(title='Βαθμός Ικανοποίησης', x='',y='Πλήθος',
+       fill='Ηλ.Ομάδα')+
+  theme(plot.title = element_text(hjust = 0.5))
+```
 
+### Bαθμός ικανοποίησης ανά ηλικιακή ομάδα και τμήμα.
 
+```{r,fig.width=10,fig.height=7,echo=FALSE}
+ggplot(data, aes(x = factor(Q5_SQ001))) +  
+  geom_bar(aes(y = (..count..), fill = factor(AgeFactor))) +
+  geom_text(stat='count', aes(label=..count..), vjust=-.3) +
+  labs(title='Βαθμός Ικανοποίησης ανά τμήμα και ηλ.ομάδα', x='Βαθμός Ικανοποίησης',y='Πλήθος',
+       fill='Ηλ.Ομάδα')+
+  theme(plot.title = element_text(hjust = 0.5))+
+ facet_wrap(~factor(Q3Factor))
 
+```
 
+### Πίνακας συχνότητας αποφοίτων ανα ηλικία
+```{r,fig.width=10,fig.height=7,echo=FALSE}
+ggplot(data, aes(x = factor(age2017),fill =factor(age2017))) +  
+  geom_bar(aes(y = (..count..))) + 
+  labs(title='Πίνακας συχνότητας αποφοίτων ανα ηλικία', x='Ηλικία',y='Αριθμός αποφοίτων')+
+  theme(plot.title = element_text(hjust = 0.5),legend.position="none")+
+  geom_vline(xintercept=11)
 
+paste("Η Διάμεσος της ηλικίας είναι", median(data$age2017))
+```
 

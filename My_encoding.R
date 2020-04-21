@@ -428,11 +428,21 @@ ggplot(data, aes(x = factor(Q13),fill = factor(Q13))) +
 
 
 
+
 qplot(as.factor(data$age2017),bins=30) #further investigate for normal distribution
 
+
+ggplot(data, aes(x = factor(age2017),fill =factor(age2017))) +  
+  geom_bar(aes(y = (..count..))) + 
+  labs(title='Πίνακας συχνότητας αποφοίτων ανα ηλικία', x='Ηλικία',y='Αριθμός αποφοίτων')+
+  theme(plot.title = element_text(hjust = 0.5),legend.position="none")+
+  geom_vline(xintercept=11)
+
+?geom_vline
+?stat_summary
 median(data$age2017)
 mean(data$age2017)
-
+paste("Η Διάμεσος της ηλικίας είναι", median(data$age2017))
 
 
 data$work <- rep('’νεργοι',nrow(data))
@@ -510,35 +520,37 @@ ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q1))) +
 
 ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q1))) +  
   geom_bar(width=0.5) + 
-  labs(title='Συνέχιση σπουδών μετά το ΠΜΣ ανα ΠΜΣ;', x='',y='Πλήθος',
+  labs(title='Συνέχιση σπουδών μετά το ΠΜΣ ανα τμήμα και φύλο;', x='',y='Πλήθος',
        fill='Φύλο')+
   theme(plot.title = element_text(hjust = 0.5))+
-  facet_wrap(~factor(Q3))+
+  facet_wrap(~factor(Q3Factor))+
   scale_x_discrete(labels=c('Ναι','Όχι'))+
   scale_fill_manual(values=c("darkred","blue"),
                     labels = c("Γυναίκες","’νδρες "))
 
 
-ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q1))) +  
+ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q12_SQ001))) +  
   geom_bar(width=0.5) + 
-  labs(title='Συνέχιση σπουδών μετά το ΠΜΣ ανα Hλικία;', x='',y='Πλήθος',
-       fill='Φύλο')+
+  labs(title='Συνέχιση σπουδών μετά το ΠΜΣ ανα Hλικία', x='',y='Πλήθος',
+       fill='Συγγραφική
+δραστηριότητα')+
   theme(plot.title = element_text(hjust = 0.5))+
-  facet_wrap(~factor(Age))+
-  scale_x_discrete(labels=c('Ναι','Όχι'))+
+  facet_wrap(~factor(AgeFactor))+
+  scale_x_discrete(labels=c('Μη συνέχιση σπουδών','Συνέχιση σπουδών'))+
   scale_fill_manual(values=c("darkred","darkblue"),
-                    labels = c("Γυναίκες","’νδρες "))
+                    labels = c("Όχι","Ναι"))
 
 
 data$Q1Factor <- factor(data$Q1, labels = c("Γυναίκες",  "’νδρες"))
 
-ggplot(data, aes(x = factor(Q11_SQ001))) +  
+ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q11_SQ001))) +  
   geom_bar(width=0.5) + 
-  labs(title='Συνέχιση σπουδών μετά το ΠΜΣ ανα Φύλο;', x='',y='Πλήθος',
-       fill='Φύλο')+
+  labs(title='Συνέχιση σπουδών μετά το ΠΜΣ ανα Φύλο;', x='Συνέχιση',y='Πλήθος',
+       fill='Συνέχιση')+
   theme(plot.title = element_text(hjust = 0.5))+
   facet_wrap(~factor(Q1Factor),labeller=label_parsed)+
-  scale_x_discrete(labels=c('Ναι','Όχι'))
+  scale_x_discrete(labels=c('Ναι','Όχι'))+
+  scale_fill_discrete(labels = c("Ναι","Όχι"))
 
 
 ggplot(data, aes(x = factor(Q5_SQ001))) +  
@@ -551,7 +563,7 @@ ggplot(data, aes(x = factor(Q5_SQ001))) +
   theme(plot.title = element_text(hjust = 0.5))
  
 ggplot(data, aes(x = factor(Q5_SQ001))) +  
-  geom_bar(aes(y = (..count..)/sum(..count..), fill = factor(Age))) + 
+  geom_bar(aes(y = (..count..)/sum(..count..), fill = factor(AgeFactor))) + 
   geom_text(aes( label = scales::percent((..count..)/sum(..count..)),
                  y=(..count..)/sum(..count..) ), stat= "count", vjust = -.3) +
   scale_y_continuous(labels = percent) + 
@@ -572,12 +584,12 @@ ggplot(data, aes(x = factor(Q5_SQ001))) +
 
 
 ggplot(data, aes(x = factor(Q5_SQ001))) +  
-  geom_bar(aes(y = (..count..), fill = factor(Q1Factor))) +
+  geom_bar(aes(y = (..count..), fill = factor(AgeFactor))) +
   geom_text(stat='count', aes(label=..count..), vjust=-.3) +
-  labs(title='Βαθμός Ικανοποίησης', x='',y='Πλήθος',
-       fill='Φύλο')+
+  labs(title='Βαθμός Ικανοποίησης ανά τμήμα και ηλ.ομάδα', x='Βαθμός Ικανοποίησης',y='Πλήθος',
+       fill='Ηλ.Ομάδα')+
   theme(plot.title = element_text(hjust = 0.5))+
- facet_wrap(~factor(Q3))
+ facet_wrap(~factor(Q3Factor))
 
  
 ggplot(data, aes(x = factor(Q5_SQ001))) +  

@@ -20,9 +20,6 @@
 
 ![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-3-2.png)
 
-Γραφήματα που αφορούν την επιλογή των απόφοιτων για τη σύσταση του μεταπτυχιακού σε τρίτους
--------------------------------------------------------------------------------------------
-
 ``` r
 ggplot(data, aes(x = factor(Q13))) +  
   geom_bar(aes(y = (..count..)/sum(..count..), fill = factor(Q13))) + 
@@ -72,3 +69,29 @@ scale_fill_discrete(labels=c('Σίγουρα ναι','Μάλλον ναι','Ού
 ### Στο παρακάτω γράφημα μπορούμε να παρατηρήσουμε αν η σχέση του ΠΜΣ με την απασχόληση των αποφοίτων, επηρεάζει την απόφασή τους για τη σύσταση του ΠΜΣ
 
 ![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-14-1.png)
+
+### Στη συνέχεια το γράφημα απεικονίζει τη πλήθος αποφοίτων που συνέχισαν (ή όχι) τις σπουδές τους, ανα τμήμα και φύλο
+
+![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-15-1.png)
+
+### Παρακάτω απεικονίζεται η συνέχιση (ή μη) των σπουδών μετά το ΠΜΣ ανα Hλικία και συγγραφική δραστηριότητα.Όπως είναι αναμενόμενο, παρατηρούμε οτι όλες οι μεταβλητές συνδέονται.
+
+![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-16-1.png)
+
+### Γράφημα για συνέχιση(ή μη) των σπουδών ανά φύλο
+
+![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-18-1.png)
+
+### Bαθμός ικανοποίησης ανά ηλικιακή ομάδα, όλων συνολικά των αποφοίτων
+
+![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-19-1.png)
+
+### Bαθμός ικανοποίησης ανά ηλικιακή ομάδα και τμήμα.
+
+![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-20-1.png)
+
+### Πίνακας συχνότητας αποφοίτων ανα ηλικία
+
+![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-21-1.png)
+
+    ## [1] "Η Διάμεσος της ηλικίας είναι 35"
