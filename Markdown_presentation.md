@@ -11,28 +11,16 @@
     ## 
     ##     intersect, setdiff, setequal, union
 
+\#
+<center>
 ΔΙΑΓΡΑΜΜΑΤΑ
-===========
+</center>
 
 ![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-3-1.png)
 
     ## Loading required package: grid
 
 ![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-3-2.png)
-
-``` r
-ggplot(data, aes(x = factor(Q13))) +  
-  geom_bar(aes(y = (..count..)/sum(..count..), fill = factor(Q13))) + 
-  geom_text(aes( label = scales::percent((..count..)/sum(..count..)),
-                 y=(..count..)/sum(..count..) ), stat= "count", vjust = -.3) +
-  scale_y_continuous(labels = percent) + 
-  labs(title='Θα συστήνατε το μεταπτυχιακό;', x='Απάντηση',y='Πλήθος',
-       fill='Θα συστήνατε 
-το μεταπτυχιακό?')+
-  theme(plot.title = element_text(hjust = 0.5))+
-  scale_x_discrete(labels=c('Σίγουρα ναι','Μάλλον ναι','Ούτε ναι ούτε όχι','Μάλλον όχι','Σίγουρα όχι'))+
-scale_fill_discrete(labels=c('Σίγουρα ναι','Μάλλον ναι','Ούτε ναι ούτε όχι','Μάλλον όχι','Σίγουρα όχι'))
-```
 
 ![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-4-1.png)
 
