@@ -33,7 +33,7 @@ data <- read.spss("C:/Users/User/Desktop/Άγγελος/ΕΛΚΕ/Έρευνα/so
 
 
 
-# ΔΙΑΓΡΑΜΜΑΤΑ
+# <center>  ΔΙΑΓΡΑΜΜΑΤΑ </center>
 
 
 
@@ -78,7 +78,7 @@ multiplot(p1, p2, cols=2)
 
 
 
-```{r}
+```{r,echo=FALSE}
 
 ggplot(data, aes(x = factor(Q13))) +  
   geom_bar(aes(y = (..count..)/sum(..count..), fill = factor(Q13))) + 
@@ -240,11 +240,11 @@ scale_fill_discrete(
 ```{r,fig.width=10,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q1))) +  
   geom_bar(width=0.5) + 
-  labs(title='Συνέχιση σπουδών μετά το ΠΜΣ ανα τμήμα και φύλο;', x='',y='Πλήθος',
+  labs(title='Συνέχιση σπουδών μετά το ΠΜΣ ανα τμήμα και φύλο;', x='Συνέχιση σπουδών',y='Πλήθος',
        fill='Φύλο')+
   theme(plot.title = element_text(hjust = 0.5))+
   facet_wrap(~factor(Q3Factor))+
-  scale_x_discrete(labels=c('Ναι','Όχι'))+
+  scale_x_discrete(labels=c('Όχι','Ναι'))+
   scale_fill_manual(values=c("darkred","blue"),
                     labels = c("Γυναίκες","Άνδρες "))
 ```
@@ -276,8 +276,8 @@ ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q11_SQ001))) +
        fill='Συνέχιση')+
   theme(plot.title = element_text(hjust = 0.5))+
   facet_wrap(~factor(Q1Factor),labeller=label_parsed)+
-  scale_x_discrete(labels=c('Ναι','Όχι'))+
-  scale_fill_discrete(labels = c("Ναι","Όχι"))
+  scale_x_discrete(labels=c('Όχι','Ναι'))+
+  scale_fill_discrete(labels = c("Όχι","Ναι"))
 ```
 
 
@@ -299,7 +299,7 @@ ggplot(data, aes(x = factor(Q5_SQ001))) +
 ggplot(data, aes(x = factor(Q5_SQ001))) +  
   geom_bar(aes(y = (..count..), fill = factor(AgeFactor))) +
   geom_text(stat='count', aes(label=..count..), vjust=-.3) +
-  labs(title='Βαθμός Ικανοποίησης ανά τμήμα και ηλ.ομάδα', x='Βαθμός Ικανοποίησης',y='Πλήθος',
+  labs(title='Βαθμός Ικανοποίησης ανά ηλικιακή ομάδα και τμήμα', x='Βαθμός Ικανοποίησης',y='Πλήθος',
        fill='Ηλ.Ομάδα')+
   theme(plot.title = element_text(hjust = 0.5))+
  facet_wrap(~factor(Q3Factor))
