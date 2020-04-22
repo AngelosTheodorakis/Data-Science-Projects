@@ -11,10 +11,7 @@
     ## 
     ##     intersect, setdiff, setequal, union
 
-\#
-<center>
-ΔΙΑΓΡΑΜΜΑΤΑ
-</center>
+### ΔΙΑΓΡΑΜΜΑΤΑ
 
 ![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-3-1.png)
 
@@ -62,7 +59,7 @@
 
 ![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-15-1.png)
 
-### Παρακάτω απεικονίζεται η συνέχιση (ή μη) των σπουδών μετά το ΠΜΣ ανα Hλικία και συγγραφική δραστηριότητα.Όπως είναι αναμενόμενο, παρατηρούμε οτι όλες οι μεταβλητές συνδέονται.
+### Παρακάτω απεικονίζεται η συνέχιση (ή μη) των σπουδών μετά το ΠΜΣ ανα Hλικία και επιστημονική δραστηριότητα μετά την ολοκλήρωση του ΠΜΣ.Όπως είναι αναμενόμενο, παρατηρούμε οτι όλες οι μεταβλητές συνδέονται.
 
 ![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-16-1.png)
 
