@@ -9,9 +9,7 @@ output:
 ---
 
 
-
-
-## ΔΙΑΓΡΑΜΜΑΤΑ ΓΙΑ ΤΗΝ ΕΡΕΥΝΑ ΑΠΟΦΟΙΤΩΝ ΠΜΣ
+### ΔΙΑΓΡΑΜΜΑΤΑ ΓΙΑ ΤΗΝ ΕΡΕΥΝΑ ΑΠΟΦΟΙΤΩΝ ΠΜΣ
 
 ```{r,echo=FALSE}
 library(foreign)
@@ -34,7 +32,6 @@ data <- read.spss("C:/Users/User/Desktop/Άγγελος/ΕΛΚΕ/Έρευνα/so
 
 
 ### Αρχικά παρουσιάζουμε κάποια γραφήματα που αφορούν τα ποσοστά ετών αποφοίτησης, φύλων και ηλικίας των αποφοίτων.
-
 
 ```{r,echo=FALSE}
 p1<-ggplot(data, aes(x = factor(Q1))) +  
@@ -293,7 +290,7 @@ ggplot(data, aes(x = factor(Q5_SQ001))) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-### Το ίδιο γράφημα, αυτή τη φορά ανα ηλικιακή ομάδα και τμήμα.
+### Το ίδιο γράφημα, αυτή τη φορά ανα ηλικιακή ομάδα και τμήμα
 
 ```{r,fig.width=10,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(Q5_SQ001))) +  
@@ -306,7 +303,7 @@ ggplot(data, aes(x = factor(Q5_SQ001))) +
 
 ```
 
-### Τέλος, ένα γράφημα που απεικονίζει το πλήθος των αποφοίτων ανα ηλικία.
+### Τέλος, ένα γράφημα που απεικονίζει το πλήθος των αποφοίτων ανα ηλικία
 ```{r,fig.width=10,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(age2017),fill =factor(age2017))) +  
   geom_bar(aes(y = (..count..))) + 

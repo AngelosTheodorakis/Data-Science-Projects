@@ -1,5 +1,4 @@
-ΔΙΑΓΡΑΜΜΑΤΑ ΓΙΑ ΤΗΝ ΕΡΕΥΝΑ ΑΠΟΦΟΙΤΩΝ ΠΜΣ
-----------------------------------------
+### ΔΙΑΓΡΑΜΜΑΤΑ ΓΙΑ ΤΗΝ ΕΡΕΥΝΑ ΑΠΟΦΟΙΤΩΝ ΠΜΣ
 
     ## Warning: package 'foreign' was built under R version 3.6.3
 
@@ -74,11 +73,11 @@
 
 ![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-19-1.png)
 
-### Το ίδιο γράφημα, αυτή τη φορά ανα ηλικιακή ομάδα και τμήμα.
+### Το ίδιο γράφημα, αυτή τη φορά ανα ηλικιακή ομάδα και τμήμα
 
 ![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-20-1.png)
 
-### Τέλος, ένα γράφημα που απεικονίζει το πλήθος των αποφοίτων ανα ηλικία.
+### Τέλος, ένα γράφημα που απεικονίζει το πλήθος των αποφοίτων ανα ηλικία
 
 ![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-21-1.png)
 
