@@ -1,3 +1,6 @@
+ΔΙΑΓΡΑΜΜΑΤΑ ΓΙΑ ΤΗΝ ΕΡΕΥΝΑ ΑΠΟΦΟΙΤΩΝ ΠΜΣ
+----------------------------------------
+
 ### Αρχικά παρουσιάζουμε κάποια γραφήματα που αφορούν τα ποσοστά ετών αποφοίτησης, φύλων και ηλικίας των αποφοίτων.
 
 ![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-3-1.png)![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-3-2.png)

@@ -12,9 +12,9 @@ output:
 
 
 
+## ΔΙΑΓΡΑΜΜΑΤΑ ΓΙΑ ΤΗΝ ΕΡΕΥΝΑ ΑΠΟΦΟΙΤΩΝ ΠΜΣ
 
-
-```{r,echo=FALSE}
+```{r,echo=FALSE,include=FALSE}
 library(foreign)
 library(knitr)
 library(ggplot2)
@@ -78,6 +78,7 @@ multiplot(p1, p2, cols=2)
 
 
 ### Στη συνέχεια , το διάγραμμα απεικονίζει το ποσοστό αποφοίτων που θα σύστηναν το μεταπτυχιακό σε τρίτους.Παρατηρούμε οτι ένα μεγάλο ποσοστό 78.1%, θα το σύστηνε.
+
 ```{r,echo=FALSE}
 
 ggplot(data, aes(x = factor(Q13))) +  
