@@ -1,11 +1,12 @@
 
 ---
-title: "Γραφήματα για Έρευνα ΠΜΣ"
+title: "ΔΙΑΓΡΑΜΜΑΤΑ ΓΙΑ ΤΗΝ ΕΡΕΥΝΑ ΑΠΟΦΟΙΤΩΝ ΠΜΣ"
 author: "Angelos Theodorakis"
 date: "16/4/2020"
 output: 
-      md_document:
-        variant: markdown_github
+        md_document:
+           variant: markdown_github
+      
 
 ---
 
@@ -13,13 +14,13 @@ output:
 
 
 
-
-```{r,echo=FALSE}
+```{r,echo=FALSE,include=FALSE}
 library(foreign)
 library(knitr)
 library(ggplot2)
 library(scales)
 library(dplyr)
+library(grid)
 source("http://peterhaschke.com/Code/multiplot.R")
 ```
 
@@ -33,8 +34,7 @@ data <- read.spss("C:/Users/User/Desktop/Άγγελος/ΕΛΚΕ/Έρευνα/so
 
 
 
-### ΔΙΑΓΡΑΜΜΑΤΑ 
-
+### Αρχικά παρουσιάζουμε κάποια γραφήματα που αφορούν τα ποσοστά ετών αποφοίτησης, φύλων και ηλικίας των αποφοίτων.
 
 
 ```{r,echo=FALSE}
@@ -77,7 +77,7 @@ multiplot(p1, p2, cols=2)
 ```
 
 
-
+### Στη συνέχεια , το διάγραμμα απεικονίζει το ποσοστό αποφοίτων που θα σύστηναν το μεταπτυχιακό σε τρίτους.Παρατηρούμε οτι ένα μεγάλο ποσοστό 78.1%, θα το σύστηνε.
 ```{r,echo=FALSE}
 
 ggplot(data, aes(x = factor(Q13))) +  
@@ -85,7 +85,7 @@ ggplot(data, aes(x = factor(Q13))) +
   geom_text(aes( label = scales::percent((..count..)/sum(..count..)),
                  y=(..count..)/sum(..count..) ), stat= "count", vjust = -.3) +
   scale_y_continuous(labels = percent) + 
-  labs(title='Θα συστήνατε το μεταπτυχιακό;', x='Απάντηση',y='Πλήθος',
+  labs(title='Θα συστήνατε το μεταπτυχιακό;', x='Απάντηση',y='Ποσοστό',
        fill='Θα συστήνατε 
 το μεταπτυχιακό?')+
   theme(plot.title = element_text(hjust = 0.5))+
@@ -94,7 +94,7 @@ scale_fill_discrete(labels=c('Σίγουρα ναι','Μάλλον ναι','Ού
 
 ```
 
-
+### Παρακάτω έχουμε το ίδιο διάγραμμα, αυτή τη φορά όμως ανα τμήμα ΠΜΣ.
 ```{r,fig.width=12,fig.height=8,echo=FALSE}
 data$Q3Factor <- factor(data$Q3, labels = c("Πολιτική Επιστήμη και Κοινωνιολογία", "Διεθνείς και Ευρωπαϊκές σπουδές", "Κράτος και Δημόσια Πολιτική", "Σπουδές Νοτιοανατολικής Ευρώπης"))
 
@@ -120,7 +120,7 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Q1))) +
   scale_fill_discrete(name='Φύλο',labels=c('Γυναίκες','Άνδρες'))
 ```
 
-### Το επόμενο διάγραμμα μας δείχνει την απάντηση για τη σύσταση ΠΜΣ σε τρίτους, ανα βαθμό ικανοποίησης από τις σπουδές των αποφοίτων.Υπάρχει όπως φαίνεται μια σύνδεση ανάμεσα στις 2 μεταβλητές.
+### Το επόμενο διάγραμμα μας δείχνει την απάντηση για τη σύσταση ΠΜΣ σε τρίτους, ανα βαθμό ικανοποίησης από τις σπουδές των αποφοίτων.Υπάρχει όπως φαίνεται μια σύνδεση ανάμεσα στις μεταβλητές.
 ```{r,fig.width=12,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +  
   geom_bar(width=0.5) + 
@@ -134,7 +134,7 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +
                       labels=c('Σίγουρα ναι','Μάλλον ναι','Ούτε ναι ούτε όχι','Μάλλον όχι','Σίγουρα όχι'))
 ```
 
-### Στο επόμενο γράφημα παρατηρούμε την απάντηση για σύσταση του ΠΜΣ σε τρίτους ανά ηλικιακή ομάδα και φύλο
+### Στο επόμενο γράφημα παρατηρούμε την απάντηση για σύσταση του ΠΜΣ σε τρίτους ανά ηλικιακή ομάδα και φύλο.
 ```{r,fig.width=12,fig.height=7,echo=FALSE}
 
   data$AgeFactor <- factor(data$Age, labels = c('25-29','30-34','35-39','40+'))
@@ -149,7 +149,7 @@ ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +
   
 ```
 
-### Στο παρακάτω γράφημα παρατηρούμε το πως η ικανοποίηση από την τρέχουσα απασχόληση επηρεάζει την απάντηση για σύσταση του ΠΜΣ σε τρίτους
+### Στο παρακάτω γράφημα παρατηρούμε το πως η ικανοποίηση από την τρέχουσα απασχόληση επηρεάζει την απάντηση για σύσταση του ΠΜΣ σε τρίτους.
 ```{r,fig.width=12,fig.height=7,echo=FALSE}
   data$Q7Factor <- factor(data$Q7, labels = c("Πολύ ευχαριστημένος", "Αρκετά ευχαριστημένος", "Ούτε ευχαριστημένος ούτε δυσαρεστημένος", "Αρκετά δυσαρεστημένος ", "Πολύ δυσαρεστημένος"))
   ggplot(data, aes(x = factor(Q13),fill=factor(Q13))) +  
@@ -171,7 +171,7 @@ data[(data$Q6<=15) & (!is.na(data$Q6)),'work'] <- 'Εργαζόμενοι'
 data[is.na(data$Q6),'work'] <- NA
 ```
 
-### Στο παρακάτω γράφημα ελέγχουμε αν η εργασιακή κατάσταση επηρεάζει την απόφαση για την σύσταση του ΠΜΣ σε τρίτους 
+### Στο παρακάτω γράφημα ελέγχουμε αν η εργασιακή κατάσταση επηρεάζει την απόφαση για την σύσταση του ΠΜΣ σε τρίτους .
 ```{r,fig.width=14,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(Q13),fill = factor(Q13))) +  
   geom_bar(aes(y = (..count..)/sum(..count..))) + 
@@ -185,7 +185,7 @@ ggplot(data, aes(x = factor(Q13),fill = factor(Q13))) +
 ```
 
 
-### Στο παρακάτω γράφημα παρατηρούμε τον αριθμό των αποφοίτων σε κάθε τμήμα , ανα ηλικιακή ομάδα και φύλο. Οι γυναίκες υπερισχύουν στο τμήμα Κράτος και Δημόσια Πολιτική ,σε κάθε ηλικιακή ομάδα
+### Στο παρακάτω γράφημα παρατηρούμε τον αριθμό των αποφοίτων σε κάθε τμήμα , ανα ηλικιακή ομάδα και φύλο. Οι γυναίκες υπερισχύουν στο τμήμα Κράτος και Δημόσια Πολιτική ,σε κάθε ηλικιακή ομάδα.
 ```{r,fig.width=12,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(Q3Factor),fill=factor(Q1))) +  
   geom_bar(width=0.5) + 
@@ -208,7 +208,7 @@ ggplot(data, aes(x = factor(Q3Factor),fill=factor(work))) +
   scale_fill_discrete(name = "Κατάσταση")
 ```
 
-### Στο παρακάτω γράφημα παρατηρούμε οτι το Τμήμα Πολιτικής Επιστήμης έχει συγκριτικά με τα υπόλοιπα τμήματα μεγαλύτερη συμβολή στην εύρεση εργασίας
+### Στο παρακάτω γράφημα παρατηρούμε οτι το Τμήμα Πολιτικής Επιστήμης έχει συγκριτικά με τα υπόλοιπα τμήματα μεγαλύτερη συμβολή στην εύρεση εργασίας.
 ```{r,fig.width=12,fig.height=7,echo=FALSE}
 
 ggplot(data, aes(x = factor(Q9_SQ002),fill=factor(work))) +  
@@ -222,7 +222,7 @@ ggplot(data, aes(x = factor(Q9_SQ002),fill=factor(work))) +
 ```
 
 
-### Στο παρακάτω γράφημα μπορούμε να παρατηρήσουμε αν η σχέση του ΠΜΣ με την απασχόληση των αποφοίτων, επηρεάζει την απόφασή τους για τη σύσταση του ΠΜΣ
+### Στο παρακάτω γράφημα μπορούμε να παρατηρήσουμε αν η σχέση του ΠΜΣ με την απασχόληση των αποφοίτων, επηρεάζει την απόφασή τους για τη σύσταση του ΠΜΣ.
 ```{r,fig.width=12,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(Q13),fill = factor(Q8))) +  
   geom_bar(aes(y = (..count..)/sum(..count..))) + 
@@ -236,7 +236,7 @@ scale_fill_discrete(
   labels = c("Πολύ σχετικό ", "Αρκετά σχετικό", "Όχι και τόσο ", "Καθόλου σχετικό ", "Δεν έχω εργαστεί",'NA'))
 ```
 
-### Στη συνέχεια το γράφημα απεικονίζει τη πλήθος αποφοίτων που συνέχισαν (ή όχι) τις σπουδές τους, ανα τμήμα και φύλο
+### Στη συνέχεια το γράφημα απεικονίζει τη πλήθος αποφοίτων που συνέχισαν (ή όχι) τις σπουδές τους, ανα τμήμα και φύλο.
 ```{r,fig.width=10,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q1))) +  
   geom_bar(width=0.5) + 
@@ -268,7 +268,7 @@ ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q12_SQ001))) +
 data$Q1Factor <- factor(data$Q1, labels = c("Γυναίκες",  "Άνδρες"))
 ```
 
-### Γράφημα για συνέχιση(ή μη) των σπουδών ανά φύλο
+### Γράφημα για συνέχιση(ή μη) των σπουδών ανά φύλο.
 
 ```{r,fig.width=10,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q11_SQ001))) +  
@@ -282,7 +282,7 @@ ggplot(data, aes(x = factor(Q11_SQ001),fill = factor(Q11_SQ001))) +
 ```
 
 
-### Bαθμός ικανοποίησης ανά ηλικιακή ομάδα, όλων συνολικά των αποφοίτων
+### Bαθμός ικανοποίησης ανά ηλικιακή ομάδα, όλων συνολικά των αποφοίτων.
 ```{r,fig.width=10,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(Q5_SQ001))) +  
   geom_bar(aes(y = (..count..)/sum(..count..), fill = factor(AgeFactor))) + 
@@ -294,7 +294,7 @@ ggplot(data, aes(x = factor(Q5_SQ001))) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-### Bαθμός ικανοποίησης ανά ηλικιακή ομάδα και τμήμα.
+### Το ίδιο γράφημα, αυτή τη φορά ανα ηλικιακή ομάδα και τμήμα.
 
 ```{r,fig.width=10,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(Q5_SQ001))) +  
@@ -307,7 +307,7 @@ ggplot(data, aes(x = factor(Q5_SQ001))) +
 
 ```
 
-### Πίνακας συχνότητας αποφοίτων ανα ηλικία
+### Τέλος, ένα γράφημα που απεικονίζει το πλήθος των αποφοίτων ανα ηλικία.
 ```{r,fig.width=10,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(age2017),fill =factor(age2017))) +  
   geom_bar(aes(y = (..count..))) + 
@@ -315,6 +315,8 @@ ggplot(data, aes(x = factor(age2017),fill =factor(age2017))) +
   theme(plot.title = element_text(hjust = 0.5),legend.position="none")+
   geom_vline(xintercept=11)
 
-paste("Η Διάμεσος της ηλικίας είναι", median(data$age2017))
+paste("Η Διάμεσος της ηλικίας είναι", median(data$age2017),"έτη")
 ```
+
+
 

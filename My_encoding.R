@@ -5,7 +5,7 @@ str(data)
 summary(data)
 
 Missing_values<-data.frame(sort(sapply(data,function(x) sum(is.na(x))),decreasing = TRUE))
-
+library(grid)
 
 #Q7
 #In variable Q7 
