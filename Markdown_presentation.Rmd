@@ -14,7 +14,7 @@ output:
 
 
 
-```{r,echo=FALSE,include=FALSE}
+```{r,echo=FALSE}
 library(foreign)
 library(knitr)
 library(ggplot2)
