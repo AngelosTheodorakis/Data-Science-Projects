@@ -9,7 +9,7 @@ output:
 ---
 
 
-### ΔΙΑΓΡΑΜΜΑΤΑ ΓΙΑ ΤΗΝ ΕΡΕΥΝΑ ΑΠΟΦΟΙΤΩΝ ΠΜΣ
+### ΔΙΑΓΡΑΜΜΑΤΑ ΓΙΑ ΤΗΝ ΕΡΕΥΝΑ ΑΠΟΦΟΙΤΩΝ ΠΜΣ.
 
 ```{r,echo=FALSE,include=FALSE}
 library(foreign)
@@ -65,7 +65,7 @@ ggplot(data, aes(x = factor(Gradyear))) +
   labs(title='Ποσοστό Έτών Αποφοίτησης', x='Έτος αποφοίτησης',y='Ποσοστό')+
   theme(plot.title = element_text(hjust = 0.5))+
   scale_x_discrete(labels=c('1997-2002','2003-2007','2008-2012','2013-2017'))+
-  scale_fill_discrete(name = "Φύλο", 
+  scale_fill_discrete(name = "Έτη", 
                       labels=c('1997-2002','2003-2007','2008-2012','2013-2017'))
 
 multiplot(p1, p2, cols=2)
@@ -167,7 +167,7 @@ data[(data$Q6<=15) & (!is.na(data$Q6)),'work'] <- 'Εργαζόμενοι'
 data[is.na(data$Q6),'work'] <- NA
 ```
 
-### Στο παρακάτω γράφημα ελέγχουμε αν η εργασιακή κατάσταση επηρεάζει την απόφαση για την σύσταση του ΠΜΣ σε τρίτους .
+### Στη συνέχεια ελέγχουμε αν η εργασιακή κατάσταση επηρεάζει την απόφαση για την σύσταση του ΠΜΣ σε τρίτους .
 ```{r,fig.width=14,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(Q13),fill = factor(Q13))) +  
   geom_bar(aes(y = (..count..)/sum(..count..))) + 
@@ -290,7 +290,7 @@ ggplot(data, aes(x = factor(Q5_SQ001))) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-### Το ίδιο γράφημα, αυτή τη φορά ανα ηλικιακή ομάδα και τμήμα
+### Το ίδιο γράφημα, αυτή τη φορά ανα ηλικιακή ομάδα και τμήμα.
 
 ```{r,fig.width=10,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(Q5_SQ001))) +  
@@ -303,7 +303,7 @@ ggplot(data, aes(x = factor(Q5_SQ001))) +
 
 ```
 
-### Τέλος, ένα γράφημα που απεικονίζει το πλήθος των αποφοίτων ανα ηλικία
+### Τέλος, ένα γράφημα που απεικονίζει το πλήθος των αποφοίτων ανα ηλικία.
 ```{r,fig.width=10,fig.height=7,echo=FALSE}
 ggplot(data, aes(x = factor(age2017),fill =factor(age2017))) +  
   geom_bar(aes(y = (..count..))) + 
