@@ -11,7 +11,7 @@ output:
 
 ### ΔΙΑΓΡΑΜΜΑΤΑ ΓΙΑ ΤΗΝ ΕΡΕΥΝΑ ΑΠΟΦΟΙΤΩΝ ΠΜΣ
 
-```{r,echo=FALSE}
+```{r,echo=FALSE,include=FALSE}
 library(foreign)
 library(knitr)
 library(ggplot2)
