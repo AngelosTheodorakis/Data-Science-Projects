@@ -1,6 +1,19 @@
 ΔΙΑΓΡΑΜΜΑΤΑ ΓΙΑ ΤΗΝ ΕΡΕΥΝΑ ΑΠΟΦΟΙΤΩΝ ΠΜΣ
 ----------------------------------------
 
+    ## Warning: package 'foreign' was built under R version 3.6.3
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
 ### Αρχικά παρουσιάζουμε κάποια γραφήματα που αφορούν τα ποσοστά ετών αποφοίτησης, φύλων και ηλικίας των αποφοίτων.
 
 ![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-3-1.png)![](Markdown_presentation_files/figure-markdown_github/unnamed-chunk-3-2.png)
