@@ -15,6 +15,7 @@ output:
 ## ΔΙΑΓΡΑΜΜΑΤΑ ΓΙΑ ΤΗΝ ΕΡΕΥΝΑ ΑΠΟΦΟΙΤΩΝ ΠΜΣ
 
 ```{r,echo=FALSE,include=FALSE}
+
 library(foreign)
 library(knitr)
 library(ggplot2)
@@ -22,6 +23,7 @@ library(scales)
 library(dplyr)
 library(grid)
 source("http://peterhaschke.com/Code/multiplot.R")
+
 ```
 
 
