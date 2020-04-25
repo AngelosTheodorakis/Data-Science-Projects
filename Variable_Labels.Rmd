@@ -1,0 +1,29 @@
+---
+title: "Variable labels"
+author: "Angelos Theodorakis"
+date: "20/4/2020"
+output: 
+  md_document:
+    variant: markdown_github
+---
+
+
+```{r,echo=FALSE}
+library(foreign)
+library(knitr)
+library(ggplot2)
+library(scales)
+library(dplyr)
+data <- read.spss("C:/Users/User/Desktop/Άγγελος/ΕΛΚΕ/Έρευνα/sodanet/My-encoding.sav",use.value.labels = FALSE, to.data.frame=TRUE)
+
+```
+
+# Variable labels 
+```{r,echo=FALSE}
+dataset.labels <- as.data.frame(attr(data, "variable.labels"))
+knitr::kable(dataset.labels, caption = "Labels table", floating.environment="sidewaystable")
+```
+
+
+
+
