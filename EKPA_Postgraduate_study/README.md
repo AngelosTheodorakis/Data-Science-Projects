@@ -7,4 +7,5 @@ Below is a summary of the files I have uploaded:
 - **Plots_Presentation.md** is the file containing the plots presentation.\
 - **Variable_Labels.md** contains all the variable labels, in order for someone to know what the variables represent.\
 - **My_encoding.R** will contain the code for data analysis I intend to do for this study (Not ready yet).\
+\
 Again, for more details on this study, please visit .........
