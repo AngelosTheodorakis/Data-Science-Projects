@@ -1,0 +1,411 @@
+---
+title: "Titanic_Project"
+author: "Angelos Theodorakis"
+date: "12/5/2020"
+output:
+   md_document:
+    variant: markdown_github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## TITANIC DATASET EXPLORATION
+
+### In this project we will explore the Titanic dataset (downloaded from Kaggle.com) by making some plots and observations about the data. Also, we will make a prediction about whether the passengers on the test set survived or not./
+
+
+**First, we read the data**
+```{r}
+setwd("C:/Users/User/Desktop/Άγγελος/R/Data analysis/Titanic/titanic")
+test<-read.csv("test.csv")
+train<-read.csv("train.csv")
+```
+
+**Then we load some libraries**
+```{r}
+library('ggplot2') 
+library('ggthemes')
+library('scales') 
+library('dplyr') 
+```
+
+**Now we will create a new column which we want to predict, for the test matrix.**
+
+```{r}
+Survived<-rep(NA,nrow(test)) # Make a vector of NA's
+test<-as.data.frame(cbind(Survived,test)) # Test matrix with the new column
+data<-rbind(train,test) # Join the 2 matrices together (Train and test set)
+rm(Survived) #remove the survived vector
+```
+
+**We are ready to explore our data. We will make some plots to visualise our data and explore all the columns of this dataset. Let's look at a summary of our variables.**
+
+```{r}
+str(data)
+summary(data)
+```
+
+
+**Now, let's find the missing values.**
+```{r}
+Missing_values<-data.frame(sort(sapply(data,function(x) sum(is.na(x))),decreasing = TRUE))
+Missing_values
+```
+**Survived is the variable we want to predict in our test set. So we will later look at its correlation with the other variables.**
+
+```{r}
+ggplot(train, aes(x = factor(Survived))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..), fill = factor(Survived))) + 
+  geom_text(aes( label = scales::percent((..count..)/sum(..count..)),
+                 y=(..count..)/sum(..count..) ), stat= "count", vjust =-.3)+
+  scale_y_continuous(labels = percent) +
+  labs(title='Passengers survived', x='Survived',y='Percent')+
+  theme(plot.title = element_text(hjust = 0.5),legend.position="none")+
+  scale_x_discrete(labels=c('NO','YES'))
+```
+
+**We can see from the plot above that approximately 62% of the passengers didn't survive.**
+
+**Next, we will convert to factors some of our variables and make some plots to get an idea of our data.**
+
+```{r}
+train$Survived <- as.factor(train$Survived)
+data$Pclass<-as.factor(data$Pclass)
+data$Survived<-as.factor(data$Survived)
+data$Pclass<-as.factor(data$Pclass)
+data$SibSp<-as.factor(data$SibSp)
+data$Parch<-as.factor(data$Parch)
+
+par(mfrow=c(2,4))
+plot(train$Survived,col="red",main="Survived")
+plot(data$Pclass,col="green",main="Pclass")
+plot(data$Sex,col="brown",main="Gender")
+hist(data$Age,col="yellow",breaks = 15)
+
+plot(data$SibSp,col="purple",main="Siblings")
+plot(data$Parch,col="pink",main="Parents/Children")
+hist(data$Fare,col="blue",main="Fare")
+plot(data$Embarked,main="Port Embarked") 
+```
+
+**From the plots above we can make some observations:**
+
+* The third class passengers were the majority.
+* There was almost a double number of men than women in the ship.
+* Most of the passengers were around 30 years old.
+* Most of the passengers travelled alone.
+* We can see that there is an outlier for the ticket fair.
+* There is a small number of missing values for the embarkation port, that we did'n find before,because they are not stored as NA's.
+
+**We will try to find the missing cabins**
+
+```{r}
+levels(data$Embarked)
+which(data$Embarked=="") # 2 Cabins are unknown
+subset(data,Embarked=="")
+```
+
+**We can see that the 2 persons were on the same cabin (B28),they were both females,they both survived and belonged to the first class.They also traveled alone (so they were not relatives) and had the same number of ticket. So we could guess that they embarked from the same port.**
+
+**How will we find the port from which the 2 persons embarged? Maybe it has some correlation with some other variable, like the ticket price or the Cabin for example. We will first find if there is correlation wih the Cabin variable**
+```{r}
+levels(data$Cabin)[1:20] # First 20 levels
+length(levels(data$Cabin)) # Number of different levels
+length(which(data$Cabin== "")) # Missing values
+```
+
+**First we can see that Cabin starts with letters. Also, there is an empty level and we find that there are 1014 missing values for this level that are not stored as NA's. We will use just the first letter of the cabins, to reduce the levels,and hopefully make some conclusions.**
+
+```{r}
+Cabin_levels = substr(data$Cabin, start = 1, stop = 1)
+Cabin_levels = as.factor(Cabin_levels)
+
+# Cabin levels (Percentages)
+sapply(table(Cabin_levels),function(x) round((x/nrow(data)*100),2))
+
+# Table of Cabin levels Percentages, seperately for each Port
+prop.table(table(Cabin_levels,data$Embarked), 1)*100
+
+```
+
+**We can see that for the Cabins starting with B there is an equal probability that people have embarged from C and S.**
+
+**What about the correlation with the ticket Fare?**
+
+```{r}
+plot(data$Embarked,data$Fare,ylim=c(0,300),xlab = "Port", ylab = "Ticket Price", main="Ticket Price for each port")
+```
+
+**From the plot above it seems that the ticket fare is more likely to belong to the C port. Let's investigate more specifically for females that belong to the first class.**
+
+```{r}
+median(data[which(data$Embarked=="C" & data$Pclass==1 & data$Sex == "female"),"Fare"]) # median fare for the first class female passengers, that have embarged from the port of Charbourg.
+median(data[which(data$Embarked=="S" & data$Pclass==1 & data$Sex == "female"),"Fare"]) # # median fare for the first class female passengers, that have embarged from the port of Southampton.
+```
+
+**From the results above we cannot make a conclusion about the embarkation port. We won't stay longer here and we will replace the 2 missing values with the most common port (Southampton). Maybe we will come back later.**
+
+```{r}
+data[which(data$Embarked==""),"Embarked"] <- "S"
+```
+
+**Now for the Fare variable there is only one missing value.**
+
+```{r}
+data[which(is.na(data$Fare)),] 
+```
+
+**We can maybe find it by again looking the other attributes of the passenger. One variable we could use is the Pclass variable, because the higher the class is , the higher the ticket cost. Let's confirm that.**
+
+```{r}
+par(mfrow=c(1,1))
+plot(factor(data$Pclass),data$Fare,ylim=c(0,300),xlab = "Class", ylab = "Ticket Price", main="Ticket Price for each class") #price of ticket for Pclass
+```
+
+**There is certainly a correlation. We will replace the missing value with the median fare of male passengers who belong to the third class and embarked from Southampton port.**
+
+```{r}
+median(data[which(data$Embarked=="S" & data$Pclass==3 & data$Sex == "male"),"Fare"],na.rm = TRUE) #median
+
+data[which(is.na(data$Fare)),"Fare"] <- median(data[which(data$Embarked=="S" & data$Pclass==3 & data$Sex == "male"),"Fare"],na.rm = TRUE) #Replace the missing value
+```
+
+**The remaining missing values are for the Age variable. We have seen before a plot regarding the age of the passengers. Let's make some plots and matrices to get a better sense of how the variable is connected to other attributes of a passenger.**
+
+```{r}
+ggplot(data, aes(x = Sex, y=Age, fill=factor(Sex))) +  
+  labs(title='Median Age for each class', x='Gender',y='Age')+
+  theme(plot.title = element_text(hjust = 0.5),legend.position="none")+
+  stat_summary(fun.y="median", geom="bar")+
+  facet_wrap(~factor(Pclass))
+```
+
+**From the plot above, we can see clearly that the Pclass variable is correlated with age. Maybe the older people have more wealth and so they belong to a higher class. Let's see more specificaly the numbers in the matrix that follows:**
+
+```{r}
+data %>% 
+  group_by(Pclass,Sex) %>% 
+  summarize(Median_Age = median(Age,na.rm = TRUE)) 
+```
+
+**Now we will replace the misiing values with the median age for each class**
+
+
+
+
+
+plot(train$Sex,train$Survived) #maybe better with ggplot
+
+
+list <- strsplit(as.character(data$Name),(', '))
+head(list)
+title <- as.factor(sapply(list, function(x) x[2]))
+list<-strsplit(as.character(title),("\\."))
+title <- as.factor(sapply(list, function(x) x[1]))
+data$Title<-title
+rm(title)
+rm(list)
+
+levels(data$Title)
+table(data$Sex,data$Title)
+plot(table(data$Sex,data$Title)) #maybe with ggplot2
+table(data$Pclass,data$Title)
+paste(as.character(levels(data$Title)),collapse = "','")
+rare_title<-c('Capt','Col','Don','Dona','Dr','Jonkheer','Lady','Major','Mlle','Mme','Ms','Rev','Sir','the Countess')
+
+#replace with rare title.. how?
+
+length(which(data$Title %in% rare_title))
+str(data$Title)
+data$Title<-as.character((data$Title))
+data$Title[which(data$Title %in% rare_title)]<-"Rare"
+data$Title<-as.factor(data$Title)
+plot(data$Title,data$Pclass) #plot showing that title is related in some cases with pclass
+plot(data$Title,data$Age) #plot showing that title is related with age!
+table(data$Sex,data$Title)
+
+#Now we are going to split the names so we can have the surnames
+
+list <- strsplit(as.character(data$Name),(', '))
+head(list)
+title <- as.factor(sapply(list, function(x) x[1]))
+data$Surname<-title
+rm(title)
+rm(list)
+levels(data$Surname)
+
+# Create a family size variable including the passenger themselves
+as.numeric(data$SibSp)-1
+data$Fsize<-as.numeric(as.character(data$SibSp))+as.numeric(as.character(data$Parch))+1
+  data[,c(7,8,15)]
+data$Fsize<-as.factor(data$Fsize) 
+head(data$Fsize)
+plot(data$Fsize)
+
+# Create a family variable 
+data$Family<-paste(data$Surname,data$Fsize,sep="_")
+subset(data,Fsize==11)
+
+## Use ggplot2 to visualize the relationship between family size & survival
+ggplot(data[1:891,], aes(x =as.numeric(as.character(Fsize)), fill = Survived)) +
+  geom_bar(stat='count', position='dodge') +
+  scale_x_continuous(breaks=c(1:11)) +
+  labs(x = 'Family Size') +
+  theme_few()
+
+
+# Discretize family size
+data$FsizeD<-rep(NA,nrow(data))
+data$FsizeD[which(as.numeric(as.character(data$Fsize)) > 4)]<- "Large"
+data$FsizeD[which(as.numeric(as.character(data$Fsize)) ==1)]<- "Alone"
+data$FsizeD[which(as.numeric(as.character(data$Fsize))>1 & (as.numeric(as.character(data$Fsize)))<=4 )]<- "Medium"
+
+# Show family size by survival using a mosaic plot
+mosaicplot(table(data$FsizeD, data$Survived), main='Family Size by Survival', shade=TRUE)
+
+#Now we'll work with the Cabin variable . How?
+
+data$Cabin<-as.character(data$Cabin)
+list<-strsplit(data$Cabin,NULL)
+data$Deck<-sapply(list,function(x) x[1])
+rm(list)
+
+data$Deck<-as.factor(data$Deck)
+
+## Use ggplot2 for (data$Pclass,data$Deck) How?
+#lets find the missing values from port embarked
+plot(data$Embarked,data$Fare,ylim=c(0,300))
+
+
+# Use ggplot2 to visualize embarkment, passenger class, & median fare
+ggplot(data, aes(x = Embarked, y = Fare, fill = factor(Pclass))) +
+  geom_boxplot() +
+  geom_hline(aes(yintercept=80), 
+             colour='black', linetype='dashed', lwd=1) +
+  scale_y_continuous(labels=dollar_format()) +
+  theme_few()
+#So we assume that the passengers embarged from C port
+#How about this one?
+data[1044, ]
+
+##This is a third class passenger who departed from Southampton (‘S’). 
+##Let’s visualize Fares among all others sharing their class and embarkment
+ggplot(data[data$Pclass == '3' & data$Embarked == 'S', ], 
+       aes(x = Fare)) +
+  geom_density(fill = 'blue', alpha=0.2) + 
+  geom_vline(aes(xintercept=median(Fare, na.rm=T)),
+             colour='red', linetype='dashed', lwd=1) +
+  scale_x_continuous(labels=dollar_format()) +
+  theme_few()
+
+median(data[data$Pclass == '3' & data$Embarked == 'S', "Fare" ],na.rm=TRUE)
+#so we assume that he paid 8.05$ fare
+
+data[1044,"Fare"]<-8.05
+summary(data$Age) #as we saw there are 263 NA's
+
+# Make variables factors into factors
+paste(colnames(data),collapse="','") 
+
+factors <- c('PassengerId','Pclass','Sex','Embarked',
+                 'Title','Surname','Family','FsizeD')
+
+data[factors] <- lapply(data[factors], function(x) as.factor(x))
+       str(data[factors])
+       set.seed(129)
+       
+       # Perform mice imputation, excluding certain less-than-useful variables:
+       mice_mod <- mice(data[, !names(data) %in% c('PassengerId','Name','Ticket','Cabin','Family','Surname','Survived')], method='rf') 
+md.pattern(data) #map of the missing values and pairs
+
+# Save the complete output 
+mice_output <- complete(mice_mod) #No more missing values
+
+# Plot age distributions
+par(mfrow=c(1,2))
+hist(data$Age,freq=F , main='Age: Original Data', 
+     col='darkblue', ylim=c(0,0.04))
+hist(mice_output$Age, freq=F, main='Age: MICE Output', 
+     col='lightblue', ylim=c(0,0.04))
+
+# Replace Age variable from the mice model.
+data$Age <- mice_output$Age
+
+# Show new number of missing Age values
+sum(is.na(data$Age))
+par(mfrow=c(1,1))
+# First we'll look at the relationship between age & survival
+ggplot(data[1:891,], aes(Age, fill = factor(Survived))) + 
+  geom_histogram() + 
+  # I include Sex since we know (a priori) it's a significant predictor
+  facet_grid(.~Sex) + 
+  theme_few()
+
+#create a mother variable
+data$Mother<- rep("Not_Mother",nrow(data))
+data$Mother[data$Sex %in% "female" & data$Age>=18 & !data$Title %in% "Miss" & data$Parch!=0]<-"Mother"
+data$Mother<-factor(data$Mother)
+table(data$Mother, data$Survived)
+
+data$Child<-rep(NA,nrow(data))
+data$Child[which(data$Age<18)]<-c("Child")
+data$Child[which(data$Age>=18)]<-c("Adult")
+data[,c("Child","Age")]
+data$Child<-as.factor(data$Child)
+summary(data$Child)
+sapply(summary(data$Child),function(x) x/nrow(data)) #percent of children
+table(data$Child, data$Survived)
+
+md.pattern(data)
+#################################################
+
+# Split the data back into a train set and a test set
+train <- data[1:891,]
+test <- data[892:1309,]
+
+# Set a random seed
+set.seed(754)
+
+# Build the model (note: not all possible variables are used)
+rf_model <- randomForest(factor(Survived) ~ Pclass + Sex + Age + SibSp + Parch + 
+                           Fare + Embarked + Title + 
+                           FsizeD + Child + Mother,
+                         data = train)
+
+# Show model error
+plot(rf_model, ylim=c(0,0.36))
+legend('topright', colnames(rf_model$err.rate), col=1:3, fill=1:3)
+
+# Get importance
+importance    <- importance(rf_model)
+varImportance <- data.frame(Variables = row.names(importance), 
+                            Importance = round(importance[ ,'MeanDecreaseGini'],2))
+
+# Create a rank variable based on importance
+rankImportance <- varImportance %>%
+  mutate(Rank = paste0('#',dense_rank(desc(Importance))))
+##How do I do it with another way? 
+
+# Use ggplot2 to visualize the relative importance of variables
+ggplot(rankImportance, aes(x = reorder(Variables, Importance), 
+                           y = Importance, fill = Importance)) +
+  geom_bar(stat='identity') + 
+  geom_text(aes(x = Variables, y = 0.5, label = Rank),
+            hjust=0, vjust=0.55, size = 4, colour = 'red') +
+  labs(x = 'Variables') +
+  coord_flip() + 
+  theme_few()
+
+# Predict using the test set
+prediction <- predict(rf_model, test)
+
+# Save the solution to a dataframe with two columns: PassengerId and Survived (prediction)
+solution <- data.frame(PassengerId = test$PassengerId, Survived = prediction)
+
+# Write the solution to file
+write.csv(solution, file = 'Titanic_Solution.csv', row.names = F)
+
+
+
