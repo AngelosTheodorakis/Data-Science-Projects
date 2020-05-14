@@ -236,10 +236,10 @@ the cabins, to reduce the levels,and hopefully make some conclusions.**
 
 ``` r
 Cabin_levels = substr(data$Cabin, start = 1, stop = 1)
-Cabin_levels = as.factor(Cabin_levels)
+data$Cabin_levels <- as.factor(Cabin_levels) # Create a new column
 
 # Cabin levels (Percentages)
-sapply(table(Cabin_levels),function(x) round((x/nrow(data)*100),2))
+sapply(table(data$Cabin_levels),function(x) round((x/nrow(data)*100),2))
 ```
 
     ##           A     B     C     D     E     F     G     T 
@@ -247,20 +247,20 @@ sapply(table(Cabin_levels),function(x) round((x/nrow(data)*100),2))
 
 ``` r
 # Table of Cabin levels Percentages, seperately for each Port
-prop.table(table(Cabin_levels,data$Embarked), 1)*100
+prop.table(table(data$Cabin_levels,data$Embarked), 1)*100
 ```
 
-    ##             
-    ## Cabin_levels                     C          Q          S
-    ##                0.000000  14.990138  11.637081  73.372781
-    ##            A   0.000000  50.000000   0.000000  50.000000
-    ##            B   3.076923  49.230769   0.000000  47.692308
-    ##            C   0.000000  43.617021   3.191489  53.191489
-    ##            D   0.000000  43.478261   0.000000  56.521739
-    ##            E   0.000000  26.829268   2.439024  70.731707
-    ##            F   0.000000  14.285714   4.761905  80.952381
-    ##            G   0.000000   0.000000   0.000000 100.000000
-    ##            T   0.000000   0.000000   0.000000 100.000000
+    ##    
+    ##                         C          Q          S
+    ##       0.000000  14.990138  11.637081  73.372781
+    ##   A   0.000000  50.000000   0.000000  50.000000
+    ##   B   3.076923  49.230769   0.000000  47.692308
+    ##   C   0.000000  43.617021   3.191489  53.191489
+    ##   D   0.000000  43.478261   0.000000  56.521739
+    ##   E   0.000000  26.829268   2.439024  70.731707
+    ##   F   0.000000  14.285714   4.761905  80.952381
+    ##   G   0.000000   0.000000   0.000000 100.000000
+    ##   T   0.000000   0.000000   0.000000 100.000000
 
 **We can see that for the Cabins starting with B there is an equal
 probability that people have embarged from C and S.**
@@ -306,7 +306,7 @@ data[which(is.na(data$Fare)),]
 
     ##      PassengerId Survived Pclass               Name  Sex  Age SibSp Parch
     ## 1044        1044     <NA>      3 Storey, Mr. Thomas male 60.5     0     0
-    ##      Ticket Fare Cabin Embarked
+    ##      Ticket Fare Cabin Embarked Cabin_levels
     ## 1044   3701   NA              S
 
 **We can maybe find it by again looking the other attributes of the
@@ -373,182 +373,262 @@ data %>%
     ## 5 3      female       22  
     ## 6 3      male         25
 
-**Now we will replace the misiing values with the median age for each
+**We could replace the mising values with the median age for each
 class**
 
-plot(train*S**e**x*, *t**r**a**i**n*Survived) \#maybe better with ggplot
+**One other way to predict the age of the passenger, would be to extract
+the title from their name. As we can see all the names have titles, so
+we will extract them and make a new column with just the titles. Then we
+will see if there is indeed a correlation between the title and the age
+of the passengers.**
 
-list \<-
-strsplit(as.character(data$Name),(', ')) head(list) title \<- as.factor(sapply(list, function(x) x\[2\])) list\<-strsplit(as.character(title),("\\\\.")) title \<- as.factor(sapply(list, function(x) x\[1\])) data$Title\<-title
-rm(title) rm(list)
+``` r
+list <- strsplit(as.character(data$Name),(', ')) # We first split the words
+head(list)
+```
 
-levels(data*T**i**t**l**e*)*t**a**b**l**e*(*d**a**t**a*Sex,data*T**i**t**l**e*)*p**l**o**t*(*t**a**b**l**e*(*d**a**t**a*Sex,data$Title)) \#maybe with ggplot2 table(data$Pclass,data*T**i**t**l**e*)*p**a**s**t**e*(*a**s*.*c**h**a**r**a**c**t**e**r*(*l**e**v**e**l**s*(*d**a**t**a*Title)),collapse
-= “‘,’”)
-rare\_title\<-c(‘Capt’,‘Col’,‘Don’,‘Dona’,‘Dr’,‘Jonkheer’,‘Lady’,‘Major’,‘Mlle’,‘Mme’,‘Ms’,‘Rev’,‘Sir’,‘the
-Countess’)
+    ## [[1]]
+    ## [1] "Braund"          "Mr. Owen Harris"
+    ## 
+    ## [[2]]
+    ## [1] "Cumings"                                   
+    ## [2] "Mrs. John Bradley (Florence Briggs Thayer)"
+    ## 
+    ## [[3]]
+    ## [1] "Heikkinen"   "Miss. Laina"
+    ## 
+    ## [[4]]
+    ## [1] "Futrelle"                          
+    ## [2] "Mrs. Jacques Heath (Lily May Peel)"
+    ## 
+    ## [[5]]
+    ## [1] "Allen"             "Mr. William Henry"
+    ## 
+    ## [[6]]
+    ## [1] "Moran"     "Mr. James"
 
-\#replace with rare title.. how?
+``` r
+title <- as.factor(sapply(list, function(x) x[2]))
+list<-strsplit(as.character(title),("\\.")) # We split again
+title <- as.factor(sapply(list, function(x) x[1]))
+data$Title<-title # Make the new column with the titles
+rm(title) #We remove the vectors
+rm(list)
+```
 
-length(which(data*T**i**t**l**e*Title)
-data*T**i**t**l**e* \<  − *a**s*.*c**h**a**r**a**c**t**e**r*((*d**a**t**a*Title))
-data*T**i**t**l**e*\[*w**h**i**c**h*(*d**a**t**a*Title %in%
-rare\_title)\]\<-“Rare”
-data*T**i**t**l**e* \<  − *a**s*.*f**a**c**t**o**r*(*d**a**t**a*Title)
-plot(data*T**i**t**l**e*, *d**a**t**a*Pclass) \#plot showing that title
-is related in some cases with pclass
-plot(data*T**i**t**l**e*, *d**a**t**a*Age) \#plot showing that title is
-related with age! table(data*S**e**x*, *d**a**t**a*Title)
+**So we now have the titles column ready. Let’s explore it**
 
-\#Now we are going to split the names so we can have the surnames
+``` r
+levels(data$Title)
+```
 
-list \<-
-strsplit(as.character(data*N**a**m**e*), (′, ′))*h**e**a**d*(*l**i**s**t*)*t**i**t**l**e* \<  − *a**s*.*f**a**c**t**o**r*(*s**a**p**p**l**y*(*l**i**s**t*, *f**u**n**c**t**i**o**n*(*x*)*x*\[1\]))*d**a**t**a*Surname\<-title
-rm(title) rm(list) levels(data$Surname)
+    ##  [1] "Capt"         "Col"          "Don"          "Dona"        
+    ##  [5] "Dr"           "Jonkheer"     "Lady"         "Major"       
+    ##  [9] "Master"       "Miss"         "Mlle"         "Mme"         
+    ## [13] "Mr"           "Mrs"          "Ms"           "Rev"         
+    ## [17] "Sir"          "the Countess"
 
-Create a family size variable including the passenger themselves
-================================================================
+``` r
+table(data$Title)
+```
 
-as.numeric(data*S**i**b**S**p*) − 1*d**a**t**a*Fsize\<-as.numeric(as.character(data*S**i**b**S**p*)) + *a**s*.*n**u**m**e**r**i**c*(*a**s*.*c**h**a**r**a**c**t**e**r*(*d**a**t**a*Parch))+1
-data\[,c(7,8,15)\]
-data*F**s**i**z**e* \<  − *a**s*.*f**a**c**t**o**r*(*d**a**t**a*Fsize)
-head(data*F**s**i**z**e*)*p**l**o**t*(*d**a**t**a*Fsize)
+    ## 
+    ##         Capt          Col          Don         Dona           Dr 
+    ##            1            4            1            1            8 
+    ##     Jonkheer         Lady        Major       Master         Miss 
+    ##            1            1            2           61          260 
+    ##         Mlle          Mme           Mr          Mrs           Ms 
+    ##            2            1          757          197            2 
+    ##          Rev          Sir the Countess 
+    ##            8            1            1
 
-Create a family variable
-========================
+``` r
+table(data$Sex,data$Title)
+```
 
-data*F**a**m**i**l**y* \<  − *p**a**s**t**e*(*d**a**t**a*Surname,data$Fsize,sep="\_")
-subset(data,Fsize==11)
+    ##         
+    ##          Capt Col Don Dona  Dr Jonkheer Lady Major Master Miss Mlle Mme
+    ##   female    0   0   0    1   1        0    1     0      0  260    2   1
+    ##   male      1   4   1    0   7        1    0     2     61    0    0   0
+    ##         
+    ##           Mr Mrs  Ms Rev Sir the Countess
+    ##   female   0 197   2   0   0            1
+    ##   male   757   0   0   8   1            0
 
-Use ggplot2 to visualize the relationship between family size & survival
-------------------------------------------------------------------------
+``` r
+table(data$Pclass,data$Title)
+```
 
-ggplot(data\[1:891,\], aes(x =as.numeric(as.character(Fsize)), fill =
-Survived)) + geom\_bar(stat=‘count’, position=‘dodge’) +
-scale\_x\_continuous(breaks=c(1:11)) + labs(x = ‘Family Size’) +
-theme\_few()
+    ##    
+    ##     Capt Col Don Dona  Dr Jonkheer Lady Major Master Miss Mlle Mme  Mr Mrs
+    ##   1    1   4   1    1   6        1    1     2      5   60    2   1 159  77
+    ##   2    0   0   0    0   2        0    0     0     11   50    0   0 150  55
+    ##   3    0   0   0    0   0        0    0     0     45  150    0   0 448  65
+    ##    
+    ##      Ms Rev Sir the Countess
+    ##   1   0   0   1            1
+    ##   2   1   8   0            0
+    ##   3   1   0   0            0
 
-Discretize family size
-======================
+**We can reduce the levels because we can see that some titles are rare,
+so we will make a level with just these rare titles**
 
-data*F**s**i**z**e**D* \<  − *r**e**p*(*N**A*, *n**r**o**w*(*d**a**t**a*))*d**a**t**a*FsizeD\[which(as.numeric(as.character(data$Fsize))
-\> 4)\]\<- “Large”
-data*F**s**i**z**e**D*\[*w**h**i**c**h*(*a**s*.*n**u**m**e**r**i**c*(*a**s*.*c**h**a**r**a**c**t**e**r*(*d**a**t**a*Fsize))
-==1)\]\<- “Alone”
-data*F**s**i**z**e**D*\[*w**h**i**c**h*(*a**s*.*n**u**m**e**r**i**c*(*a**s*.*c**h**a**r**a**c**t**e**r*(*d**a**t**a*Fsize))\>1
-& (as.numeric(as.character(data$Fsize)))\<=4 )\]\<- “Medium”
+``` r
+paste(as.character(levels(data$Title)),collapse = "','")
+```
 
-Show family size by survival using a mosaic plot
-================================================
+    ## [1] "Capt','Col','Don','Dona','Dr','Jonkheer','Lady','Major','Master','Miss','Mlle','Mme','Mr','Mrs','Ms','Rev','Sir','the Countess"
 
-mosaicplot(table(data*F**s**i**z**e**D*, *d**a**t**a*Survived),
-main=‘Family Size by Survival’, shade=TRUE)
+``` r
+rare_title<-c('Capt','Col','Don','Dona','Dr','Jonkheer','Lady','Major','Mlle','Mme','Ms','Rev','Sir','the Countess')
+data$Title<-as.character((data$Title)) # Convert to character 
+data$Title[which(data$Title %in% rare_title)]<-"Rare" # Change the titles to "Rare"
+data$Title<-as.factor(data$Title) #Convert back to factor
+table(data$Sex,data$Title) # Titles by gender
+```
 
-\#Now we’ll work with the Cabin variable . How?
+    ##         
+    ##          Master Miss  Mr Mrs Rare
+    ##   female      0  260   0 197    9
+    ##   male       61    0 757   0   25
 
-data*C**a**b**i**n* \<  − *a**s*.*c**h**a**r**a**c**t**e**r*(*d**a**t**a*Cabin)
-list\<-strsplit(data*C**a**b**i**n*, *N**U**L**L*)*d**a**t**a*Deck\<-sapply(list,function(x)
-x\[1\]) rm(list)
+**We can now answer our question about whether the title is correlated
+with age**
 
-data*D**e**c**k* \<  − *a**s*.*f**a**c**t**o**r*(*d**a**t**a*Deck)
+``` r
+plot(data$Title,data$Age) 
+```
 
-Use ggplot2 for (data*P**c**l**a**s**s*, *d**a**t**a*Deck) How?
----------------------------------------------------------------
+![](Titanic_Project_files/figure-markdown_github/unnamed-chunk-22-1.png)
 
-\#lets find the missing values from port embarked
-plot(data*E**m**b**a**r**k**e**d*, *d**a**t**a*Fare,ylim=c(0,300))
+``` r
+data %>% 
+  group_by(Title) %>% 
+  summarize(Median_Age = median(Age,na.rm = TRUE)) # The exact median ages
+```
 
-Use ggplot2 to visualize embarkment, passenger class, & median fare
-===================================================================
+    ## # A tibble: 5 x 2
+    ##   Title  Median_Age
+    ##   <fct>       <dbl>
+    ## 1 Master        4  
+    ## 2 Miss         22  
+    ## 3 Mr           29  
+    ## 4 Mrs          35.5
+    ## 5 Rare         44.5
 
-ggplot(data, aes(x = Embarked, y = Fare, fill = factor(Pclass))) +
-geom\_boxplot() + geom\_hline(aes(yintercept=80), colour=‘black’,
-linetype=‘dashed’, lwd=1) +
-scale\_y\_continuous(labels=dollar\_format()) + theme\_few() \#So we
-assume that the passengers embarged from C port \#How about this one?
-data\[1044, \]
+**The plot is showing that title is related with age! So we could
+replace the missing values with the median age of passengers according
+to their class and title**
 
-\#\#This is a third class passenger who departed from Southampton (‘S’).
-\#\#Let’s visualize Fares among all others sharing their class and
-embarkment ggplot(data\[data$Pclass == '3' & data$Embarked == ‘S’, \],
-aes(x = Fare)) + geom\_density(fill = ‘blue’, alpha=0.2) +
-geom\_vline(aes(xintercept=median(Fare, na.rm=T)), colour=‘red’,
-linetype=‘dashed’, lwd=1) +
-scale\_x\_continuous(labels=dollar\_format()) + theme\_few()
+``` r
+data %>% 
+  group_by(Title,Pclass) %>% 
+  summarize(Median_Age = median(Age,na.rm = TRUE)) 
+```
 
-median(data\[data$Pclass == '3' & data$Embarked == ‘S’, “Fare”
-\],na.rm=TRUE) \#so we assume that he paid 8.05$ fare
+    ## # A tibble: 15 x 3
+    ## # Groups:   Title [5]
+    ##    Title  Pclass Median_Age
+    ##    <fct>  <fct>       <dbl>
+    ##  1 Master 1             6  
+    ##  2 Master 2             2  
+    ##  3 Master 3             6  
+    ##  4 Miss   1            30  
+    ##  5 Miss   2            20  
+    ##  6 Miss   3            18  
+    ##  7 Mr     1            41.5
+    ##  8 Mr     2            30  
+    ##  9 Mr     3            26  
+    ## 10 Mrs    1            45  
+    ## 11 Mrs    2            30.5
+    ## 12 Mrs    3            31  
+    ## 13 Rare   1            47  
+    ## 14 Rare   2            41  
+    ## 15 Rare   3            NA
 
-data\[1044,“Fare”\]\<-8.05 summary(data$Age) \#as we saw there are 263
-NA’s
+\#HOW?
 
-Make variables factors into factors
-===================================
+**Now we are going to use some plots to find the important variables.**
 
-paste(colnames(data),collapse=“‘,’”)
+**Visualize the relationship between Pclass & survival**
 
-factors \<- c(‘PassengerId’,‘Pclass’,‘Sex’,‘Embarked’,
-‘Title’,‘Surname’,‘Family’,‘FsizeD’)
+``` r
+ggplot(train, aes(x =Pclass, fill = Survived)) +
+  geom_bar(stat='count') +
+  labs(x = 'Pclass',title = 'Survived by class') +
+  theme(plot.title = element_text(hjust = 0.5))
+```
 
-data\[factors\] \<- lapply(data\[factors\], function(x) as.factor(x))
-str(data\[factors\]) set.seed(129)
+![](Titanic_Project_files/figure-markdown_github/unnamed-chunk-24-1.png)
 
-       # Perform mice imputation, excluding certain less-than-useful variables:
-       mice_mod <- mice(data[, !names(data) %in% c('PassengerId','Name','Ticket','Cabin','Family','Surname','Survived')], method='rf') 
+**The passengers of first and second class were more likely to survive
+than those of the third class** **Let’s visualize the relationship
+between Sex & survival**
 
-md.pattern(data) \#map of the missing values and pairs
+``` r
+ggplot(train, aes(x =Sex, fill = Survived)) +
+  geom_bar(stat='count') +
+  labs(x = 'Gender',title = 'Survived by Sex') +
+  theme(plot.title = element_text(hjust = 0.5))
+```
 
-Save the complete output
-========================
+![](Titanic_Project_files/figure-markdown_github/unnamed-chunk-25-1.png)
 
-mice\_output \<- complete(mice\_mod) \#No more missing values
+**The female passengers were more likely to survive** **Now let’s
+Combine the above plots**
 
-Plot age distributions
-======================
+``` r
+ggplot(train, aes(x = Sex, fill=Survived)) +  
+  labs(title='Survived by Sex and Class', x='Gender',y='Age')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_bar(stat='count') +
+  facet_wrap(~factor(Pclass))
+```
 
-par(mfrow=c(1,2))
-hist(data*A**g**e*, *f**r**e**q* = *F*, *m**a**i**n* = ′*A**g**e* : *O**r**i**g**i**n**a**l**D**a**t**a*′, *c**o**l* = ′*d**a**r**k**b**l**u**e*′, *y**l**i**m* = *c*(0, 0.04))*h**i**s**t*(*m**i**c**e*<sub>*o*</sub>*u**t**p**u**t*Age,
-freq=F, main=‘Age: MICE Output’, col=‘lightblue’, ylim=c(0,0.04))
+![](Titanic_Project_files/figure-markdown_github/unnamed-chunk-26-1.png)
 
-Replace Age variable from the mice model.
-=========================================
+**That is a very interesting plot that shows that almost all of the
+female passengers of first and second class survived. Also, it shows
+that most male passengers didn’t survive (in the first class the
+percentage of survival was bigger)**
 
-data*A**g**e* \<  − *m**i**c**e*<sub>*o*</sub>*u**t**p**u**t*Age
+**Next we’ll look at the relationship between age and survival**
 
-Show new number of missing Age values
-=====================================
+``` r
+ggplot(train, aes(Age, fill = factor(Survived))) + 
+  geom_histogram(bins = 80) + 
+  theme_few()
+```
 
-sum(is.na(data$Age)) par(mfrow=c(1,1)) \# First we’ll look at the
-relationship between age & survival ggplot(data\[1:891,\], aes(Age, fill
-= factor(Survived))) + geom\_histogram() + \# I include Sex since we
-know (a priori) it’s a significant predictor facet\_grid(.\~Sex) +
-theme\_few()
+    ## Warning: Removed 177 rows containing non-finite values (stat_bin).
 
-\#create a mother variable
-data$Mother\<- rep("Not\_Mother",nrow(data)) data$Mother\[data*S**e**x*Age\>=18
-& !data*T**i**t**l**e*Parch!=0\]\<-“Mother”
-data*M**o**t**h**e**r* \<  − *f**a**c**t**o**r*(*d**a**t**a*Mother)
-table(data*M**o**t**h**e**r*, *d**a**t**a*Survived)
+![](Titanic_Project_files/figure-markdown_github/unnamed-chunk-27-1.png)
 
-data*C**h**i**l**d* \<  − *r**e**p*(*N**A*, *n**r**o**w*(*d**a**t**a*))*d**a**t**a*Child\[which(data$Age\<18)\]\<-c(“Child”)
-data*C**h**i**l**d*\[*w**h**i**c**h*(*d**a**t**a*Age\>=18)\]\<-c(“Adult”)
-data\[,c(“Child”,“Age”)\]
-data*C**h**i**l**d* \<  − *a**s*.*f**a**c**t**o**r*(*d**a**t**a*Child)
-summary(data*C**h**i**l**d*)*s**a**p**p**l**y*(*s**u**m**m**a**r**y*(*d**a**t**a*Child),function(x)
-x/nrow(data)) \#percent of children
-table(data*C**h**i**l**d*, *d**a**t**a*Survived)
+``` r
+ggplot(train, aes(Age, fill = factor(Survived))) + 
+  geom_histogram() + 
+  facet_grid(.~Pclass) + 
+  theme_few()
+```
 
-md.pattern(data)
-\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-Split the data back into a train set and a test set
-===================================================
+    ## Warning: Removed 177 rows containing non-finite values (stat_bin).
 
-train \<- data\[1:891,\] test \<- data\[892:1309,\]
+![](Titanic_Project_files/figure-markdown_github/unnamed-chunk-27-2.png)
 
-Set a random seed
-=================
+``` r
+ggplot(train, aes(Age, fill = factor(Survived))) + 
+  geom_histogram() + 
+  facet_grid(.~Sex) + 
+  theme_few()
+```
 
-set.seed(754)
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+    ## Warning: Removed 177 rows containing non-finite values (stat_bin).
+
+![](Titanic_Project_files/figure-markdown_github/unnamed-chunk-27-3.png)
 
 Build the model (note: not all possible variables are used)
 ===========================================================
