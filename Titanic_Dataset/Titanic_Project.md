@@ -630,6 +630,52 @@ ggplot(train, aes(Age, fill = factor(Survived))) +
 
 ![](Titanic_Project_files/figure-markdown_github/unnamed-chunk-27-3.png)
 
+**From the above plots, age doesn’t seem to play a big role in survival,
+apart from the young ages of first and second class.**
+
+\*\*What about the Title variable we made earlier? Let’s see some plots:
+
+``` r
+ggplot(train, aes(x = data[1:891,"Title"], fill=Survived)) +  
+  labs(title='Survived by Title', x='Title',y='Count')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_bar(stat='count') 
+```
+
+![](Titanic_Project_files/figure-markdown_github/unnamed-chunk-28-1.png)
+
+``` r
+ggplot(train, aes(x = data[1:891,"Title"], fill=Survived)) +  
+  labs(title='Survived by Title and Pclass', x='Title',y='Count')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_bar(stat='count') +
+  facet_wrap(~factor(Pclass))
+```
+
+![](Titanic_Project_files/figure-markdown_github/unnamed-chunk-28-2.png)
+
+**These are also very interesting plots. We can see for example that
+almost all of the adult males in second class didn’t survive, but all of
+the young males survived in first and second class. Half of them
+survived in the third class.**
+
+**As for the siblings and Parch variables:**
+
+``` r
+ggplot(train, aes(x = SibSp, fill=Survived)) +  
+  labs(title='Survived by number of Siblings and Parents/Children', x='x = number of Siblings',y='Count')+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_bar(stat='count') +
+  facet_wrap(~factor(Parch))
+```
+
+![](Titanic_Project_files/figure-markdown_github/unnamed-chunk-29-1.png)
+
+**It seems that family size plays a negative role in survival.**
+
+**We will now predict using logistic regression, the survival of the
+Titanic passengers at the test set.**
+
 Build the model (note: not all possible variables are used)
 ===========================================================
 
