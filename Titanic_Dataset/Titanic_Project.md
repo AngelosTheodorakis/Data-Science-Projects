@@ -770,7 +770,7 @@ summary(predictions)
     ## 263 155
 
 **We can see that our model predicted that 263 people didn’t survive and
-155 survived. This is a percentage of 37.0813397% **
+155 survived. This is a percentage of 37.0813397%**
 
 **Let’s see what is our score on Kaggle if we submit our predictions**
 

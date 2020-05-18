@@ -394,7 +394,7 @@ predictions<-as.factor(predictions)
 summary(predictions)
 ```
 
-**We can see that our model predicted that 263 people didn't survive and 155 survived. This is a percentage of `r 155/(263+155)*100`% **
+**We can see that our model predicted that 263 people didn't survive and 155 survived. This is a percentage of `r 155/(263+155)*100`%**
 
 **Let's see what is our score on Kaggle if we submit our predictions**
 
