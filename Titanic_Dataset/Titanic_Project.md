@@ -521,32 +521,28 @@ replace the missing values with the median age of passengers according
 to their class and title**
 
 ``` r
-data %>% 
-  group_by(Title,Pclass) %>% 
+df<- data %>% 
+  group_by(Pclass,Title) %>% 
   summarize(Median_Age = median(Age,na.rm = TRUE)) 
+
+#Now we replace the missing values
+data$Age[is.na(data$Age) & data$Pclass==1 & data$Title=="Miss"]<- df[2,"Median_Age"]
+data$Age[is.na(data$Age) & data$Pclass==1 & data$Title=="Mr"]<- df[3,"Median_Age"]
+data$Age[is.na(data$Age) & data$Pclass==1 & data$Title=="Mrs"]<- df[4,"Median_Age"]
+data$Age[is.na(data$Age) & data$Pclass==1 & data$Title=="Rare"]<- df[5,"Median_Age"]
+
+data$Age[is.na(data$Age) & data$Pclass==2 & data$Title=="Miss"]<- df[7,"Median_Age"]
+data$Age[is.na(data$Age) & data$Pclass==2 & data$Title=="Mr"]<- df[8,"Median_Age"]
+data$Age[is.na(data$Age) & data$Pclass==2 & data$Title=="Mrs"]<- df[9,"Median_Age"]
+
+data$Age[is.na(data$Age) & data$Pclass==3 & data$Title=="Master"]<- df[11,"Median_Age"]
+data$Age[is.na(data$Age) & data$Pclass==3 & data$Title=="Miss"]<- df[12,"Median_Age"]
+data$Age[is.na(data$Age) & data$Pclass==3 & data$Title=="Mr"]<- df[13,"Median_Age"]
+data$Age[is.na(data$Age) & data$Pclass==3 & data$Title=="Mrs"]<- df[14,"Median_Age"]
+data$Age[is.na(data$Age) & data$Pclass==3 & data$Title=="Rare"]<- df[5,"Median_Age"] # We will use the median from second class
+
+data$Age <- as.numeric(data$Age)  # Change the type to numeric.
 ```
-
-    ## # A tibble: 15 x 3
-    ## # Groups:   Title [5]
-    ##    Title  Pclass Median_Age
-    ##    <fct>  <fct>       <dbl>
-    ##  1 Master 1             6  
-    ##  2 Master 2             2  
-    ##  3 Master 3             6  
-    ##  4 Miss   1            30  
-    ##  5 Miss   2            20  
-    ##  6 Miss   3            18  
-    ##  7 Mr     1            41.5
-    ##  8 Mr     2            30  
-    ##  9 Mr     3            26  
-    ## 10 Mrs    1            45  
-    ## 11 Mrs    2            30.5
-    ## 12 Mrs    3            31  
-    ## 13 Rare   1            47  
-    ## 14 Rare   2            41  
-    ## 15 Rare   3            NA
-
-\#HOW?
 
 **Now we are going to use some plots to find the important variables.**
 
@@ -673,57 +669,115 @@ ggplot(train, aes(x = SibSp, fill=Survived)) +
 
 **It seems that family size plays a negative role in survival.**
 
+**Now let’s see the fare Variable**
+
+``` r
+ggplot(train, aes(x = Fare, fill=Survived)) +  
+  labs(title='Survived by number of Siblings and Parents/Children', x='Fare',y='Count') +
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_histogram(binwidth = 10)
+```
+
+![](Titanic_Project_files/figure-markdown_github/unnamed-chunk-30-1.png)
+
+**It seems that ticket price has to do with survival. That is probably
+because people that paid more a more expensive ticket, were maybe
+considered more “important”, so they left the ship.**
+
 **We will now predict using logistic regression, the survival of the
-Titanic passengers at the test set.**
+Titanic passengers at the test set.First we will drop some variables.**
 
-Build the model (note: not all possible variables are used)
-===========================================================
+``` r
+# We will store the new DataFrame in a variable called newdata
+newdata <- subset( data, select = -PassengerId ) 
+newdata <- subset( newdata, select = -Ticket )
+newdata <- subset( newdata, select = -Cabin )
+newdata <- subset( newdata, select = -Name )
+newdata <- subset( newdata, select = -Parch )
+newdata <- subset( newdata, select = -SibSp )
+```
 
-rf\_model \<- randomForest(factor(Survived) \~ Pclass + Sex + Age +
-SibSp + Parch + Fare + Embarked + Title + FsizeD + Child + Mother, data
-= train)
+**Now we will build the model**
 
-Show model error
-================
+``` r
+train <- newdata[1:891,] # First we split in train and test set
+test <- newdata[892:1309,]
+```
 
-plot(rf\_model, ylim=c(0,0.36)) legend(‘topright’,
-colnames(rf\_model$err.rate), col=1:3, fill=1:3)
+**We estimate the logistic regression model and make predictions for the
+test set**
 
-Get importance
-==============
+``` r
+logreg <- glm(Survived ~ ., family = binomial(link=logit),data = train)
+summary(logreg)
+```
 
-importance \<- importance(rf\_model) varImportance \<-
-data.frame(Variables = row.names(importance), Importance =
-round(importance\[ ,‘MeanDecreaseGini’\],2))
+    ## 
+    ## Call:
+    ## glm(formula = Survived ~ ., family = binomial(link = logit), 
+    ##     data = train)
+    ## 
+    ## Deviance Residuals: 
+    ##     Min       1Q   Median       3Q      Max  
+    ## -2.2980  -0.6054  -0.3510   0.5888   2.5585  
+    ## 
+    ## Coefficients:
+    ##                 Estimate Std. Error z value Pr(>|z|)    
+    ## (Intercept)    1.819e+01  5.254e+02   0.035  0.97238    
+    ## Pclass2       -5.893e-01  4.471e-01  -1.318  0.18750    
+    ## Pclass3       -1.856e+00  4.541e-01  -4.088 4.35e-05 ***
+    ## Sexmale       -1.589e+01  5.254e+02  -0.030  0.97588    
+    ## Age           -2.517e-02  9.612e-03  -2.618  0.00883 ** 
+    ## Fare          -3.832e-04  2.221e-03  -0.173  0.86299    
+    ## EmbarkedQ     -8.028e-02  3.804e-01  -0.211  0.83286    
+    ## EmbarkedS     -6.392e-01  2.469e-01  -2.589  0.00963 ** 
+    ## Cabin_levelsA  6.819e-01  6.832e-01   0.998  0.31822    
+    ## Cabin_levelsB  7.998e-01  5.590e-01   1.431  0.15252    
+    ## Cabin_levelsC  2.542e-01  5.032e-01   0.505  0.61351    
+    ## Cabin_levelsD  1.190e+00  5.822e-01   2.044  0.04096 *  
+    ## Cabin_levelsE  1.638e+00  5.800e-01   2.824  0.00475 ** 
+    ## Cabin_levelsF  9.047e-01  8.256e-01   1.096  0.27314    
+    ## Cabin_levelsG -4.062e-01  1.022e+00  -0.397  0.69113    
+    ## Cabin_levelsT -1.418e+01  1.455e+03  -0.010  0.99223    
+    ## TitleMiss     -1.523e+01  5.254e+02  -0.029  0.97687    
+    ## TitleMr       -1.910e+00  4.412e-01  -4.329 1.50e-05 ***
+    ## TitleMrs      -1.460e+01  5.254e+02  -0.028  0.97784    
+    ## TitleRare     -1.902e+00  7.393e-01  -2.573  0.01008 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## (Dispersion parameter for binomial family taken to be 1)
+    ## 
+    ##     Null deviance: 1186.66  on 890  degrees of freedom
+    ## Residual deviance:  748.29  on 871  degrees of freedom
+    ## AIC: 788.29
+    ## 
+    ## Number of Fisher Scoring iterations: 14
 
-Create a rank variable based on importance
-==========================================
+**Now the predictions**
 
-rankImportance \<- varImportance %\>% mutate(Rank =
-paste0(‘\#’,dense\_rank(desc(Importance)))) \#\#How do I do it with
-another way?
+``` r
+predictions <- predict(logreg, newdata = test, type = "response")
 
-Use ggplot2 to visualize the relative importance of variables
-=============================================================
+predictions[predictions >= 0.5] <- 1 # Probabilities above 0.5 = 1 (Survived)
+predictions[predictions<0.5] <-0 # Probabilities below 0.5 = 0 (Survived)
 
-ggplot(rankImportance, aes(x = reorder(Variables, Importance), y =
-Importance, fill = Importance)) + geom\_bar(stat=‘identity’) +
-geom\_text(aes(x = Variables, y = 0.5, label = Rank), hjust=0,
-vjust=0.55, size = 4, colour = ‘red’) + labs(x = ‘Variables’) +
-coord\_flip() + theme\_few()
+predictions<-as.factor(predictions)
+summary(predictions)
+```
 
-Predict using the test set
-==========================
+    ##   0   1 
+    ## 263 155
 
-prediction \<- predict(rf\_model, test)
+**We can see that our model predicted that 263 people didn’t survive and
+155 survived. This is a percentage of 37.0813397% **
 
-Save the solution to a dataframe with two columns: PassengerId and Survived (prediction)
-========================================================================================
+**Let’s see what is our score on Kaggle if we submit our predictions**
 
-solution \<- data.frame(PassengerId = test$PassengerId, Survived =
-prediction)
+``` r
+final <- data.frame(PassengerId = data[892:1309,"PassengerId"], Survived = predictions)
+write.csv(final, file = 'Titanic_Solution_KAGGLE.csv', row.names = F)
+```
 
-Write the solution to file
-==========================
-
-write.csv(solution, file = ‘Titanic\_Solution.csv’, row.names = F)
+**Our score is 0.77, which means we found the correct prediction in 77
+out of 100 passengers.**
