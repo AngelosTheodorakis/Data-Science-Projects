@@ -20,9 +20,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **First, we read the data**
 ```{r}
-setwd("C:/Users/User/Desktop/Άγγελος/R/Data analysis/Titanic/titanic")
-test<-read.csv("test.csv")
-train<-read.csv("train.csv")
+test<- read.csv("https://raw.githubusercontent.com/AngelosTheodorakis/Data_Analysis_Projects/master/Titanic_Dataset/Data/test.csv",header=TRUE,sep=",")
+train<- read.csv("https://raw.githubusercontent.com/AngelosTheodorakis/Data_Analysis_Projects/master/Titanic_Dataset/Data/train.csv",header=TRUE,sep=",")
 ```
 
 **Then we load some libraries**
