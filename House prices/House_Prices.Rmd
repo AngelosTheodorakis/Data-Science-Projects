@@ -2,67 +2,103 @@
 title: "House_Prices"
 author: "Angelos Theodorakis"
 date: "29/5/2020"
-output: html_document
+output: 
+  md_document:
+    variant: markdown_github
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,warning=FALSE,message=FALSE)
 ```
+
+First, we will load the libraries we need
 
 ```{r}
 library(plyr)
 library(dplyr)
-#First we load the data, the train and the test set seperately
+```
+
+Then we load the data, the train and the test set seperately
+
+```{r}
 setwd("C:/Users/User/Desktop/Άγγελος/R/Data analysis/House prices/house-prices-advanced-regression-techniques")
 train<-read.csv("train.csv",stringsAsFactors = FALSE)
 test<-read.csv("test.csv",header=TRUE,stringsAsFactors = FALSE)
-#We can add the SalePrice variable in the test set as NA
+```
+
+We can add the SalePrice variable in the test set as NA
+
+```{r}
 test$SalePrice<-NA
-#Now we combine the test and train set
+```
+
+Now we combine the test and train set
+
+```{r}
 data<-rbind(train,test)
+```
 
-#Let's explore SalePrice variable,which is the one we want to predict
+Let's explore SalePrice variable, which is the one we want to predict
+
+```{r}
 summary(data$SalePrice) #we can see that the median for the sales price is 163000
-data$SalePrice<-as.numeric(data$SalePrice) #This variable is numeric
+data$SalePrice<-as.numeric(data$SalePrice) #Change to numeric
 hist(data$SalePrice,breaks=30) #we can see a slightly skewed distribution to the right
+```
 
-#We check for missing values
+We check for missing values
+
+```{r}
 str(data)
 sort(sapply(data, function(x) sum(is.na(x))),decreasing=TRUE)
 plot(sapply(data, function(x) sum(is.na(x))),type = "h" )
-#There are some columns with lots of missing values.We will decide later what to do with these.
-#Basically,in most cases there are not missing values,but an indication that the apartment
-#doesn't have these amenities. So let's remove these Na's with none and explore these variables
+```
 
-#PoolQC:  Pool quality
+There are some columns with lots of missing values.We will decide later what to do with these. Basically,in most cases there are not missing values,but an indication that the apartment doesn't have these amenities. So let's remove these Na's with none and explore these variables.
+
+**PoolQC:  Pool quality**
+
+```{r}
 data$PoolQC[is.na(data$PoolQC)] <- "None"
 table(data$PoolQC)
 Qual_Cond <- c('None' = 0, 'Po' = 1, 'Fa' = 2, 'TA' = 3, 'Gd' = 4, 'Ex' = 5)
 data$PoolQC<-revalue(data$PoolQC,Qual_Cond)
 data$PoolQC<-as.integer(data$PoolQC)
+```
 
-#MiscFeature: Miscellaneous feature not covered in other categories   
+**MiscFeature: Miscellaneous feature not covered in other categories**
+
+```{r}
 table(data$MiscFeature)
 data$MiscFeature[is.na(data$MiscFeature)] <- "None"
 table(data$MiscFeature)
 data$MiscFeature<-as.factor(data$MiscFeature) 
 plot(data$MiscFeature)
+```
 
-#Alley: Type of alley access to property  
+**Alley: Type of alley access to property** 
+
+```{r}
 table(data$Alley)
 data$Alley[is.na(data$Alley)] <- "None"
 data$Alley<-as.factor(data$Alley)
 plot(data$Alley,data$SalePrice) #Seems to affect the price
 table(data$Alley)
+```
 
-#Fence
+**Fence**
+
+```{r}
 table(data$Fence)
 data$Fence[is.na(data$Fence)] <- "None"
 data$Fence<-as.factor(data$Fence)
 plot(data$Fence,data$SalePrice) #Seems to affect the price,but no fence has the highest median!
 table(data$Fence)
+```
 
-#FireplaceQu
+**FireplaceQu**
+
+```{r}
 table(data$FireplaceQu)
 data$FireplaceQu[is.na(data$FireplaceQu)] <- "None"
 data$FireplaceQu<-revalue(data$FireplaceQu,Qual_Cond) #replace the values with Quality/Condition values
@@ -70,36 +106,63 @@ data$FireplaceQu<-as.integer(data$FireplaceQu)
 plot(data$FireplaceQu,data$SalePrice) #Seems to affect the price!
 abline(lm(data$SalePrice~data$FireplaceQu))
 table(data$FireplaceQu)
+```
 
-#LotFrontage: Linear feet of street connected to property. there are 259 NA's
+**LotFrontage: Linear feet of street connected to property. there are 259 NA's**
+
+```{r}
 summary(data$LotFrontage)
 cor(data$LotFrontage,data$SalePrice, use = "pairwise.complete.obs")
 hist(data$LotFrontage,breaks=30,xlim = c(0,200))
 plot(data$LotFrontage,data$SalePrice)
 abline(lm(data$SalePrice~data$LotFrontage))
 summary(lm(data$SalePrice~data$LotFrontage))
-#R squared is very low so it doesn't fit the data well.
-#maybe we will replace na's with mean
-data$LotFrontage[is.na(data$LotFrontage)] <- mean(na.omit(as.numeric(data$LotFrontage)))
-#Good idea to implement is fill Na's with median from Neighborhood. Some other time
+# R squared is very low so it doesn't fit the data well.Maybe we will replace na's with mean
+data$LotFrontage[is.na(data$LotFrontage)] <-mean(na.omit(as.numeric(data$LotFrontage)))
+```
 
 # GarageYrBlt
+
+```{r}
 summary(data$GarageYrBlt)
-plot(data$GarageYrBlt) #there is a wrong observation unless it is a house from the future - 2207.
-#We replace it with 2007
+plot(data$GarageYrBlt) 
+```
+
+There is a wrong observation unless it is a house from the future - 2207.We replace it with the year 2007.
+
+```{r}
 which(data[,"GarageYrBlt"]>2019)
 data[2593,"GarageYrBlt"]<-2007
-plot(as.factor(data$GarageYrBlt),data$SalePrice) #Find out by another variable,YearBuilt
-data.frame(data$YearBuilt,data$GarageYrBlt)
-#indeed the year the house was built is in most cases the same as the year the garage was built,
-#so we will use the observations from YearBuilt variable
-data$GarageYrBlt[is.na(data$GarageYrBlt)]<-data$YearBuilt[is.na(data$GarageYrBlt)]
-#we can see the correlation 
-cor(data$GarageYrBlt,data$YearBuilt)
-#We'll probably drop the variable and keep the YearBuilt variable.
-data <- subset(data, select = -GarageYrBlt)
+plot(as.factor(data$GarageYrBlt),data$SalePrice)
+```
 
-# GarageFinish:Interior finish of the garage
+**We will find out the NA's by another variable, YearBuilt. Let's see if they have a correlation**
+
+```{r}
+head(data.frame(data$YearBuilt,data$GarageYrBlt),15)
+```
+
+Indeed the year the house was built is in most cases the same as the year the garage was built, so we will use the observations from YearBuilt variable.
+
+```{r}
+data$GarageYrBlt[is.na(data$GarageYrBlt)]<-data$YearBuilt[is.na(data$GarageYrBlt)]
+```
+
+We can see the correlation 
+
+```{r}
+cor(data$GarageYrBlt,data$YearBuilt)
+```
+
+The correlation is very high, so we'll drop the variable and keep the YearBuilt variable.
+
+```{r}
+data <- subset(data, select = -GarageYrBlt)
+```
+
+**GarageFinish:Interior finish of the garage**
+
+```{r}
 plot(as.factor(data$GarageFinish))
 plot(as.factor(data$GarageFinish),data$SalePrice)
 data$GarageFinish[is.na(data$GarageFinish)] <- "None"
@@ -110,8 +173,11 @@ Finish<-c('None' = 0, "Unf" = 1, "RFn" = 2, "Fin" = 3)
 data$GarageFinish<-revalue(data$GarageFinish,Finish)
 data$GarageFinish<-as.integer(data$GarageFinish)  
 plot(data$GarageFinish,data$SalePrice)
+```
 
-# GarageQual   
+**GarageQual**
+
+```{r}
 table(data$GarageQual)
 plot(as.factor(data$GarageQual),data$SalePrice)
 data$GarageQual[is.na(data$GarageQual)] <- "None"
@@ -119,9 +185,11 @@ plot(as.factor(data$GarageQual),data$SalePrice)
 data$GarageQual<-revalue(data$GarageQual,Qual_Cond)
 table(data$GarageQual)
 data$GarageQual<-as.integer(data$GarageQual)
+```
 
+**GarageCond**
 
-# GarageCond    
+```{r}
 table(data$GarageCond)
 plot(as.factor(data$GarageCond),data$SalePrice)
 data$GarageCond[is.na(data$GarageCond)] <- "None"
@@ -129,25 +197,43 @@ plot(as.factor(data$GarageCond),data$SalePrice)
 data$GarageCond<-revalue(data$GarageCond,Qual_Cond)
 table(data$GarageCond)
 data$GarageCond<-as.integer(data$GarageCond)
-#we can see the correlation 
+```
+
+**we can see the correlation**
+
+```{r}
 cor(data$GarageCond,data$GarageQual)
-#It is a huge correlation,we must drop one of 2 variables
+```
+
+**It is a huge correlation,we must drop one of 2 variables**
+
+```{r}
 cor(data[1:1459,'SalePrice'],data[1:1459,'GarageCond'])
 cor(data[1:1459,'SalePrice'],data[1:1459,'GarageQual'])
-#We'll drop the variable less correlated with sales price
-data <- subset(data, select = -GarageCond)
+```
 
-# GarageType
+**We'll drop the variable less correlated with sales price**
+
+```{r}
+data <- subset(data, select = -GarageCond)
+```
+
+**GarageType**
+
+```{r}
 table(data$GarageType)
 plot(as.factor(data$GarageType),data$SalePrice)
 data$GarageType[is.na(data$GarageType)] <- "None"
 plot(as.factor(data$GarageType),data$SalePrice)
 data$GarageType<-as.factor(data$GarageType)
 plot(data$GarageType,data$SalePrice)
+```
 
-#Maybe classify together the basement and garage variables later?
+**Maybe classify together the basement and garage variables later?**
 
-# BsmtCond:Evaluates the general condition of the basement
+**BsmtCond:Evaluates the general condition of the basement**
+
+```{r}
 table(data$BsmtCond)
 plot(as.factor(data$BsmtCond),data$SalePrice)
 data$BsmtCond[is.na(data$BsmtCond)] <- "None"
@@ -156,10 +242,12 @@ data$BsmtCond<-revalue(data$BsmtCond,Qual_Cond)
 table(data$BsmtCond)
 data$BsmtCond<-as.integer(data$BsmtCond)
 plot(as.factor(data$BsmtCond),data$SalePrice)
-
+```
 
 
 # BsmtExposure:Refers to walkout or garden level walls
+
+```{r}
 table(data$BsmtExposure)
 plot(as.factor(data$BsmtExposure),data$SalePrice)
 data$BsmtExposure[is.na(data$BsmtExposure)] <- "None"
@@ -169,11 +257,12 @@ data$BsmtExposure<-revalue(data$BsmtExposure,Exposure)
 table(data$BsmtExposure)
 data$BsmtExposure<-as.integer(data$BsmtExposure)
 plot(as.factor(data$BsmtExposure),data$SalePrice)
-
+```
 
 
 
 # BsmtQual:Evaluates the height of the basement
+```{r}
 table(data$BsmtQual)
 plot(as.factor(data$BsmtQual),data$SalePrice)
 data$BsmtQual[is.na(data$BsmtQual)] <- "None"
@@ -182,9 +271,11 @@ data$BsmtQual<-revalue(data$BsmtQual,Qual_Cond)
 table(data$BsmtQual)
 data$BsmtQual<-as.integer(data$BsmtQual)
 plot(as.factor(data$BsmtQual),data$SalePrice)
-
+```
 
 # BsmtFinType1:Rating of basement finished area
+
+```{r}
 table(data$BsmtFinType1)
 plot(as.factor(data$BsmtFinType1),data$SalePrice)
 data$BsmtFinType1[is.na(data$BsmtFinType1)] <- "None"
@@ -194,10 +285,12 @@ data$BsmtFinType1<-revalue(data$BsmtFinType1,Bsm_type)
 table(data$BsmtFinType1)
 data$BsmtFinType1<-as.integer(data$BsmtFinType1)
 plot(as.factor(data$BsmtFinType1),data$SalePrice)
-
+```
 
 
 #BsmtFinType2:Rating of basement finished area (if multiple types)
+
+```{r}
 table(data$BsmtFinType2)
 plot(as.factor(data$BsmtFinType2),data$SalePrice)
 data$BsmtFinType2[is.na(data$BsmtFinType2)] <- "None"
@@ -206,8 +299,11 @@ data$BsmtFinType2<-revalue(data$BsmtFinType2,Bsm_type)
 table(data$BsmtFinType2)
 data$BsmtFinType2<-as.integer(data$BsmtFinType2)
 plot(as.factor(data$BsmtFinType2),data$SalePrice)
+```
 
 # MasVnrType: Masonry veneer type (walls)  Replace all Na's with 'none'
+
+```{r}
 table(data$MasVnrType)
 plot(as.factor(data$MasVnrType),data$SalePrice)
 data$MasVnrType[is.na(data$MasVnrType)] <- "None"
@@ -216,17 +312,20 @@ data$MasVnrType<-revalue(data$MasVnrType,Masonry)
 table(data$MasVnrType)
 data$MasVnrType<-as.integer(data$MasVnrType)
 plot(as.factor(data$MasVnrType),data$SalePrice)
+```
 
 # MasVnrArea
-table(data$MasVnrArea)
+
+```{r}
 plot(data$MasVnrArea,data$SalePrice)
 data$MasVnrArea[is.na(data$MasVnrArea)] <- 0
-table(data$MasVnrArea)
 data$MasVnrArea<-as.numeric(data$MasVnrArea)
 plot(data$MasVnrArea,data$SalePrice)
-
+```
 
 # MSZoning: Identifies the general zoning classification of the sale.
+
+```{r}
 table(data$MSZoning)
 plot(as.factor(data$MSZoning),data$SalePrice)
 data[is.na(data$MSZoning),] #How we can find the missing values? Let's check out the MSSubClass
@@ -241,17 +340,22 @@ cor(data$MSSubClass,data[,sapply(data, is.numeric)]) #it is not higly correlated
 data$MSZoning[is.na(data$MSZoning)]<-c('RM','RL','RM','RL')
 data[is.na(data$MSZoning),c("MSZoning",'MSSubClass')]
 data$MSZoning<-as.factor(data$MSZoning)
+```
 
 # Utilities: Type of utilities available
+
+```{r}
 table(data$Utilities)
 data[is.na(data$Utilities),]
 data[(data$Utilities=='NoSeWa'),]
 data[945,]
 #We don't need this variable for prediction , as there is only one house "NoSeWa"
 data <- subset(data, select = -Utilities)
-
+```
 
 # BsmtFullBath:Basement full bathrooms
+
+```{r}
 table(data$BsmtFullBath)
 data[is.na(data$BsmtFullBath),]
 paste(colnames(select(data,contains("Bsmt"))),collapse="','")
@@ -259,8 +363,11 @@ data[is.na(data$BsmtFullBath),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinTyp
 data$BsmtFullBath[is.na(data$BsmtFullBath)]<-0
 plot(as.factor(data$BsmtFullBath),data$SalePrice)
 data$BsmtFullBath<-as.integer(data$BsmtFullBath)
+```
 
 # BsmtHalfBath
+
+```{r}
 table(data$BsmtHalfBath)
 data[is.na(data$BsmtHalfBath),]
 paste(colnames(select(data,contains("Bsmt"))),collapse="','")
@@ -270,9 +377,11 @@ plot(as.factor(data$BsmtHalfBath),data$SalePrice)
 data$BsmtHalfBath<-as.integer(data$BsmtHalfBath)
 #we can see the correlation 
 cor(data$BsmtHalfBath,data$BsmtFullBath) #It is not correlated
-
+```
 
 # Functional: Home functionality (Assume typical unless deductions are warranted)
+
+```{r}
 table(data$Functional)
 plot(as.factor(data$Functional),data$SalePrice)
 data[is.na(data$Functional),]
@@ -281,9 +390,11 @@ Functional<-c('Sal'=0, 'Sev'=1, 'Maj2'=2, 'Maj1'=3, 'Mod'=4, 'Min2'=5, 'Min1'=6,
 data$Functional <- as.integer(revalue(data$Functional, Functional))
 table(data$Functional)
 plot(data$Functional,data$SalePrice)
+```
 
 #GarageCars Size of garage in car capacity  
 
+```{r}
 table(as.factor(data$GarageCars))
 plot(as.factor(data$GarageCars))
 plot(as.factor(data$GarageCars),data$SalePrice)
@@ -291,10 +402,12 @@ paste(colnames(select(data,contains("Garage"))),collapse="','")
 data[is.na(data$GarageCars),c('GarageType','GarageFinish','GarageCars','GarageArea','GarageQual')]
 data$GarageCars[is.na(data$GarageCars)]<-0
 data$GarageCars<-as.integer(data$GarageCars)
- 
+```
 
 
 #GarageArea
+
+```{r}
 plot(as.factor(data$GarageArea))
 plot(data$GarageArea,data$SalePrice)
 paste(colnames(select(data,contains("Garage"))),collapse="','")
@@ -308,9 +421,11 @@ cor(data[1:1459,'SalePrice'],data[1:1459,'GarageArea'])
 cor(data[1:1459,'SalePrice'],data[1:1459,'GarageCars']) 
 #We'll indeed drop the GarageArea variable since it is less corellated with sales Price 
 data <- subset(data, select = -GarageArea)
-
+```
 
 # TotalBsmtSF : Total square feet of basement area
+
+```{r}
 plot(as.factor(data$TotalBsmtSF))
 plot(data$TotalBsmtSF,data$SalePrice)
 cor(data[1:1459,'SalePrice'],data[1:1459,'TotalBsmtSF'])
@@ -318,8 +433,11 @@ data$TotalBsmtSF[is.na(data$TotalBsmtSF)]
 paste(colnames(select(data,contains("Bsmt"))),collapse="','")
 data[is.na(data$TotalBsmtSF),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFinSF1','BsmtFinType2','BsmtFinSF2','BsmtUnfSF','TotalBsmtSF','BsmtFullBath','BsmtHalfBath')]
 data$TotalBsmtSF[is.na(data$TotalBsmtSF)]<-0
+```
 
-#  BsmtFinSF1    
+#  BsmtFinSF1   
+
+```{r}
 plot(as.factor(data$BsmtFinSF1))
 plot(data$BsmtFinSF1,data$SalePrice)
 cor(data[1:1459,'SalePrice'],data[1:1459,'BsmtFinSF1'])
@@ -327,8 +445,11 @@ data$BsmtFinSF1[is.na(data$BsmtFinSF1)]
 paste(colnames(select(data,contains("Bsmt"))),collapse="','")
 data[is.na(data$BsmtFinSF1),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFinSF1','BsmtFinType2','BsmtFinSF2','BsmtUnfSF','TotalBsmtSF','BsmtFullBath','BsmtHalfBath')]
 data$BsmtFinSF1[is.na(data$BsmtFinSF1)]<-0
+```
 
 #BsmtUnfSF
+
+```{r}
 plot(data$BsmtUnfSF)
 plot(data$BsmtUnfSF,data$SalePrice)
 cor(data[1:1459,'SalePrice'],data[1:1459,'BsmtUnfSF'])
@@ -339,8 +460,11 @@ data$BsmtUnfSF[is.na(data$BsmtUnfSF)]<-0
 cor(data$BsmtUnfSF,data$BsmtFinSF2)
 #Let's see if it is correlated with another
 cor(data$BsmtUnfSF,data[,sapply(data, is.numeric)]) #correlated with BsmtFinSF1
+```
 
-#BsmtFinSF2     
+#BsmtFinSF2   
+
+```{r}
 plot(data$BsmtFinSF2)
 plot(data$BsmtFinSF2,data$SalePrice)
 cor(data[1:1459,'SalePrice'],data[1:1459,'BsmtFinSF2'])
@@ -365,62 +489,80 @@ data <- subset(data, select = -BsmtFinSF2)
 corrplot(cor(data[,c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFinType2','BsmtUnfSF','TotalBsmtSF','BsmtFullBath','BsmtHalfBath')]),method='square')
 data <- subset(data, select = -TotalBsmtSF)   #MAYBE NOT THIS VARIABLE?     
 corrplot(cor(data[,c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFinType2','BsmtUnfSF','BsmtFullBath','BsmtHalfBath')]),method='square')
-
+```
 
 ################################################################################
 
 #Now that we have taken care of Na's let's see what the numeric variables are
+
+```{r}
 colnames(data[,sapply(data, is.numeric)]) #check out which columns are numeric 
+```
 
 #But first let's see some correlations
+
+```{r}
 corrplot(cor(na.omit(data[,sapply(data, is.numeric)])),method = "square")
 paste(which(cor(data[1:1459,sapply(data, is.numeric)],data[1:1459,'SalePrice'])>0.5 | cor(data[1:1459,sapply(data, is.numeric)],data[1:1459,'SalePrice'])<(-0.5)),collapse=',')
 colnames(data[,sapply(data, is.numeric)][c(5,7,8,11,17,20,23,27,30,31,32,44)])
-#So these are the variables that have the highest correlation with the Saleprice variable.
-#We will examine these further.
+```
+
+**So these are the variables that have the highest correlation with the Saleprice variable.We will examine these further.**
 
 #Id
-#We will get rid of the Id column and keep it in a vector called Id
+**We will get rid of the Id column and keep it in a vector called Id**
+
+```{r}
 Id<-data$Id[1461:nrow(data)]
 data <- data[,-1]
-
+```
 
 #MSSubClass: Identifies the type of dwelling involved in the sale.
+
+```{r}
 plot(data$MSSubClass,data$SalePrice)
 #In reality this is a factor and not numeric.
 table(as.factor(data$MSSubClass))
 data$MSSubClass<-as.factor(data$MSSubClass)
-
+```
 
 #OverallQual: Rates the overall material and finish of the house
+
+```{r}
 table(as.factor(data$OverallQual))
 plot(as.factor(data$OverallQual),data$SalePrice)
 data$OverallQual<-as.integer(data$OverallQual)
 table(data$OverallQual)
-
+```
 
 #OverallCond: Rates the overall condition of the house
+
+```{r}
 table(as.factor(data$OverallCond))
 plot(as.factor(data$OverallCond),data$SalePrice)
 data$OverallCond<-as.integer(data$OverallCond)
 table(data$OverallCond)
-
+```
 
 #YearBuilt: Original construction date
+
+```{r}
 plot(as.factor(data$YearBuilt))
 table(as.factor(data$YearBuilt))
 plot(as.factor(data$YearBuilt),data$SalePrice)
 cor(data[1:1459,'SalePrice'],data[1:1459,'YearBuilt'])
-
+```
 
 # YearRemodAdd: Remodel date (same as construction date if no remodeling or additions)
+
+```{r}
 plot(as.factor(data$YearRemodAdd))
 table(as.factor(data$YearRemodAdd))
 plot(as.factor(data$YearRemodAdd),data$SalePrice)
 plot(data$YearRemodAdd,data$YearBuilt)
 #We can see from the plot that all remodelings started on 1950. Is it true or there is some error?
 cor(data$YearRemodAdd>1950,data$YearBuilt>1950) #Highly correlated with Yearbuilt
-
+```
 
 
 # X1stFlrSF"  
@@ -435,25 +577,31 @@ cor(data$YearRemodAdd>1950,data$YearBuilt>1950) #Highly correlated with Yearbuil
  
  
 #Pool Area
+
+```{r}
 table(data$PoolArea) #we'll drop this variable
 data <- subset(data, select = -c(PoolArea))
+```
 
 #PoolQC
+
+```{r}
 table(data$PoolQC) #we'll drop this variable
 data <- subset(data, select = -c(PoolQC))
+```
 
-
-
-################################################################################
+```{r}
 colnames(data[,sapply(data, is.character)]) #check out which columns are character
+```
 
 #Street: Type of road access to property 
+
+```{r}
 plot(as.factor(data$Street))
 table(data$Street)
 #Only 12 Gravels      
 #removing Street variable 
 data <- subset(data, select = -Street)
-
 ```
 
 library(caret)
