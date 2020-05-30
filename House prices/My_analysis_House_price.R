@@ -17,7 +17,8 @@ hist(data$SalePrice,breaks=30) #we can see a slightly skewed distribution to the
 #We check for missing values
 str(data)
 sort(sapply(data, function(x) sum(is.na(x))),decreasing=TRUE)
-plot(sapply(data, function(x) sum(is.na(x))),type = "h" )
+plot(sort(sapply(data, function(x) sum(is.na(x))),decreasing=TRUE),type='h')
+
 #There are some columns with lots of missing values.We will decide later what to do with these.
 #Basically,in most cases there are not missing values,but an indication that the apartment
 #doesn't have these amenities. So let's remove these Na's with none and explore these variables
@@ -78,7 +79,7 @@ plot(data$GarageYrBlt) #there is a wrong observation unless it is a house from t
 which(data[,"GarageYrBlt"]>2019)
 data[2593,"GarageYrBlt"]<-2007
 plot(as.factor(data$GarageYrBlt),data$SalePrice) #Find out by another variable,YearBuilt
-data.frame(data$YearBuilt,data$GarageYrBlt)
+head(data.frame(data$YearBuilt,data$GarageYrBlt),10)
 #indeed the year the house was built is in most cases the same as the year the garage was built,
 #so we will use the observations from YearBuilt variable
 data$GarageYrBlt[is.na(data$GarageYrBlt)]<-data$YearBuilt[is.na(data$GarageYrBlt)]
@@ -455,7 +456,7 @@ lasso_mod$bestTune
 
 
 ##################################################################################
-#scale all variables except saleprice #change it ,make a vector salePrice
+#scale all variables except saleprice change it ,make a vector salePrice
 datanew<-data
 datanew<-data[,-ncol(data)]
   

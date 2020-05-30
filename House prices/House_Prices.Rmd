@@ -51,7 +51,7 @@ We check for missing values
 ```{r}
 str(data)
 sort(sapply(data, function(x) sum(is.na(x))),decreasing=TRUE)
-plot(sapply(data, function(x) sum(is.na(x))),type = "h" )
+plot(sort(sapply(data, function(x) sum(is.na(x))),decreasing=TRUE),type='h')
 ```
 
 There are some columns with lots of missing values.We will decide later what to do with these. Basically,in most cases there are not missing values,but an indication that the apartment doesn't have these amenities. So let's remove these Na's with none and explore these variables.

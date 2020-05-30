@@ -170,7 +170,7 @@ sort(sapply(data, function(x) sum(is.na(x))),decreasing=TRUE)
     ##             0
 
 ``` r
-plot(sapply(data, function(x) sum(is.na(x))),type = "h" )
+plot(sort(sapply(data, function(x) sum(is.na(x))),decreasing=TRUE),type='h')
 ```
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-6-1.png)
