@@ -5,7 +5,7 @@ setwd("C:/Users/User/Desktop/¢ããåëïò/R/Data analysis/House prices/house-prices-a
 train<-read.csv("train.csv",stringsAsFactors = FALSE)
 test<-read.csv("test.csv",header=TRUE,stringsAsFactors = FALSE)
 #We can add the SalePrice variable in the test set as NA
-test$SalePrice<-NA
+test$SalePrice<-rep(NA,1459)
 #Now we combine the test and train set
 data<-rbind(train,test)
 

@@ -362,8 +362,7 @@ summary(lm(data$SalePrice~data$LotFrontage))
 data$LotFrontage[is.na(data$LotFrontage)] <-mean(na.omit(as.numeric(data$LotFrontage)))
 ```
 
-GarageYrBlt
-===========
+**GarageYrBlt**
 
 ``` r
 summary(data$GarageYrBlt)
@@ -644,8 +643,7 @@ plot(as.factor(data$BsmtCond),data$SalePrice)
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-26-3.png)
 
-BsmtExposure:Refers to walkout or garden level walls
-====================================================
+**BsmtExposure:Refers to walkout or garden level walls**
 
 ``` r
 table(data$BsmtExposure)
@@ -685,8 +683,7 @@ plot(as.factor(data$BsmtExposure),data$SalePrice)
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-27-3.png)
 
-BsmtQual:Evaluates the height of the basement
-=============================================
+**BsmtQual:Evaluates the height of the basement**
 
 ``` r
 table(data$BsmtQual)
@@ -725,8 +722,7 @@ plot(as.factor(data$BsmtQual),data$SalePrice)
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-28-3.png)
 
-BsmtFinType1:Rating of basement finished area
-=============================================
+**BsmtFinType1:Rating of basement finished area**
 
 ``` r
 table(data$BsmtFinType1)
@@ -766,7 +762,7 @@ plot(as.factor(data$BsmtFinType1),data$SalePrice)
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-29-3.png)
 
-\#BsmtFinType2:Rating of basement finished area (if multiple types)
+**BsmtFinType2:Rating of basement finished area (if multiple types)**
 
 ``` r
 table(data$BsmtFinType2)
@@ -805,8 +801,7 @@ plot(as.factor(data$BsmtFinType2),data$SalePrice)
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-30-3.png)
 
-MasVnrType: Masonry veneer type (walls) Replace all Na’s with ‘none’
-====================================================================
+**MasVnrType: Masonry veneer type (walls) Replace all Na’s with ‘none’**
 
 ``` r
 table(data$MasVnrType)
@@ -840,8 +835,7 @@ plot(as.factor(data$MasVnrType),data$SalePrice)
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-31-2.png)
 
-MasVnrArea
-==========
+**MasVnrArea**
 
 ``` r
 plot(data$MasVnrArea,data$SalePrice)
@@ -857,8 +851,7 @@ plot(data$MasVnrArea,data$SalePrice)
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-32-2.png)
 
-MSZoning: Identifies the general zoning classification of the sale.
-===================================================================
+**MSZoning: Identifies the general zoning classification of the sale.**
 
 ``` r
 table(data$MSZoning)
@@ -1023,8 +1016,7 @@ data[is.na(data$MSZoning),c("MSZoning",'MSSubClass')]
 data$MSZoning<-as.factor(data$MSZoning)
 ```
 
-Utilities: Type of utilities available
-======================================
+**Utilities: Type of utilities available**
 
 ``` r
 table(data$Utilities)
@@ -1171,8 +1163,7 @@ data[945,]
 data <- subset(data, select = -Utilities)
 ```
 
-BsmtFullBath:Basement full bathrooms
-====================================
+**BsmtFullBath:Basement full bathrooms**
 
 ``` r
 table(data$BsmtFullBath)
@@ -1254,8 +1245,7 @@ plot(as.factor(data$BsmtFullBath),data$SalePrice)
 data$BsmtFullBath<-as.integer(data$BsmtFullBath)
 ```
 
-BsmtHalfBath
-============
+**BsmtHalfBath**
 
 ``` r
 table(data$BsmtHalfBath)
@@ -1341,8 +1331,8 @@ cor(data$BsmtHalfBath,data$BsmtFullBath) #It is not correlated
 
     ## [1] -0.1486548
 
-Functional: Home functionality (Assume typical unless deductions are warranted)
-===============================================================================
+**Functional: Home functionality (Assume typical unless deductions are
+warranted)**
 
 ``` r
 table(data$Functional)
@@ -1419,7 +1409,7 @@ plot(data$Functional,data$SalePrice)
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-37-2.png)
 
-\#GarageCars Size of garage in car capacity
+**GarageCars Size of garage in car capacity **
 
 ``` r
 table(as.factor(data$GarageCars))
@@ -1459,7 +1449,7 @@ data$GarageCars[is.na(data$GarageCars)]<-0
 data$GarageCars<-as.integer(data$GarageCars)
 ```
 
-\#GarageArea
+**GarageArea**
 
 ``` r
 plot(as.factor(data$GarageArea))
@@ -1566,8 +1556,7 @@ cor(data[1:1459,'SalePrice'],data[1:1459,'GarageCars'])
 data <- subset(data, select = -GarageArea)
 ```
 
-TotalBsmtSF : Total square feet of basement area
-================================================
+**TotalBsmtSF : Total square feet of basement area**
 
 ``` r
 plot(as.factor(data$TotalBsmtSF))
@@ -1612,8 +1601,7 @@ data[is.na(data$TotalBsmtSF),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType
 data$TotalBsmtSF[is.na(data$TotalBsmtSF)]<-0
 ```
 
-BsmtFinSF1
-==========
+**BsmtFinSF1**
 
 ``` r
 plot(as.factor(data$BsmtFinSF1))
@@ -1658,7 +1646,7 @@ data[is.na(data$BsmtFinSF1),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1
 data$BsmtFinSF1[is.na(data$BsmtFinSF1)]<-0
 ```
 
-\#BsmtUnfSF
+**BsmtUnfSF**
 
 ``` r
 plot(data$BsmtUnfSF)
@@ -1730,7 +1718,7 @@ cor(data$BsmtUnfSF,data[,sapply(data, is.numeric)]) #correlated with BsmtFinSF1
     ##          MiscVal     MoSold      YrSold SalePrice
     ## [1,] -0.01045017 0.02295447 -0.03807293        NA
 
-\#BsmtFinSF2
+**BsmtFinSF2**
 
 ``` r
 plot(data$BsmtFinSF2)
@@ -1876,10 +1864,8 @@ corrplot(cor(data[,c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFi
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-43-5.png)
 
-################################################################################ 
-
-\#Now that we have taken care of Na’s let’s see what the numeric
-variables are
+**Now that we have taken care of Na’s let’s see what the numeric
+variables are**
 
 ``` r
 colnames(data[,sapply(data, is.numeric)]) #check out which columns are numeric 
@@ -1897,7 +1883,7 @@ colnames(data[,sapply(data, is.numeric)]) #check out which columns are numeric
     ## [37] "X3SsnPorch"    "ScreenPorch"   "PoolArea"      "PoolQC"       
     ## [41] "MiscVal"       "MoSold"        "YrSold"        "SalePrice"
 
-\#But first let’s see some correlations
+**But first let’s see some correlations**
 
 ``` r
 corrplot(cor(na.omit(data[,sapply(data, is.numeric)])),method = "square")
@@ -1922,7 +1908,7 @@ colnames(data[,sapply(data, is.numeric)][c(5,7,8,11,17,20,23,27,30,31,32,44)])
 **So these are the variables that have the highest correlation with the
 Saleprice variable.We will examine these further.**
 
-\#Id **We will get rid of the Id column and keep it in a vector called
+**Id** **We will get rid of the Id column and keep it in a vector called
 Id**
 
 ``` r
@@ -1930,7 +1916,7 @@ Id<-data$Id[1461:nrow(data)]
 data <- data[,-1]
 ```
 
-\#MSSubClass: Identifies the type of dwelling involved in the sale.
+**MSSubClass: Identifies the type of dwelling involved in the sale.**
 
 ``` r
 plot(data$MSSubClass,data$SalePrice)
@@ -1953,7 +1939,7 @@ table(as.factor(data$MSSubClass))
 data$MSSubClass<-as.factor(data$MSSubClass)
 ```
 
-\#OverallQual: Rates the overall material and finish of the house
+**OverallQual: Rates the overall material and finish of the house**
 
 ``` r
 table(as.factor(data$OverallQual))
@@ -1978,7 +1964,7 @@ table(data$OverallQual)
     ##   1   2   3   4   5   6   7   8   9  10 
     ##   4  13  40 226 825 731 600 342 107  31
 
-\#OverallCond: Rates the overall condition of the house
+**OverallCond: Rates the overall condition of the house**
 
 ``` r
 table(as.factor(data$OverallCond))
@@ -2003,7 +1989,7 @@ table(data$OverallCond)
     ##    1    2    3    4    5    6    7    8    9 
     ##    7   10   50  101 1645  531  390  144   41
 
-\#YearBuilt: Original construction date
+**YearBuilt: Original construction date**
 
 ``` r
 plot(as.factor(data$YearBuilt))
@@ -2045,8 +2031,8 @@ cor(data[1:1459,'SalePrice'],data[1:1459,'YearBuilt'])
 
     ## [1] 0.5228769
 
-YearRemodAdd: Remodel date (same as construction date if no remodeling or additions)
-====================================================================================
+**YearRemodAdd: Remodel date (same as construction date if no remodeling
+or additions)**
 
 ``` r
 plot(as.factor(data$YearRemodAdd))
@@ -2107,7 +2093,7 @@ FireplaceQu"
 GarageFinish"
 =============
 
-\#Pool Area
+**Pool Area**
 
 ``` r
 table(data$PoolArea) #we'll drop this variable
@@ -2121,7 +2107,7 @@ table(data$PoolArea) #we'll drop this variable
 data <- subset(data, select = -c(PoolArea))
 ```
 
-\#PoolQC
+**PoolQC**
 
 ``` r
 table(data$PoolQC) #we'll drop this variable
@@ -2135,8 +2121,10 @@ table(data$PoolQC) #we'll drop this variable
 data <- subset(data, select = -c(PoolQC))
 ```
 
+**check out which columns are character**
+
 ``` r
-colnames(data[,sapply(data, is.character)]) #check out which columns are character
+colnames(data[,sapply(data, is.character)]) 
 ```
 
     ##  [1] "Street"        "LotShape"      "LandContour"   "LotConfig"    
@@ -2147,7 +2135,7 @@ colnames(data[,sapply(data, is.character)]) #check out which columns are charact
     ## [21] "Electrical"    "KitchenQual"   "PavedDrive"    "SaleType"     
     ## [25] "SaleCondition"
 
-\#Street: Type of road access to property
+**Street: Type of road access to property **
 
 ``` r
 plot(as.factor(data$Street))
@@ -2178,31 +2166,4 @@ y=data*S**a**l**e**P**r**i**c**e*\[!*i**s*.*n**a*(*d**a**t**a*SalePrice)\],
 method=‘glmnet’, trControl= my\_control, tuneGrid=lassoGrid)
 lasso\_mod$bestTune
 
-################################################################################## 
-
-\#scale all variables except saleprice \#change it ,make a vector
-salePrice datanew\<-data datanew\<-data\[,-ncol(data)\]
-
-datanew\[,sapply(datanew,
-is.numeric)\]\<-scale(datanew\[,sapply(datanew, is.numeric)\])
-
-paste(colnames(data), collapse =“+”,sep=" ")
-datanew*S**a**l**e**P**r**i**c**e* \<  − *d**a**t**a*SalePrice
-
-train\<-datanew\[1:1460,\] test\<-datanew\[1461:nrow(datanew),\]
-
-fit\<-step(lm(SalePrice\~MSSubClass+MSZoning+LotFrontage+LotArea+Alley+LotShape+LandContour+LotConfig+LandSlope+Neighborhood+Condition1+Condition2+BldgType+HouseStyle+OverallQual+OverallCond+YearBuilt+YearRemodAdd+RoofStyle+RoofMatl+Exterior1st+Exterior2nd+MasVnrType+MasVnrArea+ExterQual+ExterCond+Foundation+BsmtQual+BsmtCond+BsmtExposure+BsmtFinType1+BsmtFinType2+BsmtUnfSF+Heating+HeatingQC+CentralAir+Electrical+X1stFlrSF+X2ndFlrSF+LowQualFinSF+GrLivArea+BsmtFullBath+BsmtHalfBath+FullBath+HalfBath+BedroomAbvGr+KitchenAbvGr+KitchenQual+TotRmsAbvGrd+Functional+Fireplaces+FireplaceQu+GarageType+GarageFinish+GarageCars+GarageQual+PavedDrive+WoodDeckSF+OpenPorchSF+EnclosedPorch+X3SsnPorch+ScreenPorch+Fence+MiscFeature+MiscVal+MoSold+YrSold+SaleType+SaleCondition,
-data=na.omit(train)),direction = “both”)  
-summary(fit) test$SalePrice\<-predict(fit,test)
-df\<-data.frame(Id,test\[,“SalePrice”\])
-
-which(is.na(df)) colnames(df)\<-c(“Id”,“SalePrice”)
-
-which(is.na(df)) \#But we have 2 NA’s (further investigate for now use
-mean) for(i in 1:2){ df\[is.na(df\[,i\]), i\] \<- mean(df\[,i\], na.rm =
-TRUE) } write.csv(df,“C:/Users/User/Desktop/Άγγελος/R/Data
-analysis/House
-prices/house-prices-advanced-regression-techniques\\submission.csv”,
-row.names = FALSE) getwd()
-
-\`\`\`
+############################################################################
