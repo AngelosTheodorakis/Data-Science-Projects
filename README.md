@@ -14,6 +14,6 @@ This is a part of a project i did on Dataquest and I had the chance to work with
 ## [**Project 3 - Titanic dataset.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Titanic_Dataset)
 This is the famous Titanic dataset. I've downloaded the data from Kaggle and used logistic regression to predict if the passengers in the test set survived or not.
 
-<img src="https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/Titanic_Dataset/Titanic_Project_files/figure-markdown_github/unnamed-chunk-28-2.png" width="600" height="400" />
+<img src="https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/images/unnamed-chunk-28-2.png" width="600" height="400" />
 
 
