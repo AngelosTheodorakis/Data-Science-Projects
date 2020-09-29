@@ -2,8 +2,8 @@ Below is a quick summary of some of the projects I keep in this repositorie.
 
 ## **Study of EKPA**
 Visualizations using data from a recent study of *National and Kapodistrian University of Athens(EKPA)*, in which I was responsible for the study documentation. A survey was organized, asking graduates of EKPA postgraduate programs questions about employment, satisfaction with their studies etc. Some interesting observations are the following:
-- According to graduates, the postgraduate program didn't have a big impact on helping them land a job.
-- Generally, the graduates were satisfied with their postgraduate program and they would reccomend it.
+- According to graduates, their postgraduate program didn't have a big impact on helping them land a job.
+- Generally, the graduates were satisfied with their postgraduate program and they would reccomend it to others.
 
 ## Job outcomes of students who graduated from college between 2010 and 2012. (Based on Dataquest site)
 This is a dataset on the job outcomes of students who graduated from college between 2010 and 2012. The original data on job outcomes was released by American
