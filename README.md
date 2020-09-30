@@ -25,7 +25,7 @@ Gathered data from various datasets and combined them into a single dataframe. B
 * Found which variables better correlate with SAT scores.
 * Used *basemap toolkit* to plot SAT score and safety score values in NY map.
 
-<img src="https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/images/Sat_scores.png" width="400" height="300" />
+<img src="images/Sat_scores.png" width="400" height="300" />
 
 ## [**Project 3 - Visualizing Earnings Based On College Majors.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Visualizing%20Earnings%20Based%20On%20College%20Majors)
 This is a dataset on the job outcomes of students who graduated from college between 2010 and 2012. The original data on job outcomes was released by American
