@@ -1,7 +1,8 @@
 Below is a quick summary of some of the projects I keep in this repositorie.
 
 ## [**Project 1 - Study of EKPA.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/EKPA_Postgraduate_study)
-Visualizations using data from a recent study of *National and Kapodistrian University of Athens(EKPA)*, in which I was responsible for the study documentation. A survey was organized, asking graduates of EKPA postgraduate programs questions about employment, satisfaction with their studies etc. Some interesting observations are the following:
+Made some visualizations using data from a recent study of *National and Kapodistrian University of Athens(EKPA)*, in which I was responsible for the study documentation. A survey was organized, asking graduates of EKPA postgraduate programs questions about employment, satisfaction with their studies etc. \
+Some interesting observations are the following:
 - According to graduates, their postgraduate program didn't have a big impact on helping them land a job.
 - Generally, the graduates were satisfied with their postgraduate program and they would reccomend it to others.
 
