@@ -9,4 +9,4 @@ Below is a summary of the files I have uploaded:
 
 I have not uploaded the data I used, since I wasn't allowed to do so.
 
-<img src="images/unnamed-chunk-20-1.png" width="700" height="500" />
+<img src="https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/images/unnamed-chunk-20-1.png" width="700" height="500" />
