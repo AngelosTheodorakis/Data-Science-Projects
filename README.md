@@ -33,7 +33,7 @@ Community Survey, which conducts surveys and aggregates the data.\
 This is a part of a project i did on Dataquest and I had the chance to work with some plots like histograms, scatterplots and barplots, in Jupyter notebooks.
 - Performed visualisations using matplotlib library, primarly working in pandas.
 
-## [**Project 3 - Titanic dataset.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Titanic_Dataset)
+## [**Project 4 - Titanic dataset.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Titanic_Dataset)
 This is the famous Titanic dataset. I've downloaded the data from Kaggle.
 - Conducted EDA.
 - Used logistic regression to predict whether the passengers on the test set survived or not.
