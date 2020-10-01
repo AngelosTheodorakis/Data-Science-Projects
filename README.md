@@ -6,7 +6,7 @@ Some interesting observations are the following:
 - According to graduates, their postgraduate program didn't have a big impact on helping them land a job.
 - Generally, the graduates were satisfied with their postgraduate program and they would reccomend it to others.
 
-<img src="images/unnamed-chunk-20-1.png" width="300" height="300" />
+<img src="images/unnamed-chunk-20-1.png" width="600" height="500" />
 
 
 ## [**Project 2 - Analyzing NY High School Data (SAT results)**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Analyzing%20NY%20High%20School%20Data)
@@ -32,7 +32,7 @@ This is a dataset on the job outcomes of students who graduated from college bet
 Community Survey, which conducts surveys and aggregates the data.\
 This is a part of a project i did on Dataquest and I had the chance to work with some plots like histograms, scatterplots and barplots, in Jupyter notebooks.
 - Performed visualisations using matplotlib library, primarly working in pandas.
-<img src="images/image_scatter.png" width="700" height="600" />
+<img src="images/image_scatter.png" width="500" height="400" />
 
 ## [**Project 4 - Titanic dataset.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Titanic_Dataset)
 This is the famous Titanic dataset. I've downloaded the data from Kaggle.
