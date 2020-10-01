@@ -6,7 +6,7 @@ Some interesting observations are the following:
 - According to graduates, their postgraduate program didn't have a big impact on helping them land a job.
 - Generally, the graduates were satisfied with their postgraduate program and they would reccomend it to others.
 
-<img src="images/unnamed-chunk-20-1.png" width="700" height="500" />
+<img src="images/unnamed-chunk-20-1.png" width="300" height="300" />
 
 
 ## [**Project 2 - Analyzing NY High School Data (SAT results)**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Analyzing%20NY%20High%20School%20Data)
