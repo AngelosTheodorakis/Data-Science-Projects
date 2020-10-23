@@ -1,0 +1,8 @@
+# Lotto probabilities
+We will focus on the 6/49 lottery (Lotto) and build functions to answer the following questions:
+
+* What is the probability of winning the big prize with a single or more tickets ticket?
+* What is the probability of having exactly five (or four, or three, or two) winning numbers on a single ticket?
+* What is the probability of having at least five (or four, or three, or two) winning numbers on a single ticket?
+* Are some numbers more likely to appear based on historical data?
+
