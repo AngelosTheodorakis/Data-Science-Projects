@@ -27,14 +27,24 @@ Gathered data from various datasets and combined them into a single dataframe. B
 
 <img src="images/Sat_scores.png" width="400" height="300" />
 
-## [**Project 3 - Visualizing Earnings Based On College Majors.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Visualizing%20Earnings%20Based%20On%20College%20Majors)
+## [**Project 3 - Lotto probabilities.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Lotto%20Probabilities)
+In this project I focused on the 6/49 lottery (Lotto) and answered the following questions:
+
+* What is the probability of winning the big prize with a single or more tickets ticket?
+* What is the probability of having exactly five (or four, three, etc.) winning numbers on a single ticket?
+* What is the probability of having at least five (or four, three, etc.) winning numbers on a single ticket?
+* Are some numbers more likely to appear, based on historical data?
+
+Finally, I used [historical data](https://www.kaggle.com/datascienceai/lottery-dataset) from the national 6/49 lottery game in Canada, with drawings dating from 1982 to 2018. By comparing a ticket against the historical lottery data in Canada, someone can determine whether he would have ever won by now.
+
+## [**Project 4 - Visualizing Earnings Based On College Majors.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Visualizing%20Earnings%20Based%20On%20College%20Majors)
 This is a dataset on the job outcomes of students who graduated from college between 2010 and 2012. The original data on job outcomes was released by American
 Community Survey, which conducts surveys and aggregates the data.\
 This is a part of a project i did on Dataquest and I had the chance to work with some plots like histograms, scatterplots and barplots, in Jupyter notebooks.
 - Performed visualisations using matplotlib library, primarly working in pandas.
 <img src="images/image_scatter.png" width="500" height="400" />
 
-## [**Project 4 - Titanic dataset.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Titanic_Dataset)
+## [**Project 5 - Titanic dataset.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Titanic_Dataset)
 This is the famous Titanic dataset. I've downloaded the data from Kaggle.
 - Conducted EDA.
 - Used logistic regression to predict whether the passengers on the test set survived or not.
