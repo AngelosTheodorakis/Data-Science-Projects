@@ -1,4 +1,4 @@
-# Lotto probabilities
+# [Lotto probabilities](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/Lotto%20Probabilities/Lottery.ipynb)
 In this project we focus on the 6/49 lottery (Lotto) and build functions to answer the following questions:
 
 * What is the probability of winning the big prize with a single or more tickets ticket?
