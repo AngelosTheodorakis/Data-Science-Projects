@@ -1,5 +1,5 @@
 
-## Analyzing NY High School Data (SAT results)
+## [Analyzing NY High School Data (SAT results)](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/Analyzing%20NY%20High%20School%20Data/NY_Schools_Project.ipynb)
 This is a project about New York City public schools, based on a Dataquest guided project. \
 Gathered data from various datasets and combined them into a single dataframe. Below is a list of the datasets, which I have stored in the [schools](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Analyzing%20NY%20High%20School%20Data/schools) folder.
 
