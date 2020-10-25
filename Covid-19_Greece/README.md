@@ -2,6 +2,7 @@
 <br>
 In this project I focused on the covid cases in Greece and did the following:
 <br>
+<br>
 
 * I gathered data from many web sources and combined them.
 * I used choropleth maps, to plot the data and reach some conclusions.
