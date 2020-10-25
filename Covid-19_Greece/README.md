@@ -1,4 +1,4 @@
-## **Covid cases and deaths in Greece.**
+## [**Covid cases and deaths in Greece.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/Covid-19_Greece/Covid_Greece.ipynb)
 <br>
 In this project I focused on the covid cases in Greece and did the following:
 
