@@ -1,3 +1,5 @@
+## **Covid cases and deaths in Greece.**
+<br>
 In this project I focused on the covid cases in Greece and did the following:
 <br>
 * I gathered data from many web sources and combined them.
