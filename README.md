@@ -1,25 +1,9 @@
 Below is a quick summary of some of the projects I keep in this repositorie.
 
-## [**Project 1 - Study of EKPA.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/EKPA_Postgraduate_study)
-Made some visualizations using data from a recent study of *National and Kapodistrian University of Athens(EKPA)*, in which I was responsible for the study documentation. A survey was organized, asking graduates of EKPA postgraduate programs questions about employment, satisfaction with their studies etc. \
-Some interesting observations are the following:
-- According to graduates, their postgraduate program didn't have a big impact on helping them land a job.
-- Generally, the graduates were satisfied with their postgraduate program and they would reccomend it to others.
 
-<img src="images/unnamed-chunk-20-1.png" width="600" height="500" />
-
-
-## [**Project 2 - Analyzing NY High School Data (SAT results)**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Analyzing%20NY%20High%20School%20Data)
-This is a project about New York City public schools, based on a Dataquest guided project. \
-Gathered data from various datasets and combined them into a single dataframe. Below is a list of the datasets, which I have stored in the [schools](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Analyzing%20NY%20High%20School%20Data/schools) folder.
-
-* SAT scores by school - SAT scores for each high school in New York City
-* School attendance - Attendance information for each school in New York City
-* Class size - Information on class size for each school
-* AP test results - Advanced Placement (AP) exam results for each high school (passing an optional AP exam in a particular subject can earn a student college credit in that subject)
-* Graduation outcomes - The percentage of students who graduated, and other outcome information
-* Demographics - Demographic information for each school
-* School survey - Surveys of parents, teachers, and students at each school
+## [**Project 1 - Analyzing NY High School Data (SAT results)**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Analyzing%20NY%20High%20School%20Data)
+This is a project about New York City public schools, based on a Dataquest guided project. <br>
+I combined data from various datasets, into a single dataframe. The list of the datasets which I have combined is available in the [schools](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Analyzing%20NY%20High%20School%20Data/schools) folder.
 
 ### After combining the data, I did the following:
 * Found which variables better correlate with SAT scores.
@@ -27,16 +11,24 @@ Gathered data from various datasets and combined them into a single dataframe. B
 
 <img src="images/Sat_scores.png" width="400" height="300" />
 
-## [**Project 3 - Covid cases in Greece.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Covid-19_Greece)
+## [**Project 2 - Covid cases in Greece.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Covid-19_Greece)
 In this project I focused on the covid cases in Greece and did the following:<br>
 * I gathered data from many web sources and combined them. 
-* I used choropleth maps, to plot the data and reach some conclusions.
+* I used *choropleth maps*, to plot the data and reach some conclusions.
 * Found some general statistics about the data.
 <br>
 The last update I used on Covid cases and deaths was on 8 October 2020. However, if you run the code it should work for later updates. (It depends on the wikipedia site updates).
 
-
 <img src="https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/Covid-19_Greece/images/Greece_cases_prop.png?raw=true" width="500" height="300" />
+
+## [**Project 3 - Study of EKPA.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/EKPA_Postgraduate_study)
+Made some visualizations using data from a recent study of *National and Kapodistrian University of Athens (EKPA)*, in which I was responsible for the study documentation. A survey was organized, asking graduates of EKPA postgraduate programs questions about employment, satisfaction with their studies etc. \
+Some interesting observations are the following:
+- According to graduates, their postgraduate program didn't have a big impact on helping them land a job.
+- Generally, the graduates were satisfied with their postgraduate program and they would reccomend it to others.
+<br>
+I used the *ggplot* library in R for all the visualizations
+<img src="images/unnamed-chunk-20-1.png" width="600" height="500" />
 
 ## [**Project 4 - Lotto probabilities.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Lotto%20Probabilities)
 In this project I worked on the 6/49 lottery (Lotto) and answered the following questions:
@@ -57,8 +49,8 @@ This is a part of a project i did on Dataquest and I had the chance to work with
 
 ## [**Project 6 - Titanic dataset.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Titanic_Dataset)
 This is the famous Titanic dataset. I've downloaded the data from Kaggle.
-- Conducted EDA.
-- Used logistic regression to predict whether the passengers on the test set survived or not.
+- Conducted *EDA*.
+- Used *logistic regression* to predict whether the passengers on the test set survived or not.
 
 
 <img src="images/unnamed-chunk-28-2.png" width="600" height="400" />
