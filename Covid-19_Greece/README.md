@@ -1,7 +1,7 @@
 ## **Covid cases and deaths in Greece.**
 <br>
 In this project I focused on the covid cases in Greece and did the following:
-<br>
+
 * I gathered data from many web sources and combined them.
 * I used choropleth maps, to plot the data and reach some conclusions.
 * Found some general statistics about the data.
