@@ -1,6 +1,7 @@
 ## [**Covid cases and deaths in Greece.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/Covid-19_Greece/Covid_Greece.ipynb)
 <br>
 In this project I focused on the covid cases in Greece and did the following:
+<br>
 
 * I gathered data from many web sources and combined them.
 * I used choropleth maps, to plot the data and reach some conclusions.
