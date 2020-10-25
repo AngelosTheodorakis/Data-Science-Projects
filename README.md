@@ -27,14 +27,17 @@ Gathered data from various datasets and combined them into a single dataframe. B
 
 <img src="images/Sat_scores.png" width="400" height="300" />
 
-## [**Project 3 - Covid cases in Greece using choropleth maps.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Covid-19_Greece)
-In this project I focused on the covid cases in Greece and answered the following questions:
+## [**Project 3 - Covid cases in Greece.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Covid-19_Greece)
+In this project I focused on the covid cases in Greece and did the following:<br>
+* I gathered data from many web sources and combined them. 
+* I used choropleth maps, to plot the data and reach some conclusions.
+* Found some general statistics about the data.
+<br>
+The interactive maps made the jupyter file large when I plotted the on the notebook and I couldn't upload it to GitHub. That is why I used firefox to render the image and then I downloaded it so I could make it appear in the notebook in 2D, just to get an idea of the map
+Finally, the last update I used on Covid cases and deaths was on 8 October 2020. However, if you run the code it should work for later updates. (It depends on the wikipedia site updates).<br>
 
-This is a project for Covid cases in Greece. I gathered data from many sources and combined them. I finally used choropleth maps, to plot the data and reach some conclusions.
-The last update I used on Covid cases and deaths was on 8 October 2020. However, if you run the code it should work for later updates. (It depends on the wikipedia site updates).
-Finally, the interactive maps made the jupyter file large and I couldn't upload it to GitHub. That is why I used firefox to render the image and then I downloaded it so I could make it appear in the notebook, just to get an idea of the map.
 
-<img src="https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/Covid-19_Greece/images/Greece_cases_prop.png?raw=true" width="500" height="400" />
+<img src="https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/Covid-19_Greece/images/Greece_cases_prop.png?raw=true" width="500" height="300" />
 
 ## [**Project 4 - Lotto probabilities.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Lotto%20Probabilities)
 In this project I worked on the 6/49 lottery (Lotto) and answered the following questions:
