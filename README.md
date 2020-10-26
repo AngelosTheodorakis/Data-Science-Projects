@@ -19,7 +19,7 @@ In this project I focused on the covid cases in Greece and did the following:<br
 <br>
 The last update I used on Covid cases and deaths was on 8 October 2020. However, if you run the code it should work for later updates. (It depends on the wikipedia site updates).
 
-<img src="https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/Covid-19_Greece/images/Greece_cases_prop.png?raw=true" width="500" height="300" />
+<img src="https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/Covid_Greece/Images/Greece_cases_prop.png?raw=true" height="300" />
 
 ## [**Project 3 - Study of EKPA.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/EKPA_Postgraduate_study)
 Made some visualizations using data from a recent study of *National and Kapodistrian University of Athens (EKPA)*, in which I was responsible for the study documentation. A survey was organized, asking graduates of EKPA postgraduate programs questions about employment, satisfaction with their studies etc. \
