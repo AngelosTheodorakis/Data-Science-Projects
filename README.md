@@ -11,7 +11,7 @@ I combined data from various datasets, into a single dataframe. The list of the 
 
 <img src="images/Sat_scores.png" width="400" height="300" />
 
-## [**Project 2 - Covid cases in Greece.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Covid-19_Greece)
+## [**Project 2 - Covid cases in Greece.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Covid_Greece)
 In this project I focused on the covid cases in Greece and did the following:<br>
 * I gathered data from many web sources and combined them. 
 * I used *choropleth maps*, to plot the data and reach some conclusions.
