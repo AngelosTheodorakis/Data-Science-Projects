@@ -30,7 +30,9 @@ We extracted the following information for each post:<br>
 * The date the post created
 * Title of the post
 * YouTube link
+
 <br>
+
 Below you can see an example of the image we created with Wordcloud.<br>
 <img src="images/Vaggelis_Revolted_Blog.png" width="700" height="500" />
 
