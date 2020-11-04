@@ -21,7 +21,20 @@ The last update I used on Covid cases and deaths was on 8 October 2020. However,
 
 <img src="https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/Covid_Greece/Images/Greece_cases_prop.png?raw=true" height="300" />
 
-## [**Project 3 - Study of EKPA.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/EKPA_Postgraduate_study)
+## [**Project 3 - Web Scraping and Wordcloud using Python.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Web%20scraping%20and%20Wordcloud)
+In this project we extracted data from a webpage and then used this data to create a Wordcloud and a DataFrame, both of which contained useful information. The webpage
+used for our example, is an interesting music blog in WordPress. You can explore it [here](https://vaggelisrevolted.wordpress.com/).<br>
+We extracted the following information for each post:<br>
+<br>
+* All the description texts
+* The date the post created
+* Title of the post
+* YouTube link
+<br>
+Below you can see an example of the image we created with Wordcloud.<br>
+<img src="images/Vaggelis_Revolted_Blog.png" width="700" height="500" />
+
+## [**Project 4 - Study of EKPA.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/EKPA_Postgraduate_study)
 Made some visualizations using data from a recent study of *National and Kapodistrian University of Athens (EKPA)*, in which I was responsible for the study documentation. A survey was organized, asking graduates of EKPA postgraduate programs questions about employment, satisfaction with their studies etc. \
 Some interesting observations are the following:
 - According to graduates, their postgraduate program didn't have a big impact on helping them land a job.
@@ -30,7 +43,7 @@ Some interesting observations are the following:
 I used the *ggplot* library in R for all the visualizations
 <img src="images/unnamed-chunk-20-1.png" width="600" height="500" />
 
-## [**Project 4 - Lotto probabilities.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Lotto%20Probabilities)
+## [**Project 5 - Lotto probabilities.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Lotto%20Probabilities)
 In this project I worked on the 6/49 lottery (Lotto) and answered the following questions:
 
 * What is the probability of winning the big prize with a single or more tickets ticket?
@@ -40,14 +53,14 @@ In this project I worked on the 6/49 lottery (Lotto) and answered the following 
 
 Finally, I used [historical data](https://www.kaggle.com/datascienceai/lottery-dataset) from the national 6/49 lottery game in Canada, with drawings dating from 1982 to 2018. By comparing a ticket against the historical lottery data in Canada, someone can determine whether he would have ever won by now.
 
-## [**Project 5 - Visualizing Earnings Based On College Majors.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Visualizing%20Earnings%20Based%20On%20College%20Majors)
+## [**Project 6 - Visualizing Earnings Based On College Majors.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Visualizing%20Earnings%20Based%20On%20College%20Majors)
 This is a dataset on the job outcomes of students who graduated from college between 2010 and 2012. The original data on job outcomes was released by American
 Community Survey, which conducts surveys and aggregates the data.\
 This is a part of a project i did on Dataquest and I had the chance to work with some plots like histograms, scatterplots and barplots, in Jupyter notebooks.
 - Performed visualisations using matplotlib library, primarly working in pandas.
 <img src="images/image_scatter.png" width="500" height="400" />
 
-## [**Project 6 - Titanic dataset.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Titanic_Dataset)
+## [**Project 7 - Titanic dataset.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Titanic_Dataset)
 This is the famous Titanic dataset. I've downloaded the data from Kaggle.
 - Conducted *EDA*.
 - Used *logistic regression* to predict whether the passengers on the test set survived or not.
