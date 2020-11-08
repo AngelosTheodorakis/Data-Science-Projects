@@ -34,7 +34,7 @@ I extracted the following information for each post:<br>
 <br>
 
 Below you can see an example of the image I created with Wordcloud.<br>
-<img src="images/Vaggelis_Revolted_Blog.png" width="700" height="500" />
+<img src="images/Vaggelis_Revolted_Blog.png" width="600" height="400" />
 
 ## [**Project 4 - Study of EKPA.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/EKPA_Postgraduate_study)
 Made some visualizations using data from a recent study of *National and Kapodistrian University of Athens (EKPA)*, in which I was responsible for the study documentation. A survey was organized, asking graduates of EKPA postgraduate programs questions about employment, satisfaction with their studies etc. \
