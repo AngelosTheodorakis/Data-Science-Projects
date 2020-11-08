@@ -22,9 +22,9 @@ The last update I used on Covid cases and deaths was on 8 October 2020. However,
 <img src="https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/Covid_Greece/Images/Greece_cases_prop.png?raw=true" height="300" />
 
 ## [**Project 3 - Web Scraping and Wordcloud using Python.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Web%20scraping%20and%20Wordcloud)
-In this project we extracted data from a webpage and then used this data to create a Wordcloud and a DataFrame, both of which contained useful information. The webpage
+In this project I extracted data from a webpage and then used this data to create a Wordcloud and a DataFrame, both of which contained useful information. The webpage
 used for our example, is an interesting music blog in WordPress. You can explore it [here](https://vaggelisrevolted.wordpress.com/).<br>
-We extracted the following information for each post:<br>
+I extracted the following information for each post:<br>
 <br>
 * All the description texts
 * The date the post created
@@ -33,7 +33,7 @@ We extracted the following information for each post:<br>
 
 <br>
 
-Below you can see an example of the image we created with Wordcloud.<br>
+Below you can see an example of the image I created with Wordcloud.<br>
 <img src="images/Vaggelis_Revolted_Blog.png" width="700" height="500" />
 
 ## [**Project 4 - Study of EKPA.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/EKPA_Postgraduate_study)
