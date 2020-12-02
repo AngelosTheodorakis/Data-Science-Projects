@@ -443,6 +443,15 @@ table(data$Street)
 #removing Street variable 
 data <- subset(data, select = -Street)
 
+# Electrical
+data$Electrical<-as.factor(data$Electrical)
+plot(as.factor(data$Electrical))
+table(data$Electrical)
+
+
+numeric_columns<-colnames(data[,sapply(data, is.numeric)])
+integer_columns<-colnames(data[,sapply(data, is.integer)])
+
 
 
 library(caret)

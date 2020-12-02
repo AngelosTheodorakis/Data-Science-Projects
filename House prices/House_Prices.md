@@ -1,11 +1,11 @@
-First, we will load the libraries we need
+First, we will load the libraries we need.
 
 ``` r
 library(plyr)
 library(dplyr)
 ```
 
-Then we load the data, the train and the test set seperately
+Then we load the data, the train and the test set seperately.
 
 ``` r
 setwd("C:/Users/User/Desktop/Άγγελος/R/Data analysis/House prices/house-prices-advanced-regression-techniques")
@@ -13,37 +13,16 @@ train<-read.csv("train.csv",stringsAsFactors = FALSE)
 test<-read.csv("test.csv",header=TRUE,stringsAsFactors = FALSE)
 ```
 
-We can add the SalePrice variable in the test set as NA
+We can add the SalePrice variable in the test set as NA.
 
 ``` r
-test$SalePrice<-NA
+test$SalePrice <- NA
 ```
 
-Now we combine the test and train set
+Now we combine the test and train set and explore our data.
 
 ``` r
-data<-rbind(train,test)
-```
-
-Let’s explore SalePrice variable, which is the one we want to predict
-
-``` r
-summary(data$SalePrice) #we can see that the median for the sales price is 163000
-```
-
-    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-    ##   34900  129975  163000  180921  214000  755000    1459
-
-``` r
-data$SalePrice<-as.numeric(data$SalePrice) #Change to numeric
-hist(data$SalePrice,breaks=30) #we can see a slightly skewed distribution to the right
-```
-
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-5-1.png)
-
-We check for missing values
-
-``` r
+data <- rbind(train,test)
 str(data)
 ```
 
@@ -128,7 +107,25 @@ str(data)
     ##  $ YrSold       : int  2008 2007 2008 2006 2008 2009 2007 2009 2008 2008 ...
     ##  $ SaleType     : chr  "WD" "WD" "WD" "WD" ...
     ##  $ SaleCondition: chr  "Normal" "Normal" "Normal" "Abnorml" ...
-    ##  $ SalePrice    : num  208500 181500 223500 140000 250000 ...
+    ##  $ SalePrice    : int  208500 181500 223500 140000 250000 143000 307000 200000 129900 118000 ...
+
+Let’s explore SalePrice variable, which is the one we want to predict.
+
+``` r
+summary(data$SalePrice) # We can see that the median for the sales price is 163000
+```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+    ##   34900  129975  163000  180921  214000  755000    1459
+
+``` r
+data$SalePrice<-as.numeric(data$SalePrice) # Change to numeric
+hist(data$SalePrice, breaks=30, xlab = 'Price', main = 'Histogram of Sale Price') # There is a slightly skewed distribution to the right, possibly because of the extreme values.
+```
+
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-5-1.png)
+
+We will now check for missing values.
 
 ``` r
 sort(sapply(data, function(x) sum(is.na(x))),decreasing=TRUE)
@@ -175,13 +172,17 @@ plot(sort(sapply(data, function(x) sum(is.na(x))),decreasing=TRUE),type='h')
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
-There are some columns with lots of missing values.We will decide later
-what to do with these. Basically,in most cases there are not missing
-values,but an indication that the apartment doesn’t have these
-amenities. So let’s remove these Na’s with none and explore these
-variables.
+There are some columns with lots of missing values. However, in most
+cases these are not missing values, but an indication that the apartment
+doesn’t have these amenities. So let’s replace these Na’s with ‘None’
+and explore these variables.
 
-**PoolQC: Pool quality**
+**PoolQC: Pool quality** <br> This is the first variable we will
+examine. From the documentation, we observe that indeed, the ‘NA’ value
+in this variable means that there is no pool. We will also replace the
+values with integers from 0 to 5 as long as it is a scaling
+variable.<br> We will continue in a similar way with the other variables
+that have missing values.
 
 ``` r
 data$PoolQC[is.na(data$PoolQC)] <- "None"
@@ -250,7 +251,7 @@ table(data$Alley)
     ## Grvl None Pave 
     ##  120 2721   78
 
-**Fence**
+**Fence: Fence quality**
 
 ``` r
 table(data$Fence)
@@ -263,7 +264,7 @@ table(data$Fence)
 ``` r
 data$Fence[is.na(data$Fence)] <- "None"
 data$Fence<-as.factor(data$Fence)
-plot(data$Fence,data$SalePrice) #Seems to affect the price,but no fence has the highest median!
+plot(data$Fence,data$SalePrice) # Seems to affect the price. The 'no fence' variable has the highest median!
 ```
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-10-1.png)
@@ -276,7 +277,7 @@ table(data$Fence)
     ## GdPrv  GdWo MnPrv  MnWw  None 
     ##   118   112   329    12  2348
 
-**FireplaceQu**
+**FireplaceQu: Fireplace quality**
 
 ``` r
 table(data$FireplaceQu)
@@ -304,8 +305,10 @@ table(data$FireplaceQu)
     ##    0    1    2    3    4    5 
     ## 1420   46   74  592  744   43
 
-**LotFrontage: Linear feet of street connected to property. there are
-259 NA’s**
+**LotFrontage: Linear feet of street connected to property.**
+
+There are 259 NA’s. We will replace the missing values with the median
+and not the mean, because of the extreme values (outliers).
 
 ``` r
 summary(data$LotFrontage)
@@ -327,39 +330,13 @@ hist(data$LotFrontage,breaks=30,xlim = c(0,200))
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-12-1.png)
 
 ``` r
-plot(data$LotFrontage,data$SalePrice)
-abline(lm(data$SalePrice~data$LotFrontage))
+plot(data$LotFrontage,data$SalePrice) # There are 2 extreme values
 ```
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-12-2.png)
 
 ``` r
-summary(lm(data$SalePrice~data$LotFrontage))
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = data$SalePrice ~ data$LotFrontage)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -314258  -48878  -19402   33290  533217 
-    ## 
-    ## Coefficients:
-    ##                  Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)      96149.04    6881.97   13.97   <2e-16 ***
-    ## data$LotFrontage  1208.02      92.83   13.01   <2e-16 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 78090 on 1199 degrees of freedom
-    ##   (1718 observations deleted due to missingness)
-    ## Multiple R-squared:  0.1238, Adjusted R-squared:  0.123 
-    ## F-statistic: 169.4 on 1 and 1199 DF,  p-value: < 2.2e-16
-
-``` r
-# R squared is very low so it doesn't fit the data well.Maybe we will replace na's with mean
-data$LotFrontage[is.na(data$LotFrontage)] <-mean(na.omit(as.numeric(data$LotFrontage)))
+data$LotFrontage[is.na(data$LotFrontage)]<-median(na.omit(as.numeric(data$LotFrontage)))
 ```
 
 **GarageYrBlt**
@@ -377,8 +354,8 @@ plot(data$GarageYrBlt)
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-13-1.png)
 
-There is a wrong observation unless it is a house from the future -
-2207.We replace it with the year 2007.
+There is a wrong observation unless it is a house from the future
+(2207)! We replace it with the year 2007.
 
 ``` r
 which(data[,"GarageYrBlt"]>2019)
@@ -387,14 +364,14 @@ which(data[,"GarageYrBlt"]>2019)
     ## [1] 2593
 
 ``` r
-data[2593,"GarageYrBlt"]<-2007
-plot(as.factor(data$GarageYrBlt),data$SalePrice)
+data[2593,"GarageYrBlt"]<-2007 # Replace the observation
+plot(as.factor(data$GarageYrBlt),data$SalePrice,xlab = 'Year the garage was built', ylab = 'House Price')
 ```
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-14-1.png)
 
-**We will find out the NA’s by another variable, YearBuilt. Let’s see if
-they have a correlation**
+We will find out the NA’s by examining another variable, YearBuilt.
+Let’s see if they have a correlation.
 
 ``` r
 head(data.frame(data$YearBuilt,data$GarageYrBlt),15)
@@ -417,23 +394,14 @@ head(data.frame(data$YearBuilt,data$GarageYrBlt),15)
     ## 14           2006             2006
     ## 15           1960             1960
 
+``` r
+length(which(data$YearBuilt!=data$GarageYrBlt)) # Number of different rows
+```
+
+    ## [1] 544
+
 Indeed the year the house was built is in most cases the same as the
-year the garage was built, so we will use the observations from
-YearBuilt variable.
-
-``` r
-data$GarageYrBlt[is.na(data$GarageYrBlt)]<-data$YearBuilt[is.na(data$GarageYrBlt)]
-```
-
-We can see the correlation
-
-``` r
-cor(data$GarageYrBlt,data$YearBuilt)
-```
-
-    ## [1] 0.8607324
-
-The correlation is very high, so we’ll drop the variable and keep the
+year the garage was built, so we will drop the variable and keep the
 YearBuilt variable.
 
 ``` r
@@ -446,38 +414,37 @@ data <- subset(data, select = -GarageYrBlt)
 plot(as.factor(data$GarageFinish))
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-19-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-17-1.png)
 
 ``` r
 plot(as.factor(data$GarageFinish),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-19-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-17-2.png)
 
 ``` r
 data$GarageFinish[is.na(data$GarageFinish)] <- "None"
-plot(as.factor(data$GarageFinish),data$SalePrice)
+plot(as.factor(data$GarageFinish),data$SalePrice) # It seems ordinal 
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-19-3.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-17-3.png)
 
 ``` r
-#it seems ordinal
 levels(as.factor(data$GarageFinish))
 ```
 
     ## [1] "Fin"  "None" "RFn"  "Unf"
 
 ``` r
-Finish<-c('None' = 0, "Unf" = 1, "RFn" = 2, "Fin" = 3)
+Finish <- c('None' = 0, "Unf" = 1, "RFn" = 2, "Fin" = 3)
 data$GarageFinish<-revalue(data$GarageFinish,Finish)
 data$GarageFinish<-as.integer(data$GarageFinish)  
 plot(data$GarageFinish,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-19-4.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-17-4.png)
 
-**GarageQual**
+**GarageQual: Garage quality**
 
 ``` r
 table(data$GarageQual)
@@ -491,14 +458,14 @@ table(data$GarageQual)
 plot(as.factor(data$GarageQual),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-20-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-18-1.png)
 
 ``` r
 data$GarageQual[is.na(data$GarageQual)] <- "None"
 plot(as.factor(data$GarageQual),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-20-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-18-2.png)
 
 ``` r
 data$GarageQual<-revalue(data$GarageQual,Qual_Cond)
@@ -513,7 +480,7 @@ table(data$GarageQual)
 data$GarageQual<-as.integer(data$GarageQual)
 ```
 
-**GarageCond**
+**GarageCond: Garage condition**
 
 ``` r
 table(data$GarageCond)
@@ -527,14 +494,14 @@ table(data$GarageCond)
 plot(as.factor(data$GarageCond),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-21-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-19-1.png)
 
 ``` r
 data$GarageCond[is.na(data$GarageCond)] <- "None"
 plot(as.factor(data$GarageCond),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-21-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-19-2.png)
 
 ``` r
 data$GarageCond<-revalue(data$GarageCond,Qual_Cond)
@@ -549,7 +516,7 @@ table(data$GarageCond)
 data$GarageCond<-as.integer(data$GarageCond)
 ```
 
-**we can see the correlation**
+We can see the correlation between garage condition and quality.
 
 ``` r
 cor(data$GarageCond,data$GarageQual)
@@ -557,7 +524,7 @@ cor(data$GarageCond,data$GarageQual)
 
     ## [1] 0.9466563
 
-**It is a huge correlation,we must drop one of 2 variables**
+It is a huge correlation,we must drop one of 2 variables
 
 ``` r
 cor(data[1:1459,'SalePrice'],data[1:1459,'GarageCond'])
@@ -571,13 +538,13 @@ cor(data[1:1459,'SalePrice'],data[1:1459,'GarageQual'])
 
     ## [1] 0.2739379
 
-**We’ll drop the variable less correlated with sales price**
+We’ll drop the variable less correlated with sales price
 
 ``` r
 data <- subset(data, select = -GarageCond)
 ```
 
-**GarageType**
+**GarageType: Garage location**
 
 ``` r
 table(data$GarageType)
@@ -591,7 +558,7 @@ table(data$GarageType)
 plot(as.factor(data$GarageType),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-25-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-23-1.png)
 
 ``` r
 data$GarageType[is.na(data$GarageType)] <- "None"
@@ -600,9 +567,7 @@ data$GarageType<-as.factor(data$GarageType)
 plot(data$GarageType,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-25-2.png)
-
-**Maybe classify together the basement and garage variables later?**
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-23-2.png)
 
 **BsmtCond:Evaluates the general condition of the basement**
 
@@ -618,14 +583,14 @@ table(data$BsmtCond)
 plot(as.factor(data$BsmtCond),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-26-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-24-1.png)
 
 ``` r
 data$BsmtCond[is.na(data$BsmtCond)] <- "None"
 plot(as.factor(data$BsmtCond),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-26-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-24-2.png)
 
 ``` r
 data$BsmtCond<-revalue(data$BsmtCond,Qual_Cond)
@@ -641,7 +606,8 @@ data$BsmtCond<-as.integer(data$BsmtCond)
 plot(as.factor(data$BsmtCond),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-26-3.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-24-3.png)
+There seems to be a correlation with the house price.
 
 **BsmtExposure:Refers to walkout or garden level walls**
 
@@ -657,14 +623,14 @@ table(data$BsmtExposure)
 plot(as.factor(data$BsmtExposure),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-27-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-25-1.png)
 
 ``` r
 data$BsmtExposure[is.na(data$BsmtExposure)] <- "None"
 plot(as.factor(data$BsmtExposure),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-27-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-25-2.png)
 
 ``` r
 Exposure<-c("None"=0,"No"=1,'Mn'=2,'Av'=3,'Gd'=4)
@@ -681,7 +647,7 @@ data$BsmtExposure<-as.integer(data$BsmtExposure)
 plot(as.factor(data$BsmtExposure),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-27-3.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-25-3.png)
 
 **BsmtQual:Evaluates the height of the basement**
 
@@ -697,14 +663,14 @@ table(data$BsmtQual)
 plot(as.factor(data$BsmtQual),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-28-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-26-1.png)
 
 ``` r
 data$BsmtQual[is.na(data$BsmtQual)] <- "None"
 plot(as.factor(data$BsmtQual),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-28-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-26-2.png)
 
 ``` r
 data$BsmtQual<-revalue(data$BsmtQual,Qual_Cond)
@@ -720,7 +686,7 @@ data$BsmtQual<-as.integer(data$BsmtQual)
 plot(as.factor(data$BsmtQual),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-28-3.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-26-3.png)
 
 **BsmtFinType1:Rating of basement finished area**
 
@@ -736,14 +702,14 @@ table(data$BsmtFinType1)
 plot(as.factor(data$BsmtFinType1),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-29-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-27-1.png)
 
 ``` r
 data$BsmtFinType1[is.na(data$BsmtFinType1)] <- "None"
 plot(as.factor(data$BsmtFinType1),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-29-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-27-2.png)
 
 ``` r
 Bsm_type<-c("None"=0,"Unf"=1,'LwQ'=2,'Rec'=3,'BLQ'=4,'ALQ'=5,'GLQ'=6)
@@ -760,7 +726,7 @@ data$BsmtFinType1<-as.integer(data$BsmtFinType1)
 plot(as.factor(data$BsmtFinType1),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-29-3.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-27-3.png)
 
 **BsmtFinType2:Rating of basement finished area (if multiple types)**
 
@@ -776,14 +742,14 @@ table(data$BsmtFinType2)
 plot(as.factor(data$BsmtFinType2),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-30-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-28-1.png)
 
 ``` r
 data$BsmtFinType2[is.na(data$BsmtFinType2)] <- "None"
 plot(as.factor(data$BsmtFinType2),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-30-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-28-2.png)
 
 ``` r
 data$BsmtFinType2<-revalue(data$BsmtFinType2,Bsm_type)
@@ -799,9 +765,9 @@ data$BsmtFinType2<-as.integer(data$BsmtFinType2)
 plot(as.factor(data$BsmtFinType2),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-30-3.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-28-3.png)
 
-**MasVnrType: Masonry veneer type (walls) Replace all Na’s with ‘none’**
+**MasVnrType: Masonry veneer type (walls).**
 
 ``` r
 table(data$MasVnrType)
@@ -815,10 +781,10 @@ table(data$MasVnrType)
 plot(as.factor(data$MasVnrType),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-31-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-29-1.png)
 
 ``` r
-data$MasVnrType[is.na(data$MasVnrType)] <- "None"
+data$MasVnrType[is.na(data$MasVnrType)] <- "None" #Replace all Na's with 'none'
 Masonry <- c('None'=0, 'BrkCmn'=1, 'BrkFace'=2, 'Stone'=3)
 data$MasVnrType<-revalue(data$MasVnrType,Masonry)
 table(data$MasVnrType)
@@ -833,15 +799,15 @@ data$MasVnrType<-as.integer(data$MasVnrType)
 plot(as.factor(data$MasVnrType),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-31-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-29-2.png)
 
-**MasVnrArea**
+**MasVnrArea: Masonry veneer area in square feet**
 
 ``` r
 plot(data$MasVnrArea,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-32-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-30-1.png)
 
 ``` r
 data$MasVnrArea[is.na(data$MasVnrArea)] <- 0
@@ -849,7 +815,7 @@ data$MasVnrArea<-as.numeric(data$MasVnrArea)
 plot(data$MasVnrArea,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-32-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-30-2.png)
 
 **MSZoning: Identifies the general zoning classification of the sale.**
 
@@ -865,77 +831,9 @@ table(data$MSZoning)
 plot(as.factor(data$MSZoning),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-33-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-31-1.png)
 
-``` r
-data[is.na(data$MSZoning),] #How we can find the missing values? Let's check out the MSSubClass
-```
-
-    ##        Id MSSubClass MSZoning LotFrontage LotArea Street Alley LotShape
-    ## 1916 1916         30     <NA>    109.0000   21780   Grvl  None      Reg
-    ## 2217 2217         20     <NA>     80.0000   14584   Pave  None      Reg
-    ## 2251 2251         70     <NA>     69.3058   56600   Pave  None      IR1
-    ## 2905 2905         20     <NA>    125.0000   31250   Pave  None      Reg
-    ##      LandContour Utilities LotConfig LandSlope Neighborhood Condition1
-    ## 1916         Lvl      <NA>    Inside       Gtl       IDOTRR       Norm
-    ## 2217         Low    AllPub    Inside       Mod       IDOTRR       Norm
-    ## 2251         Low    AllPub    Inside       Gtl       IDOTRR       Norm
-    ## 2905         Lvl    AllPub    Inside       Gtl      Mitchel     Artery
-    ##      Condition2 BldgType HouseStyle OverallQual OverallCond YearBuilt
-    ## 1916       Norm     1Fam     1Story           2           4      1910
-    ## 2217       Norm     1Fam     1Story           1           5      1952
-    ## 2251       Norm     1Fam     2.5Unf           5           1      1900
-    ## 2905       Norm     1Fam     1Story           1           3      1951
-    ##      YearRemodAdd RoofStyle RoofMatl Exterior1st Exterior2nd MasVnrType
-    ## 1916         1950     Gable  CompShg     Wd Sdng     Wd Sdng          0
-    ## 2217         1952     Gable  CompShg     AsbShng     VinylSd          0
-    ## 2251         1950       Hip  CompShg     Wd Sdng     Wd Sdng          0
-    ## 2905         1951     Gable  CompShg      CBlock     VinylSd          0
-    ##      MasVnrArea ExterQual ExterCond Foundation BsmtQual BsmtCond
-    ## 1916          0        Fa        Fa     CBlock        0        0
-    ## 2217          0        Fa        Po       Slab        0        0
-    ## 2251          0        TA        TA     BrkTil        3        3
-    ## 2905          0        TA        Fa     CBlock        0        0
-    ##      BsmtExposure BsmtFinType1 BsmtFinSF1 BsmtFinType2 BsmtFinSF2
-    ## 1916            0            0          0            0          0
-    ## 2217            0            0          0            0          0
-    ## 2251            1            1          0            1          0
-    ## 2905            0            0          0            0          0
-    ##      BsmtUnfSF TotalBsmtSF Heating HeatingQC CentralAir Electrical
-    ## 1916         0           0    GasA        TA          N      FuseA
-    ## 2217         0           0    Wall        Po          N      FuseA
-    ## 2251       686         686    GasA        Ex          Y      SBrkr
-    ## 2905         0           0    GasA        TA          Y      FuseA
-    ##      X1stFlrSF X2ndFlrSF LowQualFinSF GrLivArea BsmtFullBath BsmtHalfBath
-    ## 1916       810         0            0       810            0            0
-    ## 2217       733         0            0       733            0            0
-    ## 2251      1150       686            0      1836            0            0
-    ## 2905      1600         0            0      1600            0            0
-    ##      FullBath HalfBath BedroomAbvGr KitchenAbvGr KitchenQual TotRmsAbvGrd
-    ## 1916        1        0            1            1          TA            4
-    ## 2217        1        0            2            1          Fa            4
-    ## 2251        2        0            4            1          TA            7
-    ## 2905        1        1            3            1          TA            6
-    ##      Functional Fireplaces FireplaceQu GarageType GarageFinish GarageCars
-    ## 1916       Min1          0           0     Detchd            1          1
-    ## 2217       <NA>          0           0     Attchd            1          2
-    ## 2251       Maj1          0           0     Detchd            1          1
-    ## 2905        Mod          0           0     Attchd            1          1
-    ##      GarageArea GarageQual PavedDrive WoodDeckSF OpenPorchSF EnclosedPorch
-    ## 1916        280          3          N        119          24             0
-    ## 2217        487          2          N          0           0             0
-    ## 2251        288          3          N          0           0             0
-    ## 2905        270          2          N          0           0           135
-    ##      X3SsnPorch ScreenPorch PoolArea PoolQC Fence MiscFeature MiscVal
-    ## 1916          0           0        0      0  None        None       0
-    ## 2217          0           0        0      0  None        None       0
-    ## 2251          0           0        0      0  None        None       0
-    ## 2905          0           0        0      0  None        None       0
-    ##      MoSold YrSold SaleType SaleCondition SalePrice
-    ## 1916      3   2009    ConLD        Normal        NA
-    ## 2217      2   2008       WD       Abnorml        NA
-    ## 2251      1   2008       WD        Normal        NA
-    ## 2905      5   2006       WD        Normal        NA
+How we can find the missing values? Let’s check out the MSSubClass
 
 ``` r
 data[is.na(data$MSZoning),c("MSZoning",'MSSubClass')]
@@ -966,26 +864,15 @@ table(data[,c("MSZoning",'MSSubClass')])
     ##   RL        21    0   31
     ##   RM        64   17   23
 
-``` r
-plot(as.factor(data$MSZoning),as.factor(data$MSSubClass))
-```
-
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-33-2.png)
+And now the correlations with numeric variables.
 
 ``` r
-plot(as.factor(data$MSSubClass),as.factor(data$MSZoning))
-```
-
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-33-3.png)
-
-``` r
-#and now the correlations
 library(corrplot)
-cor(data$MSSubClass,data[,sapply(data, is.numeric)]) #it is not higly correlated with other numeric variables
+cor(data$MSSubClass,data[,sapply(data, is.numeric)]) #
 ```
 
     ##               Id MSSubClass LotFrontage  LotArea OverallQual OverallCond
-    ## [1,] 0.008930622          1  -0.3901181 -0.20173  0.03363797 -0.06562504
+    ## [1,] 0.008930622          1   -0.389469 -0.20173  0.03363797 -0.06562504
     ##       YearBuilt YearRemodAdd  MasVnrType  MasVnrArea   BsmtQual
     ## [1,] 0.03440874   0.04331491 0.007170029 0.006309137 0.06525105
     ##          BsmtCond BsmtExposure BsmtFinType1 BsmtFinSF1 BsmtFinType2
@@ -1003,8 +890,11 @@ cor(data$MSSubClass,data[,sapply(data, is.numeric)]) #it is not higly correlated
     ##          MiscVal       MoSold     YrSold SalePrice
     ## [1,] -0.02886686 -0.001231139 -0.0150278        NA
 
+It is not higly correlated with other numeric variables.<br> So by
+examining the above table, we will replace MSSubClass=20 with RL ,
+MSSubClass=70 and MSSubClass=30 with RM.
+
 ``` r
-#We will replace MSSubClass=20 with RL , MSSubClass=70 and MSSubClass=30 with RM 
 data$MSZoning[is.na(data$MSZoning)]<-c('RM','RL','RM','RL')
 data[is.na(data$MSZoning),c("MSZoning",'MSSubClass')]
 ```
@@ -1018,6 +908,9 @@ data$MSZoning<-as.factor(data$MSZoning)
 
 **Utilities: Type of utilities available**
 
+We don’t need this variable for prediction , as there is only one house
+“NoSeWa”.
+
 ``` r
 table(data$Utilities)
 ```
@@ -1027,139 +920,6 @@ table(data$Utilities)
     ##   2916      1
 
 ``` r
-data[is.na(data$Utilities),]
-```
-
-    ##        Id MSSubClass MSZoning LotFrontage LotArea Street Alley LotShape
-    ## 1916 1916         30       RM    109.0000   21780   Grvl  None      Reg
-    ## 1946 1946         20       RL     69.3058   31220   Pave  None      IR1
-    ##      LandContour Utilities LotConfig LandSlope Neighborhood Condition1
-    ## 1916         Lvl      <NA>    Inside       Gtl       IDOTRR       Norm
-    ## 1946         Bnk      <NA>       FR2       Gtl      Gilbert      Feedr
-    ##      Condition2 BldgType HouseStyle OverallQual OverallCond YearBuilt
-    ## 1916       Norm     1Fam     1Story           2           4      1910
-    ## 1946       Norm     1Fam     1Story           6           2      1952
-    ##      YearRemodAdd RoofStyle RoofMatl Exterior1st Exterior2nd MasVnrType
-    ## 1916         1950     Gable  CompShg     Wd Sdng     Wd Sdng          0
-    ## 1946         1952       Hip  CompShg     BrkFace     BrkFace          0
-    ##      MasVnrArea ExterQual ExterCond Foundation BsmtQual BsmtCond
-    ## 1916          0        Fa        Fa     CBlock        0        0
-    ## 1946          0        TA        TA     CBlock        3        3
-    ##      BsmtExposure BsmtFinType1 BsmtFinSF1 BsmtFinType2 BsmtFinSF2
-    ## 1916            0            0          0            0          0
-    ## 1946            1            1          0            1          0
-    ##      BsmtUnfSF TotalBsmtSF Heating HeatingQC CentralAir Electrical
-    ## 1916         0           0    GasA        TA          N      FuseA
-    ## 1946      1632        1632    GasA        TA          Y      FuseA
-    ##      X1stFlrSF X2ndFlrSF LowQualFinSF GrLivArea BsmtFullBath BsmtHalfBath
-    ## 1916       810         0            0       810            0            0
-    ## 1946      1474         0            0      1474            0            0
-    ##      FullBath HalfBath BedroomAbvGr KitchenAbvGr KitchenQual TotRmsAbvGrd
-    ## 1916        1        0            1            1          TA            4
-    ## 1946        1        0            3            1          TA            7
-    ##      Functional Fireplaces FireplaceQu GarageType GarageFinish GarageCars
-    ## 1916       Min1          0           0     Detchd            1          1
-    ## 1946       Min2          2           4     Attchd            1          2
-    ##      GarageArea GarageQual PavedDrive WoodDeckSF OpenPorchSF EnclosedPorch
-    ## 1916        280          3          N        119          24             0
-    ## 1946        495          3          Y          0           0           144
-    ##      X3SsnPorch ScreenPorch PoolArea PoolQC Fence MiscFeature MiscVal
-    ## 1916          0           0        0      0  None        None       0
-    ## 1946          0           0        0      0  None        Shed     750
-    ##      MoSold YrSold SaleType SaleCondition SalePrice
-    ## 1916      3   2009    ConLD        Normal        NA
-    ## 1946      5   2008       WD        Normal        NA
-
-``` r
-data[(data$Utilities=='NoSeWa'),]
-```
-
-    ##       Id MSSubClass MSZoning LotFrontage LotArea Street Alley LotShape
-    ## 945  945         20       RL     69.3058   14375   Pave  None      IR1
-    ## NA    NA         NA     <NA>          NA      NA   <NA>  <NA>     <NA>
-    ## NA.1  NA         NA     <NA>          NA      NA   <NA>  <NA>     <NA>
-    ##      LandContour Utilities LotConfig LandSlope Neighborhood Condition1
-    ## 945          Lvl    NoSeWa   CulDSac       Gtl       Timber       Norm
-    ## NA          <NA>      <NA>      <NA>      <NA>         <NA>       <NA>
-    ## NA.1        <NA>      <NA>      <NA>      <NA>         <NA>       <NA>
-    ##      Condition2 BldgType HouseStyle OverallQual OverallCond YearBuilt
-    ## 945        Norm     1Fam       SLvl           6           6      1958
-    ## NA         <NA>     <NA>       <NA>          NA          NA        NA
-    ## NA.1       <NA>     <NA>       <NA>          NA          NA        NA
-    ##      YearRemodAdd RoofStyle RoofMatl Exterior1st Exterior2nd MasVnrType
-    ## 945          1958     Gable  CompShg     HdBoard     HdBoard          2
-    ## NA             NA      <NA>     <NA>        <NA>        <NA>         NA
-    ## NA.1           NA      <NA>     <NA>        <NA>        <NA>         NA
-    ##      MasVnrArea ExterQual ExterCond Foundation BsmtQual BsmtCond
-    ## 945         541        TA        TA     CBlock        3        3
-    ## NA           NA      <NA>      <NA>       <NA>       NA       NA
-    ## NA.1         NA      <NA>      <NA>       <NA>       NA       NA
-    ##      BsmtExposure BsmtFinType1 BsmtFinSF1 BsmtFinType2 BsmtFinSF2
-    ## 945             1            6        111            3        354
-    ## NA             NA           NA         NA           NA         NA
-    ## NA.1           NA           NA         NA           NA         NA
-    ##      BsmtUnfSF TotalBsmtSF Heating HeatingQC CentralAir Electrical
-    ## 945        354         819    GasA        Gd          Y      FuseA
-    ## NA          NA          NA    <NA>      <NA>       <NA>       <NA>
-    ## NA.1        NA          NA    <NA>      <NA>       <NA>       <NA>
-    ##      X1stFlrSF X2ndFlrSF LowQualFinSF GrLivArea BsmtFullBath BsmtHalfBath
-    ## 945       1344         0            0      1344            0            1
-    ## NA          NA        NA           NA        NA           NA           NA
-    ## NA.1        NA        NA           NA        NA           NA           NA
-    ##      FullBath HalfBath BedroomAbvGr KitchenAbvGr KitchenQual TotRmsAbvGrd
-    ## 945         1        0            3            1          Gd            7
-    ## NA         NA       NA           NA           NA        <NA>           NA
-    ## NA.1       NA       NA           NA           NA        <NA>           NA
-    ##      Functional Fireplaces FireplaceQu GarageType GarageFinish GarageCars
-    ## 945         Typ          1           4    Basment            2          2
-    ## NA         <NA>         NA          NA       <NA>           NA         NA
-    ## NA.1       <NA>         NA          NA       <NA>           NA         NA
-    ##      GarageArea GarageQual PavedDrive WoodDeckSF OpenPorchSF EnclosedPorch
-    ## 945         525          3          Y          0         118             0
-    ## NA           NA         NA       <NA>         NA          NA            NA
-    ## NA.1         NA         NA       <NA>         NA          NA            NA
-    ##      X3SsnPorch ScreenPorch PoolArea PoolQC Fence MiscFeature MiscVal
-    ## 945           0         233        0      0  None        None       0
-    ## NA           NA          NA       NA     NA  <NA>        <NA>      NA
-    ## NA.1         NA          NA       NA     NA  <NA>        <NA>      NA
-    ##      MoSold YrSold SaleType SaleCondition SalePrice
-    ## 945       1   2009      COD       Abnorml    137500
-    ## NA       NA     NA     <NA>          <NA>        NA
-    ## NA.1     NA     NA     <NA>          <NA>        NA
-
-``` r
-data[945,]
-```
-
-    ##      Id MSSubClass MSZoning LotFrontage LotArea Street Alley LotShape
-    ## 945 945         20       RL     69.3058   14375   Pave  None      IR1
-    ##     LandContour Utilities LotConfig LandSlope Neighborhood Condition1
-    ## 945         Lvl    NoSeWa   CulDSac       Gtl       Timber       Norm
-    ##     Condition2 BldgType HouseStyle OverallQual OverallCond YearBuilt
-    ## 945       Norm     1Fam       SLvl           6           6      1958
-    ##     YearRemodAdd RoofStyle RoofMatl Exterior1st Exterior2nd MasVnrType
-    ## 945         1958     Gable  CompShg     HdBoard     HdBoard          2
-    ##     MasVnrArea ExterQual ExterCond Foundation BsmtQual BsmtCond
-    ## 945        541        TA        TA     CBlock        3        3
-    ##     BsmtExposure BsmtFinType1 BsmtFinSF1 BsmtFinType2 BsmtFinSF2 BsmtUnfSF
-    ## 945            1            6        111            3        354       354
-    ##     TotalBsmtSF Heating HeatingQC CentralAir Electrical X1stFlrSF
-    ## 945         819    GasA        Gd          Y      FuseA      1344
-    ##     X2ndFlrSF LowQualFinSF GrLivArea BsmtFullBath BsmtHalfBath FullBath
-    ## 945         0            0      1344            0            1        1
-    ##     HalfBath BedroomAbvGr KitchenAbvGr KitchenQual TotRmsAbvGrd Functional
-    ## 945        0            3            1          Gd            7        Typ
-    ##     Fireplaces FireplaceQu GarageType GarageFinish GarageCars GarageArea
-    ## 945          1           4    Basment            2          2        525
-    ##     GarageQual PavedDrive WoodDeckSF OpenPorchSF EnclosedPorch X3SsnPorch
-    ## 945          3          Y          0         118             0          0
-    ##     ScreenPorch PoolArea PoolQC Fence MiscFeature MiscVal MoSold YrSold
-    ## 945         233        0      0  None        None       0      1   2009
-    ##     SaleType SaleCondition SalePrice
-    ## 945      COD       Abnorml    137500
-
-``` r
-#We don't need this variable for prediction , as there is only one house "NoSeWa"
 data <- subset(data, select = -Utilities)
 ```
 
@@ -1172,6 +932,8 @@ table(data$BsmtFullBath)
     ## 
     ##    0    1    2    3 
     ## 1705 1172   38    2
+
+Let’s find all the basement variables below.
 
 ``` r
 data[is.na(data$BsmtFullBath),]
@@ -1234,18 +996,23 @@ data[is.na(data$BsmtFullBath),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinTyp
     ## 2121         NA        NA          NA           NA           NA
     ## 2189          0         0           0           NA           NA
 
+We conclude that these variables are higly corralated and so we will
+replace the Na’s with zero value
+
 ``` r
 data$BsmtFullBath[is.na(data$BsmtFullBath)]<-0
 plot(as.factor(data$BsmtFullBath),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-35-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-39-1.png)
 
 ``` r
 data$BsmtFullBath<-as.integer(data$BsmtFullBath)
 ```
 
-**BsmtHalfBath**
+**BsmtHalfBath: Basement half bathrooms**
+
+We proceed with the same way as above.
 
 ``` r
 table(data$BsmtHalfBath)
@@ -1254,50 +1021,6 @@ table(data$BsmtHalfBath)
     ## 
     ##    0    1    2 
     ## 2742  171    4
-
-``` r
-data[is.na(data$BsmtHalfBath),]
-```
-
-    ##        Id MSSubClass MSZoning LotFrontage LotArea Street Alley LotShape
-    ## 2121 2121         20       RM          99    5940   Pave  None      IR1
-    ## 2189 2189         20       RL         123   47007   Pave  None      IR1
-    ##      LandContour LotConfig LandSlope Neighborhood Condition1 Condition2
-    ## 2121         Lvl       FR3       Gtl      BrkSide      Feedr       Norm
-    ## 2189         Lvl    Inside       Gtl      Edwards       Norm       Norm
-    ##      BldgType HouseStyle OverallQual OverallCond YearBuilt YearRemodAdd
-    ## 2121     1Fam     1Story           4           7      1946         1950
-    ## 2189     1Fam     1Story           5           7      1959         1996
-    ##      RoofStyle RoofMatl Exterior1st Exterior2nd MasVnrType MasVnrArea
-    ## 2121     Gable  CompShg     MetalSd      CBlock          0          0
-    ## 2189     Gable  CompShg     Plywood     Plywood          0          0
-    ##      ExterQual ExterCond Foundation BsmtQual BsmtCond BsmtExposure
-    ## 2121        TA        TA      PConc        0        0            0
-    ## 2189        TA        TA       Slab        0        0            0
-    ##      BsmtFinType1 BsmtFinSF1 BsmtFinType2 BsmtFinSF2 BsmtUnfSF TotalBsmtSF
-    ## 2121            0         NA            0         NA        NA          NA
-    ## 2189            0          0            0          0         0           0
-    ##      Heating HeatingQC CentralAir Electrical X1stFlrSF X2ndFlrSF
-    ## 2121    GasA        TA          Y      FuseA       896         0
-    ## 2189    GasA        TA          Y      SBrkr      3820         0
-    ##      LowQualFinSF GrLivArea BsmtFullBath BsmtHalfBath FullBath HalfBath
-    ## 2121            0       896            0           NA        1        0
-    ## 2189            0      3820            0           NA        3        1
-    ##      BedroomAbvGr KitchenAbvGr KitchenQual TotRmsAbvGrd Functional
-    ## 2121            2            1          TA            4        Typ
-    ## 2189            5            1          Ex           11        Typ
-    ##      Fireplaces FireplaceQu GarageType GarageFinish GarageCars GarageArea
-    ## 2121          0           0     Detchd            1          1        280
-    ## 2189          2           4     Attchd            1          2        624
-    ##      GarageQual PavedDrive WoodDeckSF OpenPorchSF EnclosedPorch X3SsnPorch
-    ## 2121          3          Y          0           0             0          0
-    ## 2189          3          Y          0         372             0          0
-    ##      ScreenPorch PoolArea PoolQC Fence MiscFeature MiscVal MoSold YrSold
-    ## 2121           0        0      0 MnPrv        None       0      4   2008
-    ## 2189           0        0      0  None        None       0      7   2008
-    ##      SaleType SaleCondition SalePrice
-    ## 2121    ConLD       Abnorml        NA
-    ## 2189       WD        Normal        NA
 
 ``` r
 paste(colnames(select(data,contains("Bsmt"))),collapse="','")
@@ -1321,7 +1044,7 @@ data$BsmtHalfBath[is.na(data$BsmtHalfBath)]<-0
 plot(as.factor(data$BsmtHalfBath),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-36-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-40-1.png)
 
 ``` r
 data$BsmtHalfBath<-as.integer(data$BsmtHalfBath)
@@ -1346,51 +1069,10 @@ table(data$Functional)
 plot(as.factor(data$Functional),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-37-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-41-1.png)
 
-``` r
-data[is.na(data$Functional),]
-```
-
-    ##        Id MSSubClass MSZoning LotFrontage LotArea Street Alley LotShape
-    ## 2217 2217         20       RL          80   14584   Pave  None      Reg
-    ## 2474 2474         50       RM          60   10320   Pave  Grvl      Reg
-    ##      LandContour LotConfig LandSlope Neighborhood Condition1 Condition2
-    ## 2217         Low    Inside       Mod       IDOTRR       Norm       Norm
-    ## 2474         Lvl    Corner       Gtl       IDOTRR     Artery       Norm
-    ##      BldgType HouseStyle OverallQual OverallCond YearBuilt YearRemodAdd
-    ## 2217     1Fam     1Story           1           5      1952         1952
-    ## 2474     1Fam     1.5Fin           4           1      1910         1950
-    ##      RoofStyle RoofMatl Exterior1st Exterior2nd MasVnrType MasVnrArea
-    ## 2217     Gable  CompShg     AsbShng     VinylSd          0          0
-    ## 2474     Gable  CompShg     Wd Sdng     Wd Sdng          0          0
-    ##      ExterQual ExterCond Foundation BsmtQual BsmtCond BsmtExposure
-    ## 2217        Fa        Po       Slab        0        0            0
-    ## 2474        Fa        Fa     CBlock        3        2            1
-    ##      BsmtFinType1 BsmtFinSF1 BsmtFinType2 BsmtFinSF2 BsmtUnfSF TotalBsmtSF
-    ## 2217            0          0            0          0         0           0
-    ## 2474            1          0            1          0       771         771
-    ##      Heating HeatingQC CentralAir Electrical X1stFlrSF X2ndFlrSF
-    ## 2217    Wall        Po          N      FuseA       733         0
-    ## 2474    GasA        Fa          Y      SBrkr       866       504
-    ##      LowQualFinSF GrLivArea BsmtFullBath BsmtHalfBath FullBath HalfBath
-    ## 2217            0       733            0            0        1        0
-    ## 2474          114      1484            0            0        2        0
-    ##      BedroomAbvGr KitchenAbvGr KitchenQual TotRmsAbvGrd Functional
-    ## 2217            2            1          Fa            4       <NA>
-    ## 2474            3            1          TA            6       <NA>
-    ##      Fireplaces FireplaceQu GarageType GarageFinish GarageCars GarageArea
-    ## 2217          0           0     Attchd            1          2        487
-    ## 2474          0           0     Detchd            1          1        264
-    ##      GarageQual PavedDrive WoodDeckSF OpenPorchSF EnclosedPorch X3SsnPorch
-    ## 2217          2          N          0           0             0          0
-    ## 2474          3          N         14         211             0          0
-    ##      ScreenPorch PoolArea PoolQC Fence MiscFeature MiscVal MoSold YrSold
-    ## 2217           0        0      0  None        None       0      2   2008
-    ## 2474          84        0      0  None        None       0      9   2007
-    ##      SaleType SaleCondition SalePrice
-    ## 2217       WD       Abnorml        NA
-    ## 2474      COD       Abnorml        NA
+We will replace the Na’s with the most common value 7, which is typical
+functionality
 
 ``` r
 data$Functional[is.na(data$Functional)]<-7
@@ -1407,9 +1089,9 @@ table(data$Functional)
 plot(data$Functional,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-37-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-42-1.png)
 
-**GarageCars Size of garage in car capacity **
+**GarageCars Size of garage in car capacity**
 
 ``` r
 table(as.factor(data$GarageCars))
@@ -1423,13 +1105,13 @@ table(as.factor(data$GarageCars))
 plot(as.factor(data$GarageCars))
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-38-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-43-1.png)
 
 ``` r
 plot(as.factor(data$GarageCars),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-38-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-43-2.png)
 
 ``` r
 paste(colnames(select(data,contains("Garage"))),collapse="','")
@@ -1452,16 +1134,10 @@ data$GarageCars<-as.integer(data$GarageCars)
 **GarageArea**
 
 ``` r
-plot(as.factor(data$GarageArea))
-```
-
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-39-1.png)
-
-``` r
 plot(data$GarageArea,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-39-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-44-1.png)
 
 ``` r
 paste(colnames(select(data,contains("Garage"))),collapse="','")
@@ -1482,16 +1158,16 @@ data$GarageArea<-as.integer(data$GarageArea)
 plot(data$GarageArea,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-39-3.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-44-2.png)
 
 ``` r
-cor(data[,sapply(data, is.numeric)],data$GarageArea) 
+cor(data[,sapply(data, is.numeric)],data$GarageArea)
 ```
 
     ##                       [,1]
     ## Id            -0.009851054
     ## MSSubClass    -0.103534194
-    ## LotFrontage    0.339380131
+    ## LotFrontage    0.338418737
     ## LotArea        0.213180376
     ## OverallQual    0.565179205
     ## OverallCond   -0.154311762
@@ -1538,8 +1214,9 @@ cor(data[,sapply(data, is.numeric)],data$GarageArea)
     ## YrSold        -0.012986182
     ## SalePrice               NA
 
+Should we dop GarageArea and keep GarageCars?
+
 ``` r
-#drop GarageArea and keep GarageCars?
 cor(data[1:1459,'SalePrice'],data[1:1459,'GarageArea'])
 ```
 
@@ -1551,24 +1228,20 @@ cor(data[1:1459,'SalePrice'],data[1:1459,'GarageCars'])
 
     ## [1] 0.6403833
 
+We’ll indeed drop the GarageArea variable since it is less corellated
+with sales Price
+
 ``` r
-#We'll indeed drop the GarageArea variable since it is less corellated with sales Price 
 data <- subset(data, select = -GarageArea)
 ```
 
 **TotalBsmtSF : Total square feet of basement area**
 
 ``` r
-plot(as.factor(data$TotalBsmtSF))
-```
-
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-40-1.png)
-
-``` r
 plot(data$TotalBsmtSF,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-40-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-47-1.png)
 
 ``` r
 cor(data[1:1459,'SalePrice'],data[1:1459,'TotalBsmtSF'])
@@ -1601,19 +1274,13 @@ data[is.na(data$TotalBsmtSF),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType
 data$TotalBsmtSF[is.na(data$TotalBsmtSF)]<-0
 ```
 
-**BsmtFinSF1**
-
-``` r
-plot(as.factor(data$BsmtFinSF1))
-```
-
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-41-1.png)
+**BsmtFinSF1: Type 1 finished square feet**
 
 ``` r
 plot(data$BsmtFinSF1,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-41-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-48-1.png)
 
 ``` r
 cor(data[1:1459,'SalePrice'],data[1:1459,'BsmtFinSF1'])
@@ -1646,19 +1313,13 @@ data[is.na(data$BsmtFinSF1),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1
 data$BsmtFinSF1[is.na(data$BsmtFinSF1)]<-0
 ```
 
-**BsmtUnfSF**
-
-``` r
-plot(data$BsmtUnfSF)
-```
-
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-42-1.png)
+**BsmtUnfSF: Unfinished square feet of basement area**
 
 ``` r
 plot(data$BsmtUnfSF,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-42-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-49-1.png)
 
 ``` r
 cor(data[1:1459,'SalePrice'],data[1:1459,'BsmtUnfSF'])
@@ -1695,12 +1356,12 @@ cor(data$BsmtUnfSF,data$BsmtFinSF2)
     ## [1] NA
 
 ``` r
-#Let's see if it is correlated with another
+#Let's see if it is correlated with another variable
 cor(data$BsmtUnfSF,data[,sapply(data, is.numeric)]) #correlated with BsmtFinSF1
 ```
 
     ##               Id MSSubClass LotFrontage    LotArea OverallQual OverallCond
-    ## [1,] -0.01479023 -0.1255609   0.1043326 0.02158978   0.2756429  -0.1386875
+    ## [1,] -0.01479023 -0.1255609   0.1063813 0.02158978   0.2756429  -0.1386875
     ##      YearBuilt YearRemodAdd MasVnrType MasVnrArea  BsmtQual  BsmtCond
     ## [1,] 0.1307862    0.1657697  0.1086214 0.08817341 0.2358125 0.1748441
     ##      BsmtExposure BsmtFinType1 BsmtFinSF1 BsmtFinType2 BsmtFinSF2
@@ -1718,19 +1379,13 @@ cor(data$BsmtUnfSF,data[,sapply(data, is.numeric)]) #correlated with BsmtFinSF1
     ##          MiscVal     MoSold      YrSold SalePrice
     ## [1,] -0.01045017 0.02295447 -0.03807293        NA
 
-**BsmtFinSF2**
-
-``` r
-plot(data$BsmtFinSF2)
-```
-
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-43-1.png)
+**BsmtFinSF2: Type 2 finished square feet**
 
 ``` r
 plot(data$BsmtFinSF2,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-43-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-50-1.png)
 
 ``` r
 cor(data[1:1459,'SalePrice'],data[1:1459,'BsmtFinSF2'])
@@ -1772,7 +1427,7 @@ cor(data$BsmtFinSF2,data[,sapply(data, is.numeric)]) #correlated with BsmtFinTyp
 ```
 
     ##              Id  MSSubClass LotFrontage    LotArea OverallQual OverallCond
-    ## [1,] 0.01817004 -0.07243126  0.04125594 0.08410715  -0.0426052  0.04135923
+    ## [1,] 0.01817004 -0.07243126  0.04032958 0.08410715  -0.0426052  0.04135923
     ##        YearBuilt YearRemodAdd  MasVnrType  MasVnrArea    BsmtQual
     ## [1,] -0.02750704  -0.06195898 -0.02374806 -0.01457983 -0.01267815
     ##        BsmtCond BsmtExposure BsmtFinType1  BsmtFinSF1 BsmtFinType2
@@ -1790,10 +1445,10 @@ cor(data$BsmtFinSF2,data[,sapply(data, is.numeric)]) #correlated with BsmtFinTyp
     ##          PoolQC      MiscVal     MoSold      YrSold SalePrice
     ## [1,] 0.02187298 -0.005129682 -0.0095096 0.008866935        NA
 
-``` r
-#We'll probably drop these 2 basement variables
-#Now we see the correlations between basement variables
+We’ll probably drop these 2 basement variables. <br> Now we see the
+correlations between basement variables
 
+``` r
 paste(colnames(select(data,contains("Bsmt"))),collapse="','")
 ```
 
@@ -1845,27 +1500,16 @@ corrplot(cor(data[,c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFi
 ,method = "square")
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-43-3.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-51-1.png)
+
+We will drop the variable BsmtFinSF2
 
 ``` r
-#we drop the variables BsmtFinSF1 and BsmtFinSF2
-data <- subset(data, select = -BsmtFinSF1)
 data <- subset(data, select = -BsmtFinSF2)
-#check again
-corrplot(cor(data[,c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFinType2','BsmtUnfSF','TotalBsmtSF','BsmtFullBath','BsmtHalfBath')]),method='square')
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-43-4.png)
-
-``` r
-data <- subset(data, select = -TotalBsmtSF)   #MAYBE NOT THIS VARIABLE?     
-corrplot(cor(data[,c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFinType2','BsmtUnfSF','BsmtFullBath','BsmtHalfBath')]),method='square')
-```
-
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-43-5.png)
-
-**Now that we have taken care of Na’s let’s see what the numeric
-variables are**
+**Now that we have taken care of Na’s let’s see which are the numeric
+variables.**
 
 ``` r
 colnames(data[,sapply(data, is.numeric)]) #check out which columns are numeric 
@@ -1874,36 +1518,37 @@ colnames(data[,sapply(data, is.numeric)]) #check out which columns are numeric
     ##  [1] "Id"            "MSSubClass"    "LotFrontage"   "LotArea"      
     ##  [5] "OverallQual"   "OverallCond"   "YearBuilt"     "YearRemodAdd" 
     ##  [9] "MasVnrType"    "MasVnrArea"    "BsmtQual"      "BsmtCond"     
-    ## [13] "BsmtExposure"  "BsmtFinType1"  "BsmtFinType2"  "BsmtUnfSF"    
-    ## [17] "X1stFlrSF"     "X2ndFlrSF"     "LowQualFinSF"  "GrLivArea"    
-    ## [21] "BsmtFullBath"  "BsmtHalfBath"  "FullBath"      "HalfBath"     
-    ## [25] "BedroomAbvGr"  "KitchenAbvGr"  "TotRmsAbvGrd"  "Functional"   
-    ## [29] "Fireplaces"    "FireplaceQu"   "GarageFinish"  "GarageCars"   
-    ## [33] "GarageQual"    "WoodDeckSF"    "OpenPorchSF"   "EnclosedPorch"
-    ## [37] "X3SsnPorch"    "ScreenPorch"   "PoolArea"      "PoolQC"       
-    ## [41] "MiscVal"       "MoSold"        "YrSold"        "SalePrice"
+    ## [13] "BsmtExposure"  "BsmtFinType1"  "BsmtFinSF1"    "BsmtFinType2" 
+    ## [17] "BsmtUnfSF"     "TotalBsmtSF"   "X1stFlrSF"     "X2ndFlrSF"    
+    ## [21] "LowQualFinSF"  "GrLivArea"     "BsmtFullBath"  "BsmtHalfBath" 
+    ## [25] "FullBath"      "HalfBath"      "BedroomAbvGr"  "KitchenAbvGr" 
+    ## [29] "TotRmsAbvGrd"  "Functional"    "Fireplaces"    "FireplaceQu"  
+    ## [33] "GarageFinish"  "GarageCars"    "GarageQual"    "WoodDeckSF"   
+    ## [37] "OpenPorchSF"   "EnclosedPorch" "X3SsnPorch"    "ScreenPorch"  
+    ## [41] "PoolArea"      "PoolQC"        "MiscVal"       "MoSold"       
+    ## [45] "YrSold"        "SalePrice"
 
-**But first let’s see some correlations**
+Let’s see also some correlations
 
 ``` r
 corrplot(cor(na.omit(data[,sapply(data, is.numeric)])),method = "square")
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-45-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-54-1.png)
 
 ``` r
 paste(which(cor(data[1:1459,sapply(data, is.numeric)],data[1:1459,'SalePrice'])>0.5 | cor(data[1:1459,sapply(data, is.numeric)],data[1:1459,'SalePrice'])<(-0.5)),collapse=',')
 ```
 
-    ## [1] "5,7,8,11,17,20,23,27,30,31,32,44"
+    ## [1] "5,7,8,11,18,19,22,25,29,32,33,34,46"
 
 ``` r
 colnames(data[,sapply(data, is.numeric)][c(5,7,8,11,17,20,23,27,30,31,32,44)])
 ```
 
     ##  [1] "OverallQual"  "YearBuilt"    "YearRemodAdd" "BsmtQual"    
-    ##  [5] "X1stFlrSF"    "GrLivArea"    "FullBath"     "TotRmsAbvGrd"
-    ##  [9] "FireplaceQu"  "GarageFinish" "GarageCars"   "SalePrice"
+    ##  [5] "BsmtUnfSF"    "X2ndFlrSF"    "BsmtFullBath" "BedroomAbvGr"
+    ##  [9] "Functional"   "Fireplaces"   "FireplaceQu"  "MoSold"
 
 **So these are the variables that have the highest correlation with the
 Saleprice variable.We will examine these further.**
@@ -1922,7 +1567,7 @@ data <- data[,-1]
 plot(data$MSSubClass,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-47-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-56-1.png)
 
 ``` r
 #In reality this is a factor and not numeric.
@@ -1953,7 +1598,7 @@ table(as.factor(data$OverallQual))
 plot(as.factor(data$OverallQual),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-48-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-57-1.png)
 
 ``` r
 data$OverallQual<-as.integer(data$OverallQual)
@@ -1978,7 +1623,7 @@ table(as.factor(data$OverallCond))
 plot(as.factor(data$OverallCond),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-49-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-58-1.png)
 
 ``` r
 data$OverallCond<-as.integer(data$OverallCond)
@@ -1995,7 +1640,7 @@ table(data$OverallCond)
 plot(as.factor(data$YearBuilt))
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-50-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-59-1.png)
 
 ``` r
 table(as.factor(data$YearBuilt))
@@ -2023,7 +1668,7 @@ table(as.factor(data$YearBuilt))
 plot(as.factor(data$YearBuilt),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-50-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-59-2.png)
 
 ``` r
 cor(data[1:1459,'SalePrice'],data[1:1459,'YearBuilt'])
@@ -2038,7 +1683,7 @@ or additions)**
 plot(as.factor(data$YearRemodAdd))
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-51-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-60-1.png)
 
 ``` r
 table(as.factor(data$YearRemodAdd))
@@ -2060,13 +1705,13 @@ table(as.factor(data$YearRemodAdd))
 plot(as.factor(data$YearRemodAdd),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-51-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-60-2.png)
 
 ``` r
 plot(data$YearRemodAdd,data$YearBuilt)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-51-3.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-60-3.png)
 
 ``` r
 #We can see from the plot that all remodelings started on 1950. Is it true or there is some error?
@@ -2141,7 +1786,7 @@ colnames(data[,sapply(data, is.character)])
 plot(as.factor(data$Street))
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-55-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-64-1.png)
 
 ``` r
 table(data$Street)
