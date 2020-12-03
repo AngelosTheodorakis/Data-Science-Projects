@@ -1674,7 +1674,7 @@ table(data$PoolArea) # We'll drop this variable (most observations belong to one
 data <- subset(data, select = -c(PoolArea))
 ```
 
-\#\#\#**PoolQC**\#\#\#
+### **PoolQC**
 
 ``` r
 table(data$PoolQC) #we'll drop this variable
@@ -1688,8 +1688,8 @@ table(data$PoolQC) #we'll drop this variable
 data <- subset(data, select = -c(PoolQC))
 ```
 
-\#\#**Afer examining the above numeric variables, we also need to
-examine the remaining character variables.**\#\#
+**Afer examining the above numeric variables, we also need to examine the remaining character variables.**
+----------------------------------------------------------------------------------------------------------
 
 ``` r
 colnames(data[,sapply(data, is.character)]) 
@@ -1703,7 +1703,8 @@ colnames(data[,sapply(data, is.character)])
     ## [21] "Electrical"    "KitchenQual"   "PavedDrive"    "SaleType"     
     ## [25] "SaleCondition"
 
-\#\#**Street: Type of road access to property**\#\#
+**Street: Type of road access to property**
+-------------------------------------------
 
 ``` r
 plot(as.factor(data$Street))
@@ -1725,7 +1726,8 @@ table(data$Street)
 data <- subset(data, select = -Street)
 ```
 
-\#\#**Neighborhood**\#\#
+**Neighborhood**
+----------------
 
 ``` r
 data$Neighborhood <- as.factor(data$Neighborhood) # Convert to factor
@@ -1747,7 +1749,8 @@ plot(data$Neighborhood,data$SalePrice)
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-71-1.png) As
 expected, Neighborhood seems to affect the price of a house.
 
-\#\#**Foundation: Type of foundation**\#\#
+**Foundation: Type of foundation**
+----------------------------------
 
 ``` r
 data$Foundation <- as.factor(data$Foundation) # Convert to factor
@@ -1764,7 +1767,8 @@ plot(data$Foundation,data$SalePrice)
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-72-1.png)
 
-\#\#**Condition1: Proximity to various conditions**\#\#
+**Condition1: Proximity to various conditions**
+-----------------------------------------------
 
 ``` r
 data$Condition1 <- as.factor(data$Condition1) # Convert to factor
@@ -1781,7 +1785,8 @@ plot(data$Condition1,data$SalePrice)
 
 ![](House_Prices_files/figure-markdown_github/unnamed-chunk-73-1.png)
 
-\#\#**LotShape: General shape of property**\#\#
+**LotShape: General shape of property**
+---------------------------------------
 
 ``` r
 data$LotShape<-as.integer(revalue(data$LotShape, c('IR3'=0, 'IR2'=1, 'IR1'=2, 'Reg'=3))) # Convert to integer
