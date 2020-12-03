@@ -936,50 +936,6 @@ table(data$BsmtFullBath)
 Let’s find all the basement variables below.
 
 ``` r
-data[is.na(data$BsmtFullBath),]
-```
-
-    ##        Id MSSubClass MSZoning LotFrontage LotArea Street Alley LotShape
-    ## 2121 2121         20       RM          99    5940   Pave  None      IR1
-    ## 2189 2189         20       RL         123   47007   Pave  None      IR1
-    ##      LandContour LotConfig LandSlope Neighborhood Condition1 Condition2
-    ## 2121         Lvl       FR3       Gtl      BrkSide      Feedr       Norm
-    ## 2189         Lvl    Inside       Gtl      Edwards       Norm       Norm
-    ##      BldgType HouseStyle OverallQual OverallCond YearBuilt YearRemodAdd
-    ## 2121     1Fam     1Story           4           7      1946         1950
-    ## 2189     1Fam     1Story           5           7      1959         1996
-    ##      RoofStyle RoofMatl Exterior1st Exterior2nd MasVnrType MasVnrArea
-    ## 2121     Gable  CompShg     MetalSd      CBlock          0          0
-    ## 2189     Gable  CompShg     Plywood     Plywood          0          0
-    ##      ExterQual ExterCond Foundation BsmtQual BsmtCond BsmtExposure
-    ## 2121        TA        TA      PConc        0        0            0
-    ## 2189        TA        TA       Slab        0        0            0
-    ##      BsmtFinType1 BsmtFinSF1 BsmtFinType2 BsmtFinSF2 BsmtUnfSF TotalBsmtSF
-    ## 2121            0         NA            0         NA        NA          NA
-    ## 2189            0          0            0          0         0           0
-    ##      Heating HeatingQC CentralAir Electrical X1stFlrSF X2ndFlrSF
-    ## 2121    GasA        TA          Y      FuseA       896         0
-    ## 2189    GasA        TA          Y      SBrkr      3820         0
-    ##      LowQualFinSF GrLivArea BsmtFullBath BsmtHalfBath FullBath HalfBath
-    ## 2121            0       896           NA           NA        1        0
-    ## 2189            0      3820           NA           NA        3        1
-    ##      BedroomAbvGr KitchenAbvGr KitchenQual TotRmsAbvGrd Functional
-    ## 2121            2            1          TA            4        Typ
-    ## 2189            5            1          Ex           11        Typ
-    ##      Fireplaces FireplaceQu GarageType GarageFinish GarageCars GarageArea
-    ## 2121          0           0     Detchd            1          1        280
-    ## 2189          2           4     Attchd            1          2        624
-    ##      GarageQual PavedDrive WoodDeckSF OpenPorchSF EnclosedPorch X3SsnPorch
-    ## 2121          3          Y          0           0             0          0
-    ## 2189          3          Y          0         372             0          0
-    ##      ScreenPorch PoolArea PoolQC Fence MiscFeature MiscVal MoSold YrSold
-    ## 2121           0        0      0 MnPrv        None       0      4   2008
-    ## 2189           0        0      0  None        None       0      7   2008
-    ##      SaleType SaleCondition SalePrice
-    ## 2121    ConLD       Abnorml        NA
-    ## 2189       WD        Normal        NA
-
-``` r
 paste(colnames(select(data,contains("Bsmt"))),collapse="','")
 ```
 
@@ -1000,7 +956,7 @@ We conclude that these variables are higly corralated and so we will
 replace the Na’s with zero value
 
 ``` r
-data$BsmtFullBath[is.na(data$BsmtFullBath)]<-0
+data$BsmtFullBath[is.na(data$BsmtFullBath)]<-0 # Replace missing value with zero
 plot(as.factor(data$BsmtFullBath),data$SalePrice)
 ```
 
@@ -1040,7 +996,7 @@ data[is.na(data$BsmtHalfBath),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinTyp
     ## 2189          0         0           0            0           NA
 
 ``` r
-data$BsmtHalfBath[is.na(data$BsmtHalfBath)]<-0
+data$BsmtHalfBath[is.na(data$BsmtHalfBath)]<-0 # Replace missing value with zero
 plot(as.factor(data$BsmtHalfBath),data$SalePrice)
 ```
 
@@ -1085,12 +1041,6 @@ table(data$Functional)
     ##    1    2    3    4    5    6    7 
     ##    2    9   19   35   70   65 2719
 
-``` r
-plot(data$Functional,data$SalePrice)
-```
-
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-42-1.png)
-
 **GarageCars Size of garage in car capacity**
 
 ``` r
@@ -1127,17 +1077,11 @@ data[is.na(data$GarageCars),c('GarageType','GarageFinish','GarageCars','GarageAr
     ## 2577     Detchd            0         NA         NA          0
 
 ``` r
-data$GarageCars[is.na(data$GarageCars)]<-0
+data$GarageCars[is.na(data$GarageCars)]<-0 # Replace missing value with zero
 data$GarageCars<-as.integer(data$GarageCars)
 ```
 
 **GarageArea**
-
-``` r
-plot(data$GarageArea,data$SalePrice)
-```
-
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-44-1.png)
 
 ``` r
 paste(colnames(select(data,contains("Garage"))),collapse="','")
@@ -1153,12 +1097,14 @@ data[is.na(data$GarageArea),c('GarageType','GarageFinish','GarageCars','GarageAr
     ## 2577     Detchd            0          0         NA          0
 
 ``` r
-data$GarageArea[is.na(data$GarageArea)]<-0
+data$GarageArea[is.na(data$GarageArea)]<-0 # Replace missing value with zero
 data$GarageArea<-as.integer(data$GarageArea)
 plot(data$GarageArea,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-44-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-44-1.png)
+
+Let’s find its correlation with other numeric values
 
 ``` r
 cor(data[,sapply(data, is.numeric)],data$GarageArea)
@@ -1214,7 +1160,9 @@ cor(data[,sapply(data, is.numeric)],data$GarageArea)
     ## YrSold        -0.012986182
     ## SalePrice               NA
 
-Should we dop GarageArea and keep GarageCars?
+It is correlated with GarageCars (Rsq = 0.889) <br> Should we drop
+GarageArea or GarageCars? <br> We will examine which is less corellated
+with Sales Price.
 
 ``` r
 cor(data[1:1459,'SalePrice'],data[1:1459,'GarageArea'])
@@ -1228,8 +1176,8 @@ cor(data[1:1459,'SalePrice'],data[1:1459,'GarageCars'])
 
     ## [1] 0.6403833
 
-We’ll indeed drop the GarageArea variable since it is less corellated
-with sales Price
+We’ll drop the GarageArea variable, since it is less corellated with
+sales Price
 
 ``` r
 data <- subset(data, select = -GarageArea)
@@ -1241,7 +1189,7 @@ data <- subset(data, select = -GarageArea)
 plot(data$TotalBsmtSF,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-47-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-48-1.png)
 
 ``` r
 cor(data[1:1459,'SalePrice'],data[1:1459,'TotalBsmtSF'])
@@ -1271,7 +1219,7 @@ data[is.na(data$TotalBsmtSF),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType
     ## 2121         NA        NA          NA            0            0
 
 ``` r
-data$TotalBsmtSF[is.na(data$TotalBsmtSF)]<-0
+data$TotalBsmtSF[is.na(data$TotalBsmtSF)]<-0 # Replace missing value with zero
 ```
 
 **BsmtFinSF1: Type 1 finished square feet**
@@ -1280,7 +1228,7 @@ data$TotalBsmtSF[is.na(data$TotalBsmtSF)]<-0
 plot(data$BsmtFinSF1,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-48-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-49-1.png)
 
 ``` r
 cor(data[1:1459,'SalePrice'],data[1:1459,'BsmtFinSF1'])
@@ -1310,7 +1258,7 @@ data[is.na(data$BsmtFinSF1),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1
     ## 2121         NA        NA           0            0            0
 
 ``` r
-data$BsmtFinSF1[is.na(data$BsmtFinSF1)]<-0
+data$BsmtFinSF1[is.na(data$BsmtFinSF1)]<-0 # Replace missing value with zero
 ```
 
 **BsmtUnfSF: Unfinished square feet of basement area**
@@ -1319,7 +1267,7 @@ data$BsmtFinSF1[is.na(data$BsmtFinSF1)]<-0
 plot(data$BsmtUnfSF,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-49-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-50-1.png)
 
 ``` r
 cor(data[1:1459,'SalePrice'],data[1:1459,'BsmtUnfSF'])
@@ -1349,15 +1297,13 @@ data[is.na(data$BsmtUnfSF),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1'
     ## 2121         NA        NA           0            0            0
 
 ``` r
-data$BsmtUnfSF[is.na(data$BsmtUnfSF)]<-0
-cor(data$BsmtUnfSF,data$BsmtFinSF2)
+data$BsmtUnfSF[is.na(data$BsmtUnfSF)]<-0 # Replace missing value with zero
 ```
 
-    ## [1] NA
+Let’s see if it is correlated with another variable
 
 ``` r
-#Let's see if it is correlated with another variable
-cor(data$BsmtUnfSF,data[,sapply(data, is.numeric)]) #correlated with BsmtFinSF1
+cor(data$BsmtUnfSF,data[,sapply(data, is.numeric)])
 ```
 
     ##               Id MSSubClass LotFrontage    LotArea OverallQual OverallCond
@@ -1379,13 +1325,16 @@ cor(data$BsmtUnfSF,data[,sapply(data, is.numeric)]) #correlated with BsmtFinSF1
     ##          MiscVal     MoSold      YrSold SalePrice
     ## [1,] -0.01045017 0.02295447 -0.03807293        NA
 
+It is correlated with BsmtFinSF1 (-0.476). <br> We continue with the
+next variable
+
 **BsmtFinSF2: Type 2 finished square feet**
 
 ``` r
 plot(data$BsmtFinSF2,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-50-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-52-1.png)
 
 ``` r
 cor(data[1:1459,'SalePrice'],data[1:1459,'BsmtFinSF2'])
@@ -1415,15 +1364,17 @@ data[is.na(data$BsmtFinSF2),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1
     ## 2121         NA         0           0            0            0
 
 ``` r
-data$BsmtFinSF2[is.na(data$BsmtFinSF2)]<-0
+data$BsmtFinSF2[is.na(data$BsmtFinSF2)]<-0 # Replace missing value with zero
 cor(data$BsmtFinSF1,data$BsmtFinSF2)
 ```
 
     ## [1] -0.05493841
 
+We will probably drop this variable,let’s see if it is correlated with
+another
+
 ``` r
-#We will probably drop this variable,let's see if it is correlated with another
-cor(data$BsmtFinSF2,data[,sapply(data, is.numeric)]) #correlated with BsmtFinType2
+cor(data$BsmtFinSF2,data[,sapply(data, is.numeric)])
 ```
 
     ##              Id  MSSubClass LotFrontage    LotArea OverallQual OverallCond
@@ -1445,8 +1396,8 @@ cor(data$BsmtFinSF2,data[,sapply(data, is.numeric)]) #correlated with BsmtFinTyp
     ##          PoolQC      MiscVal     MoSold      YrSold SalePrice
     ## [1,] 0.02187298 -0.005129682 -0.0095096 0.008866935        NA
 
-We’ll probably drop these 2 basement variables. <br> Now we see the
-correlations between basement variables
+Correlated with BsmtFinType2 <br> Now we see the correlations between
+basement variables
 
 ``` r
 paste(colnames(select(data,contains("Bsmt"))),collapse="','")
@@ -1495,21 +1446,26 @@ cor(data[,c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFinSF1','Bs
     ## BsmtFullBath    1.0000000 -0.148654812
     ## BsmtHalfBath   -0.1486548  1.000000000
 
+We will create a corrplot for better understanding the correlations
+
 ``` r
 corrplot(cor(data[,c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFinSF1','BsmtFinType2','BsmtFinSF2','BsmtUnfSF','TotalBsmtSF','BsmtFullBath','BsmtHalfBath')])
 ,method = "square")
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-51-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-55-1.png)
 
-We will drop the variable BsmtFinSF2
+The basement quality and basement condition (which are important
+variables) are not correlated with BsmtHalfBath and BsmtFinSF2. So we
+will drop these two variables
 
 ``` r
 data <- subset(data, select = -BsmtFinSF2)
+data <- subset(data, select = -BsmtHalfBath)
 ```
 
-*Now that we have taken care of Na’s let’s see which are the numeric
-variables.*
+\#\#*Now that we have taken care of Na’s let’s see which are the numeric
+variables.*\#\#
 
 ``` r
 colnames(data[,sapply(data, is.numeric)]) #check out which columns are numeric 
@@ -1520,47 +1476,34 @@ colnames(data[,sapply(data, is.numeric)]) #check out which columns are numeric
     ##  [9] "MasVnrType"    "MasVnrArea"    "BsmtQual"      "BsmtCond"     
     ## [13] "BsmtExposure"  "BsmtFinType1"  "BsmtFinSF1"    "BsmtFinType2" 
     ## [17] "BsmtUnfSF"     "TotalBsmtSF"   "X1stFlrSF"     "X2ndFlrSF"    
-    ## [21] "LowQualFinSF"  "GrLivArea"     "BsmtFullBath"  "BsmtHalfBath" 
-    ## [25] "FullBath"      "HalfBath"      "BedroomAbvGr"  "KitchenAbvGr" 
-    ## [29] "TotRmsAbvGrd"  "Functional"    "Fireplaces"    "FireplaceQu"  
-    ## [33] "GarageFinish"  "GarageCars"    "GarageQual"    "WoodDeckSF"   
-    ## [37] "OpenPorchSF"   "EnclosedPorch" "X3SsnPorch"    "ScreenPorch"  
-    ## [41] "PoolArea"      "PoolQC"        "MiscVal"       "MoSold"       
-    ## [45] "YrSold"        "SalePrice"
+    ## [21] "LowQualFinSF"  "GrLivArea"     "BsmtFullBath"  "FullBath"     
+    ## [25] "HalfBath"      "BedroomAbvGr"  "KitchenAbvGr"  "TotRmsAbvGrd" 
+    ## [29] "Functional"    "Fireplaces"    "FireplaceQu"   "GarageFinish" 
+    ## [33] "GarageCars"    "GarageQual"    "WoodDeckSF"    "OpenPorchSF"  
+    ## [37] "EnclosedPorch" "X3SsnPorch"    "ScreenPorch"   "PoolArea"     
+    ## [41] "PoolQC"        "MiscVal"       "MoSold"        "YrSold"       
+    ## [45] "SalePrice"
 
-``` r
-plot(c(1:10),c(1:10))
-```
-
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-54-1.png)
-
-Let’s see also some correlations
+Let’s see also some correlations. <br> We will find the numeric
+variables that have the highest correlation with the Saleprice variable
+and examine them further.
 
 ``` r
 corrplot(cor(na.omit(data[,sapply(data, is.numeric)])),method = "square")
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-55-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-58-1.png)
 
 ``` r
-paste(which(cor(data[1:1459,sapply(data, is.numeric)],data[1:1459,'SalePrice'])>0.5 | cor(data[1:1459,sapply(data, is.numeric)],data[1:1459,'SalePrice'])<(-0.5)),collapse=',')
+paste(which(cor(data[1:1459,sapply(data, is.numeric)],data[1:1459,'SalePrice'])>0.5 | cor(data[1:1459,sapply(data, is.numeric)],data[1:1459,'SalePrice'])<(-0.5)),collapse=',') # Check for high or low correlations
 ```
 
-    ## [1] "5,7,8,11,18,19,22,25,29,32,33,34,46"
+    ## [1] "5,7,8,11,18,19,22,24,28,31,32,33,45"
 
-``` r
-colnames(data[,sapply(data, is.numeric)][c(5,7,8,11,17,20,23,27,30,31,32,44)])
-```
+colnames(data\[,sapply(data,is.numeric)\]\[c(5,7,8,11,17,20,23,27,30,31,32,44)\])
 
-    ##  [1] "OverallQual"  "YearBuilt"    "YearRemodAdd" "BsmtQual"    
-    ##  [5] "BsmtUnfSF"    "X2ndFlrSF"    "BsmtFullBath" "BedroomAbvGr"
-    ##  [9] "Functional"   "Fireplaces"   "FireplaceQu"  "MoSold"
-
-**So these are the variables that have the highest correlation with the
-Saleprice variable.We will examine these further.**
-
-**Id** **We will get rid of the Id column and keep it in a vector called
-Id**
+**Id** We will get rid of the Id column and keep it in a vector called
+Id
 
 ``` r
 Id<-data$Id[1461:nrow(data)]
@@ -1573,10 +1516,11 @@ data <- data[,-1]
 plot(data$MSSubClass,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-57-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-60-1.png)
+
+In reality this is a factor and not numeric.
 
 ``` r
-#In reality this is a factor and not numeric.
 table(as.factor(data$MSSubClass))
 ```
 
@@ -1587,7 +1531,7 @@ table(as.factor(data$MSSubClass))
     ##   61
 
 ``` r
-data$MSSubClass<-as.factor(data$MSSubClass)
+data$MSSubClass<-as.factor(data$MSSubClass) # Change into factor variable
 ```
 
 **OverallQual: Rates the overall material and finish of the house**
@@ -1604,10 +1548,10 @@ table(as.factor(data$OverallQual))
 plot(as.factor(data$OverallQual),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-58-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-62-1.png)
 
 ``` r
-data$OverallQual<-as.integer(data$OverallQual)
+data$OverallQual<-as.integer(data$OverallQual) # Change into integer variable
 table(data$OverallQual)
 ```
 
@@ -1629,7 +1573,7 @@ table(as.factor(data$OverallCond))
 plot(as.factor(data$OverallCond),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-59-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-63-1.png)
 
 ``` r
 data$OverallCond<-as.integer(data$OverallCond)
@@ -1646,7 +1590,7 @@ table(data$OverallCond)
 plot(as.factor(data$YearBuilt))
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-60-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-64-1.png)
 
 ``` r
 table(as.factor(data$YearBuilt))
@@ -1674,7 +1618,7 @@ table(as.factor(data$YearBuilt))
 plot(as.factor(data$YearBuilt),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-60-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-64-2.png)
 
 ``` r
 cor(data[1:1459,'SalePrice'],data[1:1459,'YearBuilt'])
@@ -1689,7 +1633,7 @@ or additions)**
 plot(as.factor(data$YearRemodAdd))
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-61-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-65-1.png)
 
 ``` r
 table(as.factor(data$YearRemodAdd))
@@ -1711,13 +1655,13 @@ table(as.factor(data$YearRemodAdd))
 plot(as.factor(data$YearRemodAdd),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-61-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-65-2.png)
 
 ``` r
 plot(data$YearRemodAdd,data$YearBuilt)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-61-3.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-65-3.png)
 
 ``` r
 #We can see from the plot that all remodelings started on 1950. Is it true or there is some error?
@@ -1792,7 +1736,7 @@ colnames(data[,sapply(data, is.character)])
 plot(as.factor(data$Street))
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-65-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-69-1.png)
 
 ``` r
 table(data$Street)

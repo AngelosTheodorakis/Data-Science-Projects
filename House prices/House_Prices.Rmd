@@ -362,7 +362,6 @@ table(data$BsmtFullBath)
 Let's find all the basement variables below.
 
 ```{r}
-data[is.na(data$BsmtFullBath),]
 paste(colnames(select(data,contains("Bsmt"))),collapse="','")
 ```
 
@@ -375,7 +374,7 @@ We conclude that these variables are higly corralated and so we will replace the
 
 
 ```{r}
-data$BsmtFullBath[is.na(data$BsmtFullBath)]<-0
+data$BsmtFullBath[is.na(data$BsmtFullBath)]<-0 # Replace missing value with zero
 plot(as.factor(data$BsmtFullBath),data$SalePrice)
 data$BsmtFullBath<-as.integer(data$BsmtFullBath)
 ```
@@ -388,7 +387,7 @@ We proceed with the same way as above.
 table(data$BsmtHalfBath)
 paste(colnames(select(data,contains("Bsmt"))),collapse="','")
 data[is.na(data$BsmtHalfBath),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFinSF1','BsmtFinType2','BsmtFinSF2','BsmtUnfSF','TotalBsmtSF','BsmtFullBath','BsmtHalfBath')]
-data$BsmtHalfBath[is.na(data$BsmtHalfBath)]<-0
+data$BsmtHalfBath[is.na(data$BsmtHalfBath)]<-0 # Replace missing value with zero
 plot(as.factor(data$BsmtHalfBath),data$SalePrice)
 data$BsmtHalfBath<-as.integer(data$BsmtHalfBath)
 #we can see the correlation 
@@ -409,7 +408,6 @@ data$Functional[is.na(data$Functional)]<-7
 Functional<-c('Sal'=0, 'Sev'=1, 'Maj2'=2, 'Maj1'=3, 'Mod'=4, 'Min2'=5, 'Min1'=6, 'Typ'=7)
 data$Functional <- as.integer(revalue(data$Functional, Functional))
 table(data$Functional)
-plot(data$Functional,data$SalePrice)
 ```
 
 **GarageCars Size of garage in car capacity** 
@@ -420,7 +418,7 @@ plot(as.factor(data$GarageCars))
 plot(as.factor(data$GarageCars),data$SalePrice)
 paste(colnames(select(data,contains("Garage"))),collapse="','")
 data[is.na(data$GarageCars),c('GarageType','GarageFinish','GarageCars','GarageArea','GarageQual')]
-data$GarageCars[is.na(data$GarageCars)]<-0
+data$GarageCars[is.na(data$GarageCars)]<-0 # Replace missing value with zero
 data$GarageCars<-as.integer(data$GarageCars)
 ```
 
@@ -428,23 +426,29 @@ data$GarageCars<-as.integer(data$GarageCars)
 **GarageArea**
 
 ```{r}
-plot(data$GarageArea,data$SalePrice)
 paste(colnames(select(data,contains("Garage"))),collapse="','")
 data[is.na(data$GarageArea),c('GarageType','GarageFinish','GarageCars','GarageArea','GarageQual')]
-data$GarageArea[is.na(data$GarageArea)]<-0
+data$GarageArea[is.na(data$GarageArea)]<-0 # Replace missing value with zero
 data$GarageArea<-as.integer(data$GarageArea)
 plot(data$GarageArea,data$SalePrice)
+```
+
+Let's find its correlation with other numeric values
+
+```{r}
 cor(data[,sapply(data, is.numeric)],data$GarageArea)
 ```
 
-Should we dop GarageArea and keep GarageCars?
+It is correlated with GarageCars (Rsq = 0.889) <br>
+Should we drop GarageArea or GarageCars? <br>
+We will examine which is less corellated with Sales Price.
 
 ```{r}
 cor(data[1:1459,'SalePrice'],data[1:1459,'GarageArea'])
 cor(data[1:1459,'SalePrice'],data[1:1459,'GarageCars']) 
 ```
 
-We'll indeed drop the GarageArea variable since it is less corellated with sales Price 
+We'll drop the GarageArea variable, since it is less corellated with sales Price 
 
 ```{r}
 data <- subset(data, select = -GarageArea)
@@ -458,7 +462,7 @@ cor(data[1:1459,'SalePrice'],data[1:1459,'TotalBsmtSF'])
 data$TotalBsmtSF[is.na(data$TotalBsmtSF)]
 paste(colnames(select(data,contains("Bsmt"))),collapse="','")
 data[is.na(data$TotalBsmtSF),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFinSF1','BsmtFinType2','BsmtFinSF2','BsmtUnfSF','TotalBsmtSF','BsmtFullBath','BsmtHalfBath')]
-data$TotalBsmtSF[is.na(data$TotalBsmtSF)]<-0
+data$TotalBsmtSF[is.na(data$TotalBsmtSF)]<-0 # Replace missing value with zero
 ```
 
 **BsmtFinSF1: Type 1 finished square feet**   
@@ -469,7 +473,7 @@ cor(data[1:1459,'SalePrice'],data[1:1459,'BsmtFinSF1'])
 data$BsmtFinSF1[is.na(data$BsmtFinSF1)]
 paste(colnames(select(data,contains("Bsmt"))),collapse="','")
 data[is.na(data$BsmtFinSF1),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFinSF1','BsmtFinType2','BsmtFinSF2','BsmtUnfSF','TotalBsmtSF','BsmtFullBath','BsmtHalfBath')]
-data$BsmtFinSF1[is.na(data$BsmtFinSF1)]<-0
+data$BsmtFinSF1[is.na(data$BsmtFinSF1)]<-0 # Replace missing value with zero
 ```
 
 **BsmtUnfSF: Unfinished square feet of basement area**
@@ -480,11 +484,17 @@ cor(data[1:1459,'SalePrice'],data[1:1459,'BsmtUnfSF'])
 data$BsmtUnfSF[is.na(data$BsmtUnfSF)]
 paste(colnames(select(data,contains("Bsmt"))),collapse="','")
 data[is.na(data$BsmtUnfSF),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFinSF1','BsmtFinType2','BsmtFinSF2','BsmtUnfSF','TotalBsmtSF','BsmtFullBath','BsmtHalfBath')]
-data$BsmtUnfSF[is.na(data$BsmtUnfSF)]<-0
-cor(data$BsmtUnfSF,data$BsmtFinSF2)
-#Let's see if it is correlated with another variable
-cor(data$BsmtUnfSF,data[,sapply(data, is.numeric)]) #correlated with BsmtFinSF1
+data$BsmtUnfSF[is.na(data$BsmtUnfSF)]<-0 # Replace missing value with zero
 ```
+
+Let's see if it is correlated with another variable
+
+```{r}
+cor(data$BsmtUnfSF,data[,sapply(data, is.numeric)])
+```
+
+It is correlated with BsmtFinSF1 (-0.476). <br>
+We continue with the next variable
 
 **BsmtFinSF2: Type 2 finished square feet**  
 
@@ -494,53 +504,59 @@ cor(data[1:1459,'SalePrice'],data[1:1459,'BsmtFinSF2'])
 data$BsmtFinSF2[is.na(data$BsmtFinSF2)]
 paste(colnames(select(data,contains("Bsmt"))),collapse="','")
 data[is.na(data$BsmtFinSF2),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFinSF1','BsmtFinType2','BsmtFinSF2','BsmtUnfSF','TotalBsmtSF','BsmtFullBath','BsmtHalfBath')]
-data$BsmtFinSF2[is.na(data$BsmtFinSF2)]<-0
+data$BsmtFinSF2[is.na(data$BsmtFinSF2)]<-0 # Replace missing value with zero
 cor(data$BsmtFinSF1,data$BsmtFinSF2)
-#We will probably drop this variable,let's see if it is correlated with another
-cor(data$BsmtFinSF2,data[,sapply(data, is.numeric)]) #correlated with BsmtFinType2
 ```
 
-We'll probably drop these 2 basement variables. <br>
+We will probably drop this variable,let's see if it is correlated with another
+
+```{r}
+cor(data$BsmtFinSF2,data[,sapply(data, is.numeric)])
+```
+
+Correlated with BsmtFinType2 <br>
 Now we see the correlations between basement variables
 
 ```{r}
 paste(colnames(select(data,contains("Bsmt"))),collapse="','")
 cor(data[,c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFinSF1','BsmtFinType2','BsmtFinSF2','BsmtUnfSF','TotalBsmtSF','BsmtFullBath','BsmtHalfBath')])
+```
+
+We will create a corrplot for better understanding the correlations
+
+```{r}
 corrplot(cor(data[,c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1','BsmtFinSF1','BsmtFinType2','BsmtFinSF2','BsmtUnfSF','TotalBsmtSF','BsmtFullBath','BsmtHalfBath')])
 ,method = "square")
 ```
 
-We will drop the variable BsmtFinSF2
+The basement quality and basement condition (which are important variables) are not correlated with BsmtHalfBath and BsmtFinSF2. So we will drop these two variables
 
 ```{r}
 data <- subset(data, select = -BsmtFinSF2)
-
+data <- subset(data, select = -BsmtHalfBath)
 ```
 
 
-*Now that we have taken care of Na's let's see which are the numeric variables.*
+##*Now that we have taken care of Na's let's see which are the numeric variables.*##
 
 
 ```{r}
 colnames(data[,sapply(data, is.numeric)]) #check out which columns are numeric 
 ```
 
-```{r}
-plot(c(1:10),c(1:10))
-```
-
-Let's see also some correlations
+Let's see also some correlations. <br>
+We will find the numeric variables that have the highest correlation with the Saleprice variable and examine them further.
 
 ```{r}
 corrplot(cor(na.omit(data[,sapply(data, is.numeric)])),method = "square")
-paste(which(cor(data[1:1459,sapply(data, is.numeric)],data[1:1459,'SalePrice'])>0.5 | cor(data[1:1459,sapply(data, is.numeric)],data[1:1459,'SalePrice'])<(-0.5)),collapse=',')
-colnames(data[,sapply(data, is.numeric)][c(5,7,8,11,17,20,23,27,30,31,32,44)])
+paste(which(cor(data[1:1459,sapply(data, is.numeric)],data[1:1459,'SalePrice'])>0.5 | cor(data[1:1459,sapply(data, is.numeric)],data[1:1459,'SalePrice'])<(-0.5)),collapse=',') # Check for high or low correlations
 ```
 
-**So these are the variables that have the highest correlation with the Saleprice variable.We will examine these further.**
+colnames(data[,sapply(data,is.numeric)][c(5,7,8,11,17,20,23,27,30,31,32,44)])
+
 
 **Id**
-**We will get rid of the Id column and keep it in a vector called Id**
+We will get rid of the Id column and keep it in a vector called Id
 
 ```{r}
 Id<-data$Id[1461:nrow(data)]
@@ -551,9 +567,13 @@ data <- data[,-1]
 
 ```{r}
 plot(data$MSSubClass,data$SalePrice)
-#In reality this is a factor and not numeric.
+```
+
+In reality this is a factor and not numeric. 
+
+```{r}
 table(as.factor(data$MSSubClass))
-data$MSSubClass<-as.factor(data$MSSubClass)
+data$MSSubClass<-as.factor(data$MSSubClass) # Change into factor variable
 ```
 
 **OverallQual: Rates the overall material and finish of the house**
@@ -561,7 +581,7 @@ data$MSSubClass<-as.factor(data$MSSubClass)
 ```{r}
 table(as.factor(data$OverallQual))
 plot(as.factor(data$OverallQual),data$SalePrice)
-data$OverallQual<-as.integer(data$OverallQual)
+data$OverallQual<-as.integer(data$OverallQual) # Change into integer variable
 table(data$OverallQual)
 ```
 
