@@ -1651,24 +1651,14 @@ table(as.factor(data$YearRemodAdd))
     ## 2010 
     ##   13
 
+Interestingly, we observe that after year 2006 there is a sudden
+decrease in remodelings.
+
 ``` r
 plot(as.factor(data$YearRemodAdd),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-65-2.png)
-
-``` r
-plot(data$YearRemodAdd,data$YearBuilt)
-```
-
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-65-3.png)
-
-``` r
-#We can see from the plot that all remodelings started on 1950. Is it true or there is some error?
-cor(data$YearRemodAdd>1950,data$YearBuilt>1950) #Highly correlated with Yearbuilt
-```
-
-    ## [1] 0.6882729
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-66-1.png)
 
 **Pool Area**
 
@@ -1684,22 +1674,7 @@ table(data$PoolArea) # We'll drop this variable (most observations belong to one
 data <- subset(data, select = -c(PoolArea))
 ```
 
-Afer examining the above numeric variables, we also need to examine the
-remaining character variables.
-
-``` r
-colnames(data[,sapply(data, is.character)]) 
-```
-
-    ##  [1] "Street"        "LotShape"      "LandContour"   "LotConfig"    
-    ##  [5] "LandSlope"     "Neighborhood"  "Condition1"    "Condition2"   
-    ##  [9] "BldgType"      "HouseStyle"    "RoofStyle"     "RoofMatl"     
-    ## [13] "Exterior1st"   "Exterior2nd"   "ExterQual"     "ExterCond"    
-    ## [17] "Foundation"    "Heating"       "HeatingQC"     "CentralAir"   
-    ## [21] "Electrical"    "KitchenQual"   "PavedDrive"    "SaleType"     
-    ## [25] "SaleCondition"
-
-**PoolQC**
+\#\#\#**PoolQC**\#\#\#
 
 ``` r
 table(data$PoolQC) #we'll drop this variable
@@ -1713,13 +1688,28 @@ table(data$PoolQC) #we'll drop this variable
 data <- subset(data, select = -c(PoolQC))
 ```
 
-**Street: Type of road access to property **
+\#\#**Afer examining the above numeric variables, we also need to
+examine the remaining character variables.**\#\#
+
+``` r
+colnames(data[,sapply(data, is.character)]) 
+```
+
+    ##  [1] "Street"        "LotShape"      "LandContour"   "LotConfig"    
+    ##  [5] "LandSlope"     "Neighborhood"  "Condition1"    "Condition2"   
+    ##  [9] "BldgType"      "HouseStyle"    "RoofStyle"     "RoofMatl"     
+    ## [13] "Exterior1st"   "Exterior2nd"   "ExterQual"     "ExterCond"    
+    ## [17] "Foundation"    "Heating"       "HeatingQC"     "CentralAir"   
+    ## [21] "Electrical"    "KitchenQual"   "PavedDrive"    "SaleType"     
+    ## [25] "SaleCondition"
+
+\#\#**Street: Type of road access to property**\#\#
 
 ``` r
 plot(as.factor(data$Street))
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-69-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-70-1.png)
 
 ``` r
 table(data$Street)
@@ -1734,3 +1724,76 @@ table(data$Street)
 #removing Street variable 
 data <- subset(data, select = -Street)
 ```
+
+\#\#**Neighborhood**\#\#
+
+``` r
+data$Neighborhood <- as.factor(data$Neighborhood) # Convert to factor
+table(data$Neighborhood)
+```
+
+    ## 
+    ## Blmngtn Blueste  BrDale BrkSide ClearCr CollgCr Crawfor Edwards Gilbert 
+    ##      28      10      30     108      44     267     103     194     165 
+    ##  IDOTRR MeadowV Mitchel   NAmes NoRidge NPkVill NridgHt  NWAmes OldTown 
+    ##      93      37     114     443      71      23     166     131     239 
+    ##  Sawyer SawyerW Somerst StoneBr   SWISU  Timber Veenker 
+    ##     151     125     182      51      48      72      24
+
+``` r
+plot(data$Neighborhood,data$SalePrice)
+```
+
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-71-1.png) As
+expected, Neighborhood seems to affect the price of a house.
+
+\#\#**Foundation: Type of foundation**\#\#
+
+``` r
+data$Foundation <- as.factor(data$Foundation) # Convert to factor
+table(data$Foundation)
+```
+
+    ## 
+    ## BrkTil CBlock  PConc   Slab  Stone   Wood 
+    ##    311   1235   1308     49     11      5
+
+``` r
+plot(data$Foundation,data$SalePrice)
+```
+
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-72-1.png)
+
+\#\#**Condition1: Proximity to various conditions**\#\#
+
+``` r
+data$Condition1 <- as.factor(data$Condition1) # Convert to factor
+table(data$Condition1)
+```
+
+    ## 
+    ## Artery  Feedr   Norm   PosA   PosN   RRAe   RRAn   RRNe   RRNn 
+    ##     92    164   2511     20     39     28     50      6      9
+
+``` r
+plot(data$Condition1,data$SalePrice)
+```
+
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-73-1.png)
+
+\#\#**LotShape: General shape of property**\#\#
+
+``` r
+data$LotShape<-as.integer(revalue(data$LotShape, c('IR3'=0, 'IR2'=1, 'IR1'=2, 'Reg'=3))) # Convert to integer
+table(data$LotShape)
+```
+
+    ## 
+    ##    0    1    2    3 
+    ##   16   76  968 1859
+
+``` r
+plot(data$LotShape,data$SalePrice)
+```
+
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-74-1.png)
