@@ -1508,8 +1508,8 @@ We will drop the variable BsmtFinSF2
 data <- subset(data, select = -BsmtFinSF2)
 ```
 
-**Now that we have taken care of Na’s let’s see which are the numeric
-variables.**
+*Now that we have taken care of Na’s let’s see which are the numeric
+variables.*
 
 ``` r
 colnames(data[,sapply(data, is.numeric)]) #check out which columns are numeric 
@@ -1528,13 +1528,19 @@ colnames(data[,sapply(data, is.numeric)]) #check out which columns are numeric
     ## [41] "PoolArea"      "PoolQC"        "MiscVal"       "MoSold"       
     ## [45] "YrSold"        "SalePrice"
 
+``` r
+plot(c(1:10),c(1:10))
+```
+
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-54-1.png)
+
 Let’s see also some correlations
 
 ``` r
 corrplot(cor(na.omit(data[,sapply(data, is.numeric)])),method = "square")
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-54-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-55-1.png)
 
 ``` r
 paste(which(cor(data[1:1459,sapply(data, is.numeric)],data[1:1459,'SalePrice'])>0.5 | cor(data[1:1459,sapply(data, is.numeric)],data[1:1459,'SalePrice'])<(-0.5)),collapse=',')
@@ -1567,7 +1573,7 @@ data <- data[,-1]
 plot(data$MSSubClass,data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-56-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-57-1.png)
 
 ``` r
 #In reality this is a factor and not numeric.
@@ -1598,7 +1604,7 @@ table(as.factor(data$OverallQual))
 plot(as.factor(data$OverallQual),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-57-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-58-1.png)
 
 ``` r
 data$OverallQual<-as.integer(data$OverallQual)
@@ -1623,7 +1629,7 @@ table(as.factor(data$OverallCond))
 plot(as.factor(data$OverallCond),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-58-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-59-1.png)
 
 ``` r
 data$OverallCond<-as.integer(data$OverallCond)
@@ -1640,7 +1646,7 @@ table(data$OverallCond)
 plot(as.factor(data$YearBuilt))
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-59-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-60-1.png)
 
 ``` r
 table(as.factor(data$YearBuilt))
@@ -1668,7 +1674,7 @@ table(as.factor(data$YearBuilt))
 plot(as.factor(data$YearBuilt),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-59-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-60-2.png)
 
 ``` r
 cor(data[1:1459,'SalePrice'],data[1:1459,'YearBuilt'])
@@ -1683,7 +1689,7 @@ or additions)**
 plot(as.factor(data$YearRemodAdd))
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-60-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-61-1.png)
 
 ``` r
 table(as.factor(data$YearRemodAdd))
@@ -1705,13 +1711,13 @@ table(as.factor(data$YearRemodAdd))
 plot(as.factor(data$YearRemodAdd),data$SalePrice)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-60-2.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-61-2.png)
 
 ``` r
 plot(data$YearRemodAdd,data$YearBuilt)
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-60-3.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-61-3.png)
 
 ``` r
 #We can see from the plot that all remodelings started on 1950. Is it true or there is some error?
@@ -1786,7 +1792,7 @@ colnames(data[,sapply(data, is.character)])
 plot(as.factor(data$Street))
 ```
 
-![](House_Prices_files/figure-markdown_github/unnamed-chunk-64-1.png)
+![](House_Prices_files/figure-markdown_github/unnamed-chunk-65-1.png)
 
 ``` r
 table(data$Street)

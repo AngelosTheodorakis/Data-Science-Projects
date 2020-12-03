@@ -518,10 +518,15 @@ data <- subset(data, select = -BsmtFinSF2)
 ```
 
 
-**Now that we have taken care of Na's let's see which are the numeric variables.**
+*Now that we have taken care of Na's let's see which are the numeric variables.*
+
 
 ```{r}
 colnames(data[,sapply(data, is.numeric)]) #check out which columns are numeric 
+```
+
+```{r}
+plot(c(1:10),c(1:10))
 ```
 
 Let's see also some correlations
