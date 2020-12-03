@@ -1670,28 +1670,10 @@ cor(data$YearRemodAdd>1950,data$YearBuilt>1950) #Highly correlated with Yearbuil
 
     ## [1] 0.6882729
 
-X1stFlrSF"
-==========
-
-GrLivArea"
-==========
-
-FullBath"
-=========
-
-TotRmsAbvGrd"
-=============
-
-FireplaceQu"
-============
-
-GarageFinish"
-=============
-
 **Pool Area**
 
 ``` r
-table(data$PoolArea) #we'll drop this variable
+table(data$PoolArea) # We'll drop this variable (most observations belong to one parameter)
 ```
 
     ## 
@@ -1701,6 +1683,21 @@ table(data$PoolArea) #we'll drop this variable
 ``` r
 data <- subset(data, select = -c(PoolArea))
 ```
+
+Afer examining the above numeric variables, we also need to examine the
+remaining character variables.
+
+``` r
+colnames(data[,sapply(data, is.character)]) 
+```
+
+    ##  [1] "Street"        "LotShape"      "LandContour"   "LotConfig"    
+    ##  [5] "LandSlope"     "Neighborhood"  "Condition1"    "Condition2"   
+    ##  [9] "BldgType"      "HouseStyle"    "RoofStyle"     "RoofMatl"     
+    ## [13] "Exterior1st"   "Exterior2nd"   "ExterQual"     "ExterCond"    
+    ## [17] "Foundation"    "Heating"       "HeatingQC"     "CentralAir"   
+    ## [21] "Electrical"    "KitchenQual"   "PavedDrive"    "SaleType"     
+    ## [25] "SaleCondition"
 
 **PoolQC**
 
@@ -1715,20 +1712,6 @@ table(data$PoolQC) #we'll drop this variable
 ``` r
 data <- subset(data, select = -c(PoolQC))
 ```
-
-**check out which columns are character**
-
-``` r
-colnames(data[,sapply(data, is.character)]) 
-```
-
-    ##  [1] "Street"        "LotShape"      "LandContour"   "LotConfig"    
-    ##  [5] "LandSlope"     "Neighborhood"  "Condition1"    "Condition2"   
-    ##  [9] "BldgType"      "HouseStyle"    "RoofStyle"     "RoofMatl"     
-    ## [13] "Exterior1st"   "Exterior2nd"   "ExterQual"     "ExterCond"    
-    ## [17] "Foundation"    "Heating"       "HeatingQC"     "CentralAir"   
-    ## [21] "Electrical"    "KitchenQual"   "PavedDrive"    "SaleType"     
-    ## [25] "SaleCondition"
 
 **Street: Type of road access to property **
 
@@ -1751,14 +1734,3 @@ table(data$Street)
 #removing Street variable 
 data <- subset(data, select = -Street)
 ```
-
-library(caret) library(glmnet) my\_control \<-trainControl(method=“cv”,
-number=5) lassoGrid \<- expand.grid(alpha = 1, lambda = seq(0.001,0.1,by
-= 0.0005))
-
-lasso\_mod \<- train(x=train,
-y=data*S**a**l**e**P**r**i**c**e*\[!*i**s*.*n**a*(*d**a**t**a*SalePrice)\],
-method=‘glmnet’, trControl= my\_control, tuneGrid=lassoGrid)
-lasso\_mod$bestTune
-
-############################################################################

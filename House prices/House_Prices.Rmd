@@ -614,24 +614,19 @@ plot(data$YearRemodAdd,data$YearBuilt)
 cor(data$YearRemodAdd>1950,data$YearBuilt>1950) #Highly correlated with Yearbuilt
 ```
 
-
-# X1stFlrSF"  
-# GrLivArea"   
-# FullBath"   
-# TotRmsAbvGrd" 
-# FireplaceQu" 
-# GarageFinish"
- 
- 
- 
- 
- 
 **Pool Area**
 
 ```{r}
-table(data$PoolArea) #we'll drop this variable
+table(data$PoolArea) # We'll drop this variable (most observations belong to one parameter)
 data <- subset(data, select = -c(PoolArea))
 ```
+
+Afer examining the above numeric variables, we also need to examine the remaining character variables.
+
+```{r}
+colnames(data[,sapply(data, is.character)]) 
+```
+ 
 
 **PoolQC**
 
@@ -641,10 +636,6 @@ data <- subset(data, select = -c(PoolQC))
 ```
 
 
-**check out which columns are character**
-```{r}
-colnames(data[,sapply(data, is.character)]) 
-```
 
 **Street: Type of road access to property **
 
@@ -656,14 +647,5 @@ table(data$Street)
 data <- subset(data, select = -Street)
 ```
 
-library(caret)
-library(glmnet)
-my_control <-trainControl(method="cv", number=5)
-lassoGrid <- expand.grid(alpha = 1, lambda = seq(0.001,0.1,by = 0.0005))
-
-lasso_mod <- train(x=train, y=data$SalePrice[!is.na(data$SalePrice)], method='glmnet', trControl= my_control, tuneGrid=lassoGrid) 
-lasso_mod$bestTune
 
 
-
-############################################################################
