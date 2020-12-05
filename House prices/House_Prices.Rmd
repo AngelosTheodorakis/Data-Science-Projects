@@ -12,14 +12,16 @@ output:
 knitr::opts_chunk$set(echo = TRUE,warning=FALSE,message=FALSE)
 ```
 
-First, we will load the libraries we need.
+# House Prices: Prediction and Data analysis #
+
+* First, we will load the libraries we need.
 
 ```{r}
 library(plyr)
 library(dplyr)
 ```
 
-Then we load the data, the train and the test set seperately.
+* Then we load the data, the train and the test set seperately.
 
 ```{r}
 setwd("C:/Users/User/Desktop/Άγγελος/R/Data analysis/House prices/house-prices-advanced-regression-techniques")
@@ -27,20 +29,20 @@ train<-read.csv("train.csv",stringsAsFactors = FALSE)
 test<-read.csv("test.csv",header=TRUE,stringsAsFactors = FALSE)
 ```
 
-We can add the SalePrice variable in the test set as NA.
+* We can add the SalePrice variable in the test set as NA.
 
 ```{r}
 test$SalePrice <- NA
 ```
 
-Now we combine the test and train set and explore our data.
+* Now we combine the test and train set and explore our data.
 
 ```{r}
 data <- rbind(train,test)
 str(data)
 ```
 
-Let's explore SalePrice variable, which is the one we want to predict.
+* Let's explore SalePrice variable, which is the variable we want to predict.
 
 ```{r}
 summary(data$SalePrice) # We can see that the median for the sales price is 163000
@@ -48,7 +50,7 @@ data$SalePrice<-as.numeric(data$SalePrice) # Change to numeric
 hist(data$SalePrice, breaks=30, xlab = 'Price', main = 'Histogram of Sale Price') # There is a slightly skewed distribution to the right, possibly because of the extreme values.
 ```
 
-We will now check for missing values.
+* We will now check for missing values.
 
 ```{r}
 sort(sapply(data, function(x) sum(is.na(x))),decreasing=TRUE)
@@ -57,7 +59,7 @@ plot(sort(sapply(data, function(x) sum(is.na(x))),decreasing=TRUE),type='h')
 
 There are some columns with lots of missing values. However, in most cases these are not missing values, but an indication that the apartment doesn't have these amenities. So let's replace these Na's with 'None' and explore these variables.
 
-**PoolQC:  Pool quality**
+## **PoolQC:  Pool quality** ##
 <br>
 This is the first variable we will examine. From the documentation, we observe that indeed, the 'NA' value in this variable means that there is no pool. We will also replace the values with integers from 0 to 5 as long as it is a scaling variable.<br>
 We will continue in a similar way with the other variables that have missing values.
@@ -70,7 +72,7 @@ data$PoolQC<-revalue(data$PoolQC,Qual_Cond)
 data$PoolQC<-as.integer(data$PoolQC)
 ```
 
-**MiscFeature: Miscellaneous feature not covered in other categories**
+## **MiscFeature: Miscellaneous feature not covered in other categories** ##
 
 ```{r}
 table(data$MiscFeature)
@@ -80,7 +82,7 @@ data$MiscFeature<-as.factor(data$MiscFeature)
 plot(data$MiscFeature)
 ```
 
-**Alley: Type of alley access to property** 
+## **Alley: Type of alley access to property** ##
 
 ```{r}
 table(data$Alley)
@@ -90,7 +92,7 @@ plot(data$Alley,data$SalePrice) #Seems to affect the price
 table(data$Alley)
 ```
 
-**Fence: Fence quality**
+## **Fence: Fence quality** ##
 
 ```{r}
 table(data$Fence)
@@ -100,7 +102,7 @@ plot(data$Fence,data$SalePrice) # Seems to affect the price. The 'no fence' vari
 table(data$Fence)
 ```
 
-**FireplaceQu: Fireplace quality**
+## **FireplaceQu: Fireplace quality** ##
 
 ```{r}
 table(data$FireplaceQu)
@@ -112,7 +114,7 @@ abline(lm(data$SalePrice~data$FireplaceQu))
 table(data$FireplaceQu)
 ```
 
-**LotFrontage: Linear feet of street connected to property.**
+## **LotFrontage: Linear feet of street connected to property.** ##
 
  There are 259 NA's. We will replace the missing values with the median and not the mean, because of the extreme values (outliers).
 
@@ -124,7 +126,7 @@ plot(data$LotFrontage,data$SalePrice) # There are 2 extreme values
 data$LotFrontage[is.na(data$LotFrontage)]<-median(na.omit(as.numeric(data$LotFrontage)))
 ```
 
-**GarageYrBlt**
+## **GarageYrBlt** ##
 
 ```{r}
 summary(data$GarageYrBlt)
@@ -152,7 +154,7 @@ Indeed the year the house was built is in most cases the same as the year the ga
 data <- subset(data, select = -GarageYrBlt)
 ```
 
-**GarageFinish:Interior finish of the garage**
+## **GarageFinish:Interior finish of the garage** ##
 
 ```{r}
 plot(as.factor(data$GarageFinish))
@@ -166,7 +168,7 @@ data$GarageFinish<-as.integer(data$GarageFinish)
 plot(data$GarageFinish,data$SalePrice)
 ```
 
-**GarageQual: Garage quality**
+## **GarageQual: Garage quality** ##
 
 ```{r}
 table(data$GarageQual)
@@ -178,7 +180,7 @@ table(data$GarageQual)
 data$GarageQual<-as.integer(data$GarageQual)
 ```
 
-**GarageCond: Garage condition**
+## **GarageCond: Garage condition** ##
 
 ```{r}
 table(data$GarageCond)
@@ -209,7 +211,7 @@ We'll drop the variable less correlated with sales price
 data <- subset(data, select = -GarageCond)
 ```
 
-**GarageType: Garage location**
+## **GarageType: Garage location** ##
 
 ```{r}
 table(data$GarageType)
@@ -221,7 +223,7 @@ plot(data$GarageType,data$SalePrice)
 ```
 
 
-**BsmtCond:Evaluates the general condition of the basement**
+## **BsmtCond:Evaluates the general condition of the basement** ##
 
 ```{r}
 table(data$BsmtCond)
@@ -235,7 +237,7 @@ plot(as.factor(data$BsmtCond),data$SalePrice)
 ```
 There seems to be a correlation with the house price.
 
-**BsmtExposure:Refers to walkout or garden level walls**
+## **BsmtExposure:Refers to walkout or garden level walls** ##
 
 ```{r}
 table(data$BsmtExposure)
@@ -251,7 +253,7 @@ plot(as.factor(data$BsmtExposure),data$SalePrice)
 
 
 
-**BsmtQual:Evaluates the height of the basement**
+## **BsmtQual:Evaluates the height of the basement** ##
 ```{r}
 table(data$BsmtQual)
 plot(as.factor(data$BsmtQual),data$SalePrice)
@@ -263,7 +265,7 @@ data$BsmtQual<-as.integer(data$BsmtQual)
 plot(as.factor(data$BsmtQual),data$SalePrice)
 ```
 
-**BsmtFinType1:Rating of basement finished area**
+## **BsmtFinType1:Rating of basement finished area** ##
 
 ```{r}
 table(data$BsmtFinType1)
@@ -278,7 +280,7 @@ plot(as.factor(data$BsmtFinType1),data$SalePrice)
 ```
 
 
-**BsmtFinType2:Rating of basement finished area (if multiple types)**
+## **BsmtFinType2:Rating of basement finished area (if multiple types)** ##
 
 ```{r}
 table(data$BsmtFinType2)
@@ -291,7 +293,7 @@ data$BsmtFinType2<-as.integer(data$BsmtFinType2)
 plot(as.factor(data$BsmtFinType2),data$SalePrice)
 ```
 
-**MasVnrType: Masonry veneer type (walls).**
+## **MasVnrType: Masonry veneer type (walls).** ##
 
 ```{r}
 table(data$MasVnrType)
@@ -304,7 +306,7 @@ data$MasVnrType<-as.integer(data$MasVnrType)
 plot(as.factor(data$MasVnrType),data$SalePrice)
 ```
 
-**MasVnrArea: Masonry veneer area in square feet**
+## **MasVnrArea: Masonry veneer area in square feet** ##
 
 ```{r}
 plot(data$MasVnrArea,data$SalePrice)
@@ -313,7 +315,7 @@ data$MasVnrArea<-as.numeric(data$MasVnrArea)
 plot(data$MasVnrArea,data$SalePrice)
 ```
 
-**MSZoning: Identifies the general zoning classification of the sale.**
+## **MSZoning: Identifies the general zoning classification of the sale.** ##
 
 ```{r}
 table(data$MSZoning)
@@ -343,7 +345,7 @@ data[is.na(data$MSZoning),c("MSZoning",'MSSubClass')]
 data$MSZoning<-as.factor(data$MSZoning)
 ```
 
-**Utilities: Type of utilities available**
+## **Utilities: Type of utilities available** ##
 
 We don't need this variable for prediction , as there is only one house "NoSeWa".
 
@@ -352,7 +354,7 @@ table(data$Utilities)
 data <- subset(data, select = -Utilities)
 ```
 
-**BsmtFullBath:Basement full bathrooms**
+## **BsmtFullBath:Basement full bathrooms** ##
 
 
 ```{r}
@@ -379,7 +381,7 @@ plot(as.factor(data$BsmtFullBath),data$SalePrice)
 data$BsmtFullBath<-as.integer(data$BsmtFullBath)
 ```
 
-**BsmtHalfBath: Basement half bathrooms**
+## **BsmtHalfBath: Basement half bathrooms** ##
 
 We proceed with the same way as above.
 
@@ -394,7 +396,7 @@ data$BsmtHalfBath<-as.integer(data$BsmtHalfBath)
 cor(data$BsmtHalfBath,data$BsmtFullBath) #It is not correlated
 ```
 
-**Functional: Home functionality (Assume typical unless deductions are warranted)**
+## **Functional: Home functionality (Assume typical unless deductions are warranted)** ##
 
 ```{r}
 table(data$Functional)
@@ -410,7 +412,7 @@ data$Functional <- as.integer(revalue(data$Functional, Functional))
 table(data$Functional)
 ```
 
-**GarageCars Size of garage in car capacity** 
+## **GarageCars Size of garage in car capacity** ##
 
 ```{r}
 table(as.factor(data$GarageCars))
@@ -423,7 +425,7 @@ data$GarageCars<-as.integer(data$GarageCars)
 ```
 
 
-**GarageArea**
+## **GarageArea** ##
 
 ```{r}
 paste(colnames(select(data,contains("Garage"))),collapse="','")
@@ -454,7 +456,7 @@ We'll drop the GarageArea variable, since it is less corellated with sales Price
 data <- subset(data, select = -GarageArea)
 ```
 
-**TotalBsmtSF : Total square feet of basement area**
+## **TotalBsmtSF : Total square feet of basement area** ##
 
 ```{r}
 plot(data$TotalBsmtSF,data$SalePrice)
@@ -465,7 +467,7 @@ data[is.na(data$TotalBsmtSF),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType
 data$TotalBsmtSF[is.na(data$TotalBsmtSF)]<-0 # Replace missing value with zero
 ```
 
-**BsmtFinSF1: Type 1 finished square feet**   
+## **BsmtFinSF1: Type 1 finished square feet** ## 
 
 ```{r}
 plot(data$BsmtFinSF1,data$SalePrice)
@@ -476,7 +478,7 @@ data[is.na(data$BsmtFinSF1),c('BsmtQual','BsmtCond','BsmtExposure','BsmtFinType1
 data$BsmtFinSF1[is.na(data$BsmtFinSF1)]<-0 # Replace missing value with zero
 ```
 
-**BsmtUnfSF: Unfinished square feet of basement area**
+## **BsmtUnfSF: Unfinished square feet of basement area** ##
 
 ```{r}
 plot(data$BsmtUnfSF,data$SalePrice)
@@ -496,7 +498,7 @@ cor(data$BsmtUnfSF,data[,sapply(data, is.numeric)])
 It is correlated with BsmtFinSF1 (-0.476). <br>
 We continue with the next variable
 
-**BsmtFinSF2: Type 2 finished square feet**  
+## **BsmtFinSF2: Type 2 finished square feet** ##   
 
 ```{r}
 plot(data$BsmtFinSF2,data$SalePrice)
@@ -537,7 +539,7 @@ data <- subset(data, select = -BsmtHalfBath)
 ```
 
 
-##*Now that we have taken care of Na's let's see which are the numeric variables.*##
+## **Now that we have taken care of Na's let's see which are the numeric variables.** ##
 
 
 ```{r}
@@ -552,10 +554,13 @@ corrplot(cor(na.omit(data[,sapply(data, is.numeric)])),method = "square")
 paste(which(cor(data[1:1459,sapply(data, is.numeric)],data[1:1459,'SalePrice'])>0.5 | cor(data[1:1459,sapply(data, is.numeric)],data[1:1459,'SalePrice'])<(-0.5)),collapse=',') # Check for high or low correlations
 ```
 
-colnames(data[,sapply(data,is.numeric)][c(5,7,8,11,17,20,23,27,30,31,32,44)])
+So the numeric variables that have the highest correlation with the Saleprice are the following:
 
+```{r}
+colnames(data[,sapply(data,is.numeric)][c(5,7,8,11,18,19,22,24,28,31,32,33,45)])
+```
 
-**Id**
+## **Id** ##
 We will get rid of the Id column and keep it in a vector called Id
 
 ```{r}
@@ -563,20 +568,20 @@ Id<-data$Id[1461:nrow(data)]
 data <- data[,-1]
 ```
 
-**MSSubClass: Identifies the type of dwelling involved in the sale.**
+## **MSSubClass: Identifies the type of dwelling involved in the sale.** ##
 
 ```{r}
 plot(data$MSSubClass,data$SalePrice)
 ```
 
-In reality this is a factor and not numeric. 
+**In reality this is a factor and not numeric.**
 
 ```{r}
 table(as.factor(data$MSSubClass))
 data$MSSubClass<-as.factor(data$MSSubClass) # Change into factor variable
 ```
 
-**OverallQual: Rates the overall material and finish of the house**
+## **OverallQual: Rates the overall material and finish of the house** ##
 
 ```{r}
 table(as.factor(data$OverallQual))
@@ -585,7 +590,7 @@ data$OverallQual<-as.integer(data$OverallQual) # Change into integer variable
 table(data$OverallQual)
 ```
 
-**OverallCond: Rates the overall condition of the house**
+## **OverallCond: Rates the overall condition of the house** ##
 
 ```{r}
 table(as.factor(data$OverallCond))
@@ -594,7 +599,7 @@ data$OverallCond<-as.integer(data$OverallCond)
 table(data$OverallCond)
 ```
 
-**YearBuilt: Original construction date**
+## **YearBuilt: Original construction date** ##
 
 ```{r}
 plot(as.factor(data$YearBuilt))
@@ -603,7 +608,7 @@ plot(as.factor(data$YearBuilt),data$SalePrice)
 cor(data[1:1459,'SalePrice'],data[1:1459,'YearBuilt'])
 ```
 
-**YearRemodAdd: Remodel date (same as construction date if no remodeling or additions)**
+## **YearRemodAdd: Remodel date (same as construction date if no remodeling or additions)** ##
 
 ```{r}
 plot(as.factor(data$YearRemodAdd))
@@ -617,7 +622,7 @@ plot(as.factor(data$YearRemodAdd),data$SalePrice)
 ```
 
 
-**Pool Area**
+## **Pool Area** ##
 
 ```{r}
 table(data$PoolArea) # We'll drop this variable (most observations belong to one parameter)
@@ -681,4 +686,68 @@ table(data$LotShape)
 plot(data$LotShape,data$SalePrice)
 ```
 
+
+# **Prediction** #
+
+## **Using multiple regression** ##
+Now that we have taken care of most variables, we will use a multiple regression to predict the prices on the test set and submit our predictions to Kaggle. <br>
+
+First, let's examine the skewness of variable we want to predict
+
+```{r}
+qqnorm(data$SalePrice)
+qqline(data$SalePrice)
+```
+
+Our variable is not normally distributed  so we will take the log of SalePrice.
+
+```{r}
+data$SalePrice <- log(data$SalePrice)
+qqnorm(data$SalePrice)
+qqline(data$SalePrice)
+```
+
+The log transformation seems to have solved this problem.
+
+* We will now split our dataset in train and test set 
+
+```{r}
+train_data <- data[!is.na(data$SalePrice),]
+test_data <- data[is.na(data$SalePrice),]
+```
+
+```{r}
+fit <- lm(SalePrice ~. , data=train_data)
+summary(fit)
+
+```
+
+**Let's remove some variables with low p-value that don't seem important and run the regression again**
+
+```{r}
+fit <- lm(SalePrice ~.-Electrical-Exterior1st-Exterior2nd-ExterQual-ExterCond-Fence-MiscFeature-RoofStyle, data=train_data)
+summary(fit)
+```
+
+
+```{r}
+fit$xlevels[["MSSubClass"]] <- union(fit$xlevels[["MSSubClass"]], levels(train_data$MSSubClass))
+pred <- predict(fit, data=test_data)
+pr <- exp(pred)
+```
+
+```{r}
+summary(pr)
+df <- data.frame(Id,pr)
+colnames(df)<-c("Id","SalePrice")
+which(is.na(df))
+```
+## **We have 3 NA's (further investigate... for now we will use the mean)** ##
+```{r}
+df[is.na(df$SalePrice), "SalePrice"] <- mean(df$SalePrice, na.rm = TRUE)
+```
+
+```{r}
+write.csv(df,"C:/Users/User/Desktop/Άγγελος/R/Data analysis/House prices/house-prices-advanced-regression-techniques\\submission.csv", row.names = FALSE)
+```
 
