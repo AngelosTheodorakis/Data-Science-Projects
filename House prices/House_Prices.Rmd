@@ -456,6 +456,16 @@ We'll drop the GarageArea variable, since it is less corellated with sales Price
 data <- subset(data, select = -GarageArea)
 ```
 
+
+## **KitchenQual: Kitchen quality** ##
+```{r}
+table(data$KitchenQual)
+data$KitchenQual[is.na(data$KitchenQual)] <- 'TA' #replace with most common value
+KitchenQual <- c('None' = 0, 'Po' = 1, 'Fa' = 2, 'TA' = 3, 'Gd' = 4, 'Ex' = 5)
+data$KitchenQual<-revalue(data$KitchenQual,KitchenQual)
+data$KitchenQual<-as.integer(data$KitchenQual)
+```
+
 ## **TotalBsmtSF : Total square feet of basement area** ##
 
 ```{r}
@@ -560,13 +570,7 @@ So the numeric variables that have the highest correlation with the Saleprice ar
 colnames(data[,sapply(data,is.numeric)][c(5,7,8,11,18,19,22,24,28,31,32,33,45)])
 ```
 
-## **Id** ##
-We will get rid of the Id column and keep it in a vector called Id
 
-```{r}
-Id<-data$Id[1461:nrow(data)]
-data <- data[,-1]
-```
 
 ## **MSSubClass: Identifies the type of dwelling involved in the sale.** ##
 
@@ -589,6 +593,13 @@ plot(as.factor(data$OverallQual),data$SalePrice)
 data$OverallQual<-as.integer(data$OverallQual) # Change into integer variable
 table(data$OverallQual)
 ```
+This seems very important variable for our predictions. Let's see what will happen if we run a regression just with this variable.
+
+```{r}
+linreg_qual <- lm(SalePrice ~ OverallQual, data=data)
+summary(linreg_qual)
+```
+We have a very high R-sqaure of 0.66! Just this variable is able to explain much variance in our model.
 
 ## **OverallCond: Rates the overall condition of the house** ##
 
@@ -618,7 +629,7 @@ table(as.factor(data$YearRemodAdd))
 Interestingly, we observe that after year 2006 there is a sudden decrease in remodelings.
 
 ```{r}
-plot(as.factor(data$YearRemodAdd),data$SalePrice)
+plot(data$YearRemodAdd,data$SalePrice)
 ```
 
 
@@ -634,6 +645,38 @@ data <- subset(data, select = -c(PoolArea))
 ```{r}
 table(data$PoolQC) #we'll drop this variable
 data <- subset(data, select = -c(PoolQC))
+```
+
+## **FullBath: Full bathrooms above grade** ##
+We will convert this to integer
+
+```{r}
+table(data$FullBath) 
+FullBath <- as.integer(data$FullBath)
+```
+
+## **TotRmsAbvGrd: Total rooms above grade (does not include bathrooms)** ##
+We will convert this to integer
+
+```{r}
+table(data$TotRmsAbvGrd) 
+TotRmsAbvGrd <- as.integer(data$TotRmsAbvGrd)
+```
+
+## **GarageCars: Size of garage in car capacity** ##
+We will convert this to integer
+
+```{r}
+table(data$GarageCars) 
+GarageCars <- as.integer(data$GarageCars)
+```
+
+## **GrLivArea: Above grade (ground) living area square feet** ##
+
+
+```{r}
+plot(data$GrLivArea,data$SalePrice)
+which(data[,"GrLivArea"]>4600) # outliers
 ```
 
 ## **Afer examining the above numeric variables, we also need to examine the remaining character variables.** ##
@@ -686,6 +729,14 @@ table(data$LotShape)
 plot(data$LotShape,data$SalePrice)
 ```
 
+## **ExterQual: Evaluates the quality of the material on the exterior** ##
+
+```{r}
+table(data$ExterQual)
+ExterQual <- c('None' = 0, 'Po' = 1, 'Fa' = 2, 'TA' = 3, 'Gd' = 4, 'Ex' = 5)
+data$ExterQual<-revalue(data$ExterQual,ExterQual)
+data$ExterQual<-as.integer(data$ExterQual)
+```
 
 # **Prediction** #
 
@@ -722,10 +773,19 @@ summary(fit)
 
 ```
 
+## **Id** ##
+We will get rid of the Id column and keep it in a vector called Id
+
+```{r}
+Id<-data[is.na(data$SalePrice),"Id"]
+data <- data[,-1]
+```
+
+cor(data[,sapply(data, is.numeric)],data$GrLivArea)
 **Let's remove some variables with low p-value that don't seem important and run the regression again**
 
 ```{r}
-fit <- lm(SalePrice ~.-Electrical-Exterior1st-Exterior2nd-ExterQual-ExterCond-Fence-MiscFeature-RoofStyle, data=train_data)
+fit <- lm(SalePrice ~.-Electrical-Exterior1st-Exterior2nd-ExterCond-Fence-MiscFeature-RoofStyle-PavedDrive-BldgType-LotShape-Alley-HouseStyle-MasVnrType-MasVnrArea-MiscVal-MoSold-YrSold-LandContour-BsmtFinSF1-BsmtFinType2-BedroomAbvGr-Fireplaces-Heating-KitchenAbvGr-OpenPorchSF, data=train_data)
 summary(fit)
 ```
 
@@ -742,10 +802,7 @@ df <- data.frame(Id,pr)
 colnames(df)<-c("Id","SalePrice")
 which(is.na(df))
 ```
-## **We have 3 NA's (further investigate... for now we will use the mean)** ##
-```{r}
-df[is.na(df$SalePrice), "SalePrice"] <- mean(df$SalePrice, na.rm = TRUE)
-```
+
 
 ```{r}
 write.csv(df,"C:/Users/User/Desktop/Άγγελος/R/Data analysis/House prices/house-prices-advanced-regression-techniques\\submission.csv", row.names = FALSE)
