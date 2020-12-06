@@ -8,4 +8,4 @@ My Kaggle ranking was in the middle of the board. This is not bad, because I did
 It is possible to get much better predictions with feature engineering, by making some new variables like Total number of Bathrooms, Adding ‘House Age’ variable, Binning the Neighborhood variable, Total Square Feet etc. <br>
 I will return in the future and apply some new concepts, in order to make more accurate predictions.
 
-<img src="https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/images/corrplot.png?raw=true" width="500" height="500" />
+<img src="https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/images/corrplot.png?raw=true" width="500" height="400" />
