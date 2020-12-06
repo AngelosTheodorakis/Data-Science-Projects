@@ -760,39 +760,39 @@ qqline(data$SalePrice)
 
 The log transformation seems to have solved this problem.
 
-* We will now split our dataset in train and test set 
+## **Id** ##
+We will  keep id in a vector called Id
+
+```{r}
+Id<-data[is.na(data$SalePrice),"Id"]
+```
+
+## **We will now split our dataset in train and test set** ## 
 
 ```{r}
 train_data <- data[!is.na(data$SalePrice),]
 test_data <- data[is.na(data$SalePrice),]
 ```
 
+
+
 ```{r}
 fit <- lm(SalePrice ~. , data=train_data)
 summary(fit)
-
 ```
 
-## **Id** ##
-We will get rid of the Id column and keep it in a vector called Id
 
-```{r}
-Id<-data[is.na(data$SalePrice),"Id"]
-data <- data[,-1]
-```
 
-cor(data[,sapply(data, is.numeric)],data$GrLivArea)
 **Let's remove some variables with low p-value that don't seem important and run the regression again**
 
 ```{r}
-fit <- lm(SalePrice ~.-Electrical-Exterior1st-Exterior2nd-ExterCond-Fence-MiscFeature-RoofStyle-PavedDrive-BldgType-LotShape-Alley-HouseStyle-MasVnrType-MasVnrArea-MiscVal-MoSold-YrSold-LandContour-BsmtFinSF1-BsmtFinType2-BedroomAbvGr-Fireplaces-Heating-KitchenAbvGr-OpenPorchSF, data=train_data)
+fit <- lm(SalePrice ~ OverallQual+FullBath+KitchenQual+FireplaceQu+OverallCond+YearBuilt+GrLivArea+GarageCars+TotalBsmtSF+RoofMatl+LotArea, data=train_data)
 summary(fit)
 ```
 
-
 ```{r}
 fit$xlevels[["MSSubClass"]] <- union(fit$xlevels[["MSSubClass"]], levels(train_data$MSSubClass))
-pred <- predict(fit, data=test_data)
+pred <- predict(fit, test_data)
 pr <- exp(pred)
 ```
 

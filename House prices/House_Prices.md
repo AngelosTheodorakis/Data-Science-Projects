@@ -2006,7 +2006,17 @@ qqline(data$SalePrice)
 
 The log transformation seems to have solved this problem.
 
--   We will now split our dataset in train and test set
+**Id**
+------
+
+We will keep id in a vector called Id
+
+``` r
+Id<-data[is.na(data$SalePrice),"Id"]
+```
+
+**We will now split our dataset in train and test set**
+-------------------------------------------------------
 
 ``` r
 train_data <- data[!is.na(data$SalePrice),]
@@ -2253,183 +2263,54 @@ summary(fit)
     ## Multiple R-squared:  0.9405, Adjusted R-squared:  0.9303 
     ## F-statistic: 92.34 on 213 and 1245 DF,  p-value: < 2.2e-16
 
-**Id**
-------
-
-We will get rid of the Id column and keep it in a vector called Id
+**Let’s remove some variables with low p-value that don’t seem important
+and run the regression again**
 
 ``` r
-Id<-data[is.na(data$SalePrice),"Id"]
-data <- data[,-1]
-```
-
-cor(data\[,sapply(data, is.numeric)\],data$GrLivArea) **Let’s remove
-some variables with low p-value that don’t seem important and run the
-regression again**
-
-``` r
-fit <- lm(SalePrice ~.-Electrical-Exterior1st-Exterior2nd-ExterCond-Fence-MiscFeature-RoofStyle-PavedDrive-BldgType-LotShape-Alley-HouseStyle-MasVnrType-MasVnrArea-MiscVal-MoSold-YrSold-LandContour-BsmtFinSF1-BsmtFinType2-BedroomAbvGr-Fireplaces-Heating-KitchenAbvGr-OpenPorchSF, data=train_data)
+fit <- lm(SalePrice ~ OverallQual+FullBath+KitchenQual+FireplaceQu+OverallCond+YearBuilt+GrLivArea+GarageCars+TotalBsmtSF+RoofMatl+LotArea, data=train_data)
 summary(fit)
 ```
 
     ## 
     ## Call:
-    ## lm(formula = SalePrice ~ . - Electrical - Exterior1st - Exterior2nd - 
-    ##     ExterCond - Fence - MiscFeature - RoofStyle - PavedDrive - 
-    ##     BldgType - LotShape - Alley - HouseStyle - MasVnrType - MasVnrArea - 
-    ##     MiscVal - MoSold - YrSold - LandContour - BsmtFinSF1 - BsmtFinType2 - 
-    ##     BedroomAbvGr - Fireplaces - Heating - KitchenAbvGr - OpenPorchSF, 
-    ##     data = train_data)
+    ## lm(formula = SalePrice ~ OverallQual + FullBath + KitchenQual + 
+    ##     FireplaceQu + OverallCond + YearBuilt + GrLivArea + GarageCars + 
+    ##     TotalBsmtSF + RoofMatl + LotArea, data = train_data)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -0.72539 -0.04820  0.00104  0.05470  0.72539 
+    ## -1.66903 -0.06724  0.00552  0.07875  0.47665 
     ## 
-    ## Coefficients: (1 not defined because of singularities)
-    ##                        Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)           2.599e+00  7.954e-01   3.268 0.001111 ** 
-    ## Id                   -5.633e-06  7.013e-06  -0.803 0.422016    
-    ## MSSubClass30         -4.320e-02  2.050e-02  -2.107 0.035291 *  
-    ## MSSubClass40          4.887e-04  5.981e-02   0.008 0.993481    
-    ## MSSubClass45         -6.923e-03  3.640e-02  -0.190 0.849165    
-    ## MSSubClass50          8.639e-03  1.812e-02   0.477 0.633556    
-    ## MSSubClass60         -2.506e-02  1.964e-02  -1.276 0.202196    
-    ## MSSubClass70          2.583e-02  2.581e-02   1.001 0.317193    
-    ## MSSubClass75         -1.183e-02  3.923e-02  -0.302 0.763002    
-    ## MSSubClass80         -3.105e-03  1.732e-02  -0.179 0.857778    
-    ## MSSubClass85         -1.951e-02  2.659e-02  -0.734 0.463167    
-    ## MSSubClass90         -4.644e-02  2.100e-02  -2.212 0.027161 *  
-    ## MSSubClass120        -4.966e-02  1.809e-02  -2.745 0.006126 ** 
-    ## MSSubClass160        -1.180e-01  2.810e-02  -4.200 2.85e-05 ***
-    ## MSSubClass180        -5.864e-02  4.837e-02  -1.212 0.225554    
-    ## MSSubClass190        -2.901e-02  2.712e-02  -1.070 0.284854    
-    ## MSZoningFV            4.207e-01  5.335e-02   7.886 6.49e-15 ***
-    ## MSZoningRH            4.164e-01  5.322e-02   7.824 1.03e-14 ***
-    ## MSZoningRL            3.987e-01  4.485e-02   8.888  < 2e-16 ***
-    ## MSZoningRM            3.568e-01  4.181e-02   8.535  < 2e-16 ***
-    ## LotFrontage           4.191e-04  1.913e-04   2.191 0.028636 *  
-    ## LotArea               2.070e-06  4.267e-07   4.851 1.37e-06 ***
-    ## LotConfigCulDSac      2.986e-02  1.458e-02   2.048 0.040786 *  
-    ## LotConfigFR2         -3.131e-02  1.833e-02  -1.709 0.087773 .  
-    ## LotConfigFR3         -9.111e-02  5.806e-02  -1.569 0.116851    
-    ## LotConfigInside      -1.062e-02  8.028e-03  -1.323 0.186085    
-    ## LandSlopeMod          1.577e-02  1.567e-02   1.006 0.314642    
-    ## LandSlopeSev         -8.725e-02  4.531e-02  -1.926 0.054331 .  
-    ## NeighborhoodBlueste   2.856e-02  8.797e-02   0.325 0.745501    
-    ## NeighborhoodBrDale    1.017e-02  5.019e-02   0.203 0.839450    
-    ## NeighborhoodBrkSide   5.895e-02  4.079e-02   1.445 0.148616    
-    ## NeighborhoodClearCr   7.209e-02  3.950e-02   1.825 0.068183 .  
-    ## NeighborhoodCollgCr   9.061e-03  3.236e-02   0.280 0.779521    
-    ## NeighborhoodCrawfor   1.315e-01  3.758e-02   3.499 0.000483 ***
-    ## NeighborhoodEdwards  -2.723e-02  3.542e-02  -0.769 0.442255    
-    ## NeighborhoodGilbert   5.316e-03  3.416e-02   0.156 0.876363    
-    ## NeighborhoodIDOTRR    2.029e-02  4.675e-02   0.434 0.664329    
-    ## NeighborhoodMeadowV  -8.174e-02  4.968e-02  -1.645 0.100110    
-    ## NeighborhoodMitchel  -1.665e-02  3.601e-02  -0.462 0.643924    
-    ## NeighborhoodNAmes     1.099e-02  3.428e-02   0.320 0.748673    
-    ## NeighborhoodNoRidge   5.504e-02  3.701e-02   1.487 0.137244    
-    ## NeighborhoodNPkVill   4.684e-02  4.891e-02   0.958 0.338413    
-    ## NeighborhoodNridgHt   1.229e-01  3.198e-02   3.842 0.000128 ***
-    ## NeighborhoodNWAmes   -3.206e-03  3.539e-02  -0.091 0.927828    
-    ## NeighborhoodOldTown   4.367e-03  4.188e-02   0.104 0.916958    
-    ## NeighborhoodSawyer    5.630e-03  3.595e-02   0.157 0.875573    
-    ## NeighborhoodSawyerW   2.496e-04  3.462e-02   0.007 0.994249    
-    ## NeighborhoodSomerst   7.043e-02  3.947e-02   1.784 0.074596 .  
-    ## NeighborhoodStoneBr   1.400e-01  3.607e-02   3.883 0.000108 ***
-    ## NeighborhoodSWISU     1.168e-02  4.259e-02   0.274 0.783937    
-    ## NeighborhoodTimber    2.363e-02  3.614e-02   0.654 0.513399    
-    ## NeighborhoodVeenker   6.740e-02  4.623e-02   1.458 0.145050    
-    ## Condition1Feedr       3.068e-02  2.212e-02   1.387 0.165653    
-    ## Condition1Norm        7.771e-02  1.827e-02   4.254 2.24e-05 ***
-    ## Condition1PosA        3.956e-02  4.470e-02   0.885 0.376277    
-    ## Condition1PosN        8.313e-02  3.314e-02   2.509 0.012235 *  
-    ## Condition1RRAe       -2.936e-02  4.160e-02  -0.706 0.480415    
-    ## Condition1RRAn        5.376e-02  3.051e-02   1.762 0.078292 .  
-    ## Condition1RRNe       -4.888e-03  8.162e-02  -0.060 0.952255    
-    ## Condition1RRNn        6.698e-02  5.625e-02   1.191 0.233978    
-    ## Condition2Feedr       6.497e-02  1.020e-01   0.637 0.524333    
-    ## Condition2Norm        5.391e-02  8.655e-02   0.623 0.533429    
-    ## Condition2PosA        2.991e-01  1.435e-01   2.084 0.037349 *  
-    ## Condition2PosN       -8.023e-01  1.214e-01  -6.609 5.59e-11 ***
-    ## Condition2RRAe       -1.003e-01  1.441e-01  -0.696 0.486577    
-    ## Condition2RRAn       -1.654e-02  1.421e-01  -0.116 0.907388    
-    ## Condition2RRNn        6.975e-02  1.181e-01   0.591 0.554859    
-    ## OverallQual           4.496e-02  4.434e-03  10.140  < 2e-16 ***
-    ## OverallCond           3.713e-02  3.734e-03   9.944  < 2e-16 ***
-    ## YearBuilt             1.929e-03  3.463e-04   5.571 3.06e-08 ***
-    ## YearRemodAdd          3.649e-04  2.364e-04   1.544 0.122933    
-    ## RoofMatlCompShg       2.477e+00  1.408e-01  17.596  < 2e-16 ***
-    ## RoofMatlMembran       2.721e+00  1.855e-01  14.666  < 2e-16 ***
-    ## RoofMatlMetal         2.614e+00  1.880e-01  13.901  < 2e-16 ***
-    ## RoofMatlRoll          2.457e+00  1.796e-01  13.682  < 2e-16 ***
-    ## RoofMatlTar&Grv       2.473e+00  1.446e-01  17.098  < 2e-16 ***
-    ## RoofMatlWdShake       2.462e+00  1.515e-01  16.245  < 2e-16 ***
-    ## RoofMatlWdShngl       2.554e+00  1.463e-01  17.457  < 2e-16 ***
-    ## ExterQual             6.669e-03  9.387e-03   0.710 0.477541    
-    ## FoundationCBlock      9.387e-03  1.429e-02   0.657 0.511391    
-    ## FoundationPConc       3.361e-02  1.532e-02   2.194 0.028409 *  
-    ## FoundationSlab        1.904e-02  3.723e-02   0.512 0.609077    
-    ## FoundationStone       9.773e-02  4.727e-02   2.067 0.038908 *  
-    ## FoundationWood       -1.316e-01  6.795e-02  -1.937 0.053018 .  
-    ## BsmtQual              1.020e-02  7.472e-03   1.364 0.172652    
-    ## BsmtCond             -7.229e-03  9.148e-03  -0.790 0.429555    
-    ## BsmtExposure          1.194e-02  3.767e-03   3.170 0.001560 ** 
-    ## BsmtFinType1          4.467e-03  2.225e-03   2.008 0.044835 *  
-    ## BsmtUnfSF            -6.366e-05  1.206e-05  -5.277 1.53e-07 ***
-    ## TotalBsmtSF           1.384e-04  2.028e-05   6.824 1.34e-11 ***
-    ## HeatingQCFa          -3.809e-02  1.912e-02  -1.992 0.046537 *  
-    ## HeatingQCGd          -2.361e-02  9.369e-03  -2.520 0.011852 *  
-    ## HeatingQCPo          -9.680e-02  1.223e-01  -0.792 0.428688    
-    ## HeatingQCTA          -3.204e-02  9.038e-03  -3.545 0.000406 ***
-    ## CentralAirY           6.692e-02  1.541e-02   4.342 1.52e-05 ***
-    ## X1stFlrSF             2.613e-04  2.250e-05  11.614  < 2e-16 ***
-    ## X2ndFlrSF             2.378e-04  2.205e-05  10.786  < 2e-16 ***
-    ## LowQualFinSF          1.672e-04  7.042e-05   2.374 0.017748 *  
-    ## GrLivArea                    NA         NA      NA       NA    
-    ## BsmtFullBath          2.091e-02  8.321e-03   2.513 0.012072 *  
-    ## FullBath              2.144e-02  9.629e-03   2.227 0.026109 *  
-    ## HalfBath              3.253e-02  9.323e-03   3.489 0.000500 ***
-    ## KitchenQual           1.888e-02  7.346e-03   2.570 0.010284 *  
-    ## TotRmsAbvGrd          3.186e-03  3.750e-03   0.850 0.395713    
-    ## Functional            3.221e-02  4.901e-03   6.573 7.07e-11 ***
-    ## FireplaceQu           8.421e-03  2.176e-03   3.870 0.000114 ***
-    ## GarageTypeAttchd      6.989e-02  4.745e-02   1.473 0.140987    
-    ## GarageTypeBasment     7.277e-02  5.541e-02   1.313 0.189336    
-    ## GarageTypeBuiltIn     6.054e-02  4.972e-02   1.218 0.223550    
-    ## GarageTypeCarPort     3.068e-02  6.076e-02   0.505 0.613644    
-    ## GarageTypeDetchd      7.727e-02  4.717e-02   1.638 0.101622    
-    ## GarageTypeNone        1.538e-01  6.306e-02   2.438 0.014890 *  
-    ## GarageFinish          8.180e-03  5.378e-03   1.521 0.128515    
-    ## GarageCars            4.668e-02  7.190e-03   6.492 1.19e-10 ***
-    ## GarageQual            3.561e-02  1.311e-02   2.717 0.006675 ** 
-    ## WoodDeckSF            7.834e-05  2.626e-05   2.983 0.002907 ** 
-    ## EnclosedPorch         1.340e-04  5.467e-05   2.451 0.014386 *  
-    ## X3SsnPorch            1.587e-04  1.028e-04   1.544 0.122887    
-    ## ScreenPorch           2.669e-04  5.448e-05   4.899 1.08e-06 ***
-    ## SaleTypeCon           1.088e-01  8.155e-02   1.334 0.182553    
-    ## SaleTypeConLD         1.353e-01  4.362e-02   3.102 0.001962 ** 
-    ## SaleTypeConLI        -1.907e-02  5.323e-02  -0.358 0.720144    
-    ## SaleTypeConLw         3.308e-03  5.360e-02   0.062 0.950797    
-    ## SaleTypeCWD           6.667e-02  5.870e-02   1.136 0.256210    
-    ## SaleTypeNew           1.408e-01  7.099e-02   1.983 0.047572 *  
-    ## SaleTypeOth           9.475e-02  6.661e-02   1.422 0.155177    
-    ## SaleTypeWD            1.767e-03  1.898e-02   0.093 0.925851    
-    ## SaleConditionAdjLand  1.318e-01  5.938e-02   2.219 0.026671 *  
-    ## SaleConditionAlloca   5.769e-02  3.733e-02   1.545 0.122509    
-    ## SaleConditionFamily   1.735e-02  2.793e-02   0.621 0.534520    
-    ## SaleConditionNormal   7.472e-02  1.278e-02   5.845 6.36e-09 ***
-    ## SaleConditionPartial -1.181e-02  6.836e-02  -0.173 0.862808    
+    ## Coefficients:
+    ##                   Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)      7.629e-01  4.145e-01   1.841   0.0659 .  
+    ## OverallQual      6.590e-02  4.795e-03  13.744  < 2e-16 ***
+    ## FullBath        -1.331e-02  9.947e-03  -1.338   0.1811    
+    ## KitchenQual      4.576e-02  7.993e-03   5.725 1.26e-08 ***
+    ## FireplaceQu      1.883e-02  2.466e-03   7.634 4.11e-14 ***
+    ## OverallCond      6.001e-02  3.748e-03  16.011  < 2e-16 ***
+    ## YearBuilt        3.586e-03  1.932e-04  18.563  < 2e-16 ***
+    ## GrLivArea        2.603e-04  1.182e-05  22.014  < 2e-16 ***
+    ## GarageCars       6.342e-02  6.834e-03   9.280  < 2e-16 ***
+    ## TotalBsmtSF      1.616e-04  1.120e-05  14.430  < 2e-16 ***
+    ## RoofMatlCompShg  2.573e+00  1.541e-01  16.696  < 2e-16 ***
+    ## RoofMatlMembran  2.735e+00  2.085e-01  13.118  < 2e-16 ***
+    ## RoofMatlMetal    2.798e+00  2.099e-01  13.330  < 2e-16 ***
+    ## RoofMatlRoll     2.527e+00  2.088e-01  12.104  < 2e-16 ***
+    ## RoofMatlTar&Grv  2.581e+00  1.591e-01  16.224  < 2e-16 ***
+    ## RoofMatlWdShake  2.515e+00  1.652e-01  15.222  < 2e-16 ***
+    ## RoofMatlWdShngl  2.627e+00  1.617e-01  16.246  < 2e-16 ***
+    ## LotArea          3.128e-06  4.006e-07   7.809 1.10e-14 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.1075 on 1328 degrees of freedom
-    ##   (1 observation deleted due to missingness)
-    ## Multiple R-squared:  0.9341, Adjusted R-squared:  0.9277 
-    ## F-statistic: 144.9 on 130 and 1328 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 0.141 on 1442 degrees of freedom
+    ## Multiple R-squared:  0.8768, Adjusted R-squared:  0.8754 
+    ## F-statistic: 603.7 on 17 and 1442 DF,  p-value: < 2.2e-16
 
 ``` r
 fit$xlevels[["MSSubClass"]] <- union(fit$xlevels[["MSSubClass"]], levels(train_data$MSSubClass))
-pred <- predict(fit, data=test_data)
+pred <- predict(fit, test_data)
 pr <- exp(pred)
 ```
 
@@ -2438,7 +2319,7 @@ summary(pr)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   44595  128120  163156  180047  213186  789911
+    ##   51398  126390  157582  177083  206346 1522057
 
 ``` r
 df <- data.frame(Id,pr)
