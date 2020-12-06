@@ -774,7 +774,7 @@ train_data <- data[!is.na(data$SalePrice),]
 test_data <- data[is.na(data$SalePrice),]
 ```
 
-
+### **Next, let's run a regression with all the variables** ###
 
 ```{r}
 fitall <- lm(SalePrice ~. , data=train_data)
@@ -783,9 +783,9 @@ summary(fitall)
 
 
 
-**We will now try to fit a model using variable selection and more specifically stepwise regression. We start with no variables and gradually adding (or removing) variables in our model. Also we will exclude the variable MsSubClass from our scope.**
+### **We will now try to fit a model using variable selection and more specifically stepwise regression. We start with no variables and gradually adding (or removing) variables in our model. Also we will exclude the variable MsSubClass from our scope.** ###
 
-```{r,echo=FALSE}
+```{r echo = T, results = 'hide'}
 fitstart <- lm(SalePrice ~ 1, train_data) # Only intercept
 fitstep <- step(fitstart, direction = "both", scope =~ Id + MSZoning + LotFrontage + LotArea + 
     Alley + LotShape + LandContour + LotConfig + LandSlope + 
@@ -804,21 +804,24 @@ fitstep <- step(fitstart, direction = "both", scope =~ Id + MSZoning + LotFronta
     SaleCondition)
 ```
 
+## **The output of our final model** ##
 ```{r}
 summary(fitstep)
 formula(fitstep)
 ```
 
+## **Next we make our predictions on the test set** ##
 ```{r}
 pred <- predict(fitstep, test_data)
 pr <- exp(pred)
 ```
 
+## **Create a Dataframe to submit our predictions** ##
 ```{r}
 summary(pr)
 df <- data.frame(Id,pr)
 colnames(df)<-c("Id","SalePrice")
-df[which(is.na(df$SalePrice)),2] <- mean(df$SalePrice,na.rm = 'True')
+df[which(is.na(df$SalePrice)),2] <- median(df$SalePrice,na.rm = 'True') # Replace NA with median
 summary(df)
 ```
 
@@ -828,6 +831,6 @@ summary(df)
 write.csv(df,"C:/Users/User/Desktop/Άγγελος/R/Data analysis/House prices/house-prices-advanced-regression-techniques\\submission.csv", row.names = FALSE)
 ```
 
-If we submit our scores to Kaggle, we can see that our ranking is in the middle of the board. This is not bad, because we didn't do feature engineering or some complicated machine learning models here and we managed to get a descent score just by running a multiple regression, using variable selection.<br>
+If we submit our scores to Kaggle, we can see that our ranking is in the middle of the board. This is not bad, because we didn't do feature engineering or some really complicated machine learning models here, however we managed to get a descent score just by cleaning our data (taking care of NA's), running a multiple regression and using variable selection.<br>
 It is possible to get much better predictions with feature engineering, by making some new variables like Total number of Bathrooms, Adding ‘House Age’ variable, Binning the Neighborhood variable, Total Square Feet etc. but for now we will stop here.
 
