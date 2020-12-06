@@ -45,7 +45,12 @@ Some interesting observations are the following:
 I used the *ggplot* library in R for all the visualizations
 <img src="images/unnamed-chunk-20-1.png" width="600" height="500" />
 
-## [**Project 5 - Lotto probabilities.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Lotto%20Probabilities)
+## [**Project 5 - House Prices: Prediction and Data analysis.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/House%20prices)
+This dataset is from a Kaggle competition, so it challenges us to predict the final price of each home. There are 79 explanatory variables, describing every aspect of residential homes in Ames, Iowa. 
+- Conducted *EDA* and data cleaning.
+- Used *multiple regression* to predict the price of homes.
+
+## [**Project 6 - Lotto probabilities.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Lotto%20Probabilities)
 In this project I worked on the 6/49 lottery (Lotto) and answered the following questions:
 
 * What is the probability of winning the big prize with a single or more tickets ticket?
@@ -55,14 +60,14 @@ In this project I worked on the 6/49 lottery (Lotto) and answered the following 
 
 Finally, I used [historical data](https://www.kaggle.com/datascienceai/lottery-dataset) from the national 6/49 lottery game in Canada, with drawings dating from 1982 to 2018. By comparing a ticket against the historical lottery data in Canada, someone can determine whether he would have ever won by now.
 
-## [**Project 6 - Visualizing Earnings Based On College Majors.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Visualizing%20Earnings%20Based%20On%20College%20Majors)
+## [**Project 7 - Visualizing Earnings Based On College Majors.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Visualizing%20Earnings%20Based%20On%20College%20Majors)
 This is a dataset on the job outcomes of students who graduated from college between 2010 and 2012. The original data on job outcomes was released by American
 Community Survey, which conducts surveys and aggregates the data.\
 This is a part of a project i did on Dataquest and I had the chance to work with some plots like histograms, scatterplots and barplots, in Jupyter notebooks.
 - Performed visualisations using matplotlib library, primarly working in pandas.
 <img src="images/image_scatter.png" width="500" height="400" />
 
-## [**Project 7 - Titanic dataset.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Titanic_Dataset)
+## [**Project 8 - Titanic dataset.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Titanic_Dataset)
 This is the famous Titanic dataset. I've downloaded the data from Kaggle.
 - Conducted *EDA*.
 - Used *logistic regression* to predict whether the passengers on the test set survived or not.
