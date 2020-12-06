@@ -49,6 +49,7 @@ I used the *ggplot* library in R for all the visualizations
 This dataset is from a Kaggle competition, so it challenges us to predict the final price of each home. There are 79 explanatory variables, describing every aspect of residential homes in Ames, Iowa. 
 - Conducted *EDA* and data cleaning.
 - Used *multiple regression* to predict the price of homes.
+<img src="https://github.com/AngelosTheodorakis/Data_Analysis_Projects/blob/master/images/corrplot.png?raw=true" width="600" height="500" />
 
 ## [**Project 6 - Lotto probabilities.**](https://github.com/AngelosTheodorakis/Data_Analysis_Projects/tree/master/Lotto%20Probabilities)
 In this project I worked on the 6/49 lottery (Lotto) and answered the following questions:
